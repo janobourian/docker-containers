@@ -1,13 +1,11 @@
-# Welcome to MkDocs
-
-For full documentation visit [mkdocs.org](https://www.mkdocs.org).
+# Docker Containers Crash Course
 
 ## Commands
 
-* `mkdocs new [dir-name]` - Create a new project.
-* `mkdocs serve` - Start the live-reloading docs server.
-* `mkdocs build` - Build the documentation site.
-* `mkdocs -h` - Print help message and exit.
+* `docker version` - All information about docker.
+* `docker info` - All information about docker status. 
+* `docker --version` - Only the version.
+* `docker --help` - Fast help.
 
 ## Project layout
 
