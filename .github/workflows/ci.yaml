@@ -49,7 +49,7 @@ jobs:
           fi
 
       - name: Disable Jekyll for GitHub Pages
-        run: touch site/.nojekyll
+        run: touch docs/.nojekyll
 
       - name: Build MkDocs Site
         run: mkdocs build --clean --strict
