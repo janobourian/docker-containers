@@ -1,0 +1,58 @@
+name: ci
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Configure Git Credentials
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Set Up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.x
+
+      - name: Set Cache Key
+        run: echo "cache_id=$(date --utc '+%V')" >> $GITHUB_ENV 
+
+      - name: Cache MkDocs Dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: mkdocs-material-${{ env.cache_id }}
+          restore-keys: |
+            mkdocs-material-
+
+      - name: Install MkDocs and Dependencies
+        run: |
+          pip install --upgrade pip
+          pip install mkdocs mkdocs-material
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+      - name: Check if mkdocs.yml exists
+        run: |
+          if [ ! -f mkdocs.yml ]; then 
+            echo "❌ ERROR: mkdocs.yml not found!"; 
+            exit 1; 
+          fi
+
+      - name: Disable Jekyll for GitHub Pages
+        run: touch docs/.nojekyll
+
+      - name: Build MkDocs Site
+        run: mkdocs build --clean --strict
+
+      - name: Deploy MkDocs to GitHub Pages
+        run: mkdocs gh-deploy --force
