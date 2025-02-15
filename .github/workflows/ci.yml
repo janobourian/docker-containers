@@ -4,26 +4,47 @@ on:
     branches:
       - master 
       - main
+
 permissions:
   contents: write
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
       - name: Configure Git Credentials
         run: |
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
-      - uses: actions/setup-python@v5
+
+      - name: Set Up Python
+        uses: actions/setup-python@v5
         with:
           python-version: 3.x
-      - run: echo "cache_id=$(date --utc '+%V')" >> $GITHUB_ENV 
-      - uses: actions/cache@v4
+
+      - name: Cache Dependencies
+        uses: actions/cache@v4
         with:
-          key: mkdocs-material-${{ env.cache_id }}
+          key: mkdocs-material-${{ github.run_id }}
           path: .cache
           restore-keys: |
             mkdocs-material-
-      - run: pip install mkdocs-material 
-      - run: mkdocs gh-deploy --force
+
+      - name: Install MkDocs and Dependencies
+        run: |
+          pip install --upgrade pip
+          pip install mkdocs-material
+
+      - name: Validate MkDocs Configuration
+        run: |
+          if [ ! -f mkdocs.yml ]; then 
+            echo "❌ ERROR: mkdocs.yml not found!"; 
+            exit 1; 
+          fi
+          mkdocs build --strict
+
+      - name: Deploy MkDocs to GitHub Pages
+        run: mkdocs gh-deploy --force
