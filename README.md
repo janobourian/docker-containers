@@ -7,4 +7,4 @@ Exist two ways to deploy your documentation, the first way is using a github act
 
 The first step is to copy this project structure and deploy, and after that you should configure your repository on github like the next image:
 
-![alt text](image-1.png)
+![alt text](image.png)
