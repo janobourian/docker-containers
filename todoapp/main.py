@@ -7,7 +7,13 @@ from starlette.routing import Route
 
 async def home(request: Request) -> JSONResponse:
     print(request.app.state.EMAIL)
-    return JSONResponse({"hello": "world"})
+    return JSONResponse(
+        {
+            "headers": dict(request.headers),
+            "query_params": dict(request.query_params),
+            "path_params": request.path_params,
+        }
+    )
 
 
 @asynccontextmanager
