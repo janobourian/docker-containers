@@ -1,62 +1,53 @@
 # Getting Started
 
-Welcome to the Docker Containers project! This guide will help you get started with setting up and running the project.
+* Get and work with Docker:
+   * Docker Desktop
+   * Multipass
+   * Server installs on Linux
 
-## Project Structure
+## The Ops perspective
 
-Here's an overview of the project structure:
+* Images are objects that contain everything an app needs to run
+* You can start a new Bash process inside the container
 
-```
-/Users/frgonzal/Documents/vit/docker-containers/
-├── docker-compose.yml
-├── Dockerfile
-├── docs/
-│   └── getting-started.md
-├── src/
-│   ├── app/
-│   └── config/
-└── README.md
-```
+## The Dev perspective
 
-## Prerequisites
+* Containers are all about applications
+* Example: 
 
-Before you begin, ensure you have the following installed:
-- Docker
-- Docker Compose
-
-## Setup
-
-1. **Clone the repository:**
-   ```sh
-   git clone https://github.com/yourusername/docker-containers.git
-   cd docker-containers
-   ```
-
-2. **Build the Docker image:**
-   ```sh
-   docker-compose build
-   ```
-
-3. **Run the Docker containers:**
-   ```sh
-   docker-compose up
-   ```
-
-## Accessing the Application
-
-Once the containers are up and running, you can access the application at `http://localhost:your_port`.
-
-## Documentation
-
-For more detailed information, refer to the [documentation](./docs).
-
-## Troubleshooting
-
-If you encounter any issues, check the logs using:
-```sh
-docker-compose logs
+```Dockerfile
+FROM alpine
+LABEL maintainer="your-email@example.com"
+RUN apk add --update nodejs npm curl
+COPY . /src
+WORKDIR /src
+RUN  npm install
+EXPOSE 8080
+ENTRYPOINT ["node", "./app.js"]
 ```
 
-Feel free to reach out for support if you need further assistance.
+## Commands
 
-Happy coding!
+* `docker --version`
+* `docker version`
+* `docker info`
+* `docker --help`
+* `docker images`
+* `docker pull nginx:latest`
+* `docker run --name test -d -p 8080:80 nginx:latest`
+* `docker ps`
+* `docker ps -a`
+* `docker exec -it test bash`
+* `docker stop test`
+* `docker rm test`
+* `docker build -t test:latest .`
+* `docker run -d --name web1 --publish 8080:8080 test:latest`
+* `docker rm web1 -f`
+* `docker rmi test:latest`
+
+## Flags
+
+* `--name` - The Docker container name
+* `-d` - Working on detached mode, working with the container in background
+* `-p` - Port mapping 
+* `-a` - List all container, even those in the stopped state

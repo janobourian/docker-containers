@@ -1,0 +1,12 @@
+{
+  "name": "container-web-test",
+  "private": true,
+  "version": "0.0.5",
+  "description": "Demo app for web container demonstrations",
+  "main": "app.js",
+  "author": "John Doe <johndoe@example.com> (https://example.com)",
+  "dependencies": {
+    "express": "5.0.1",
+    "pug": "3.0.3"
+  }
+}
