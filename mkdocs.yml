@@ -15,6 +15,7 @@ nav:
   - Home: index.md
   - Getting Started: getting-started.md
   - Docker Engine: docker-engine.md
+  - Working with Images: working-with-images.md
 
 markdown_extensions:
   - admonition
