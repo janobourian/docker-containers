@@ -48,6 +48,6 @@ ENTRYPOINT ["node", "./app.js"]
 ## Flags
 
 * `--name` - The Docker container name
-* `-d` - Working on detached mode, working with the container in background
-* `-p` - Port mapping 
-* `-a` - List all container, even those in the stopped state
+* `-d/--detach` - Working on detached mode, working with the container in background
+* `-p/--publish` - Port mapping 
+* `-a/--all` - List all container, even those in the stopped state
