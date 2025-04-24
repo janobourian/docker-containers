@@ -39,7 +39,7 @@
     * daemon
         * Receive API request and instruct containerd to start a new container
     * containerd
-        * Receive instruaction to create new container and pass instruction to runc
+        * Receive instruction to create new container and pass instruction to runc
     * shim
         * Becomes container's parent process and communicates with containerd
     * runc

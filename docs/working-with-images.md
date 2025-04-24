@@ -5,7 +5,7 @@
     * Build -> Share -> Run
 * Image naming and tagging
     * Registry/User-Org/Repository:Image-tag
-* Images are a collection of loosely connected rea-only layers where each layer comprises one or more files.
+* Images are a collection of loosely connected read-only layers where each layer comprises one or more files.
 * Content hashes vs distribution hashes
     * Content hash
     * Distribution hash
