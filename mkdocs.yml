@@ -17,6 +17,7 @@ nav:
   - Docker Engine: docker-engine.md
   - Working with Images: working-with-images.md
   - Working with Containers: working-with-containers.md
+  - Containerizing an Application: containerizing_an_app.md
 
 markdown_extensions:
   - admonition
