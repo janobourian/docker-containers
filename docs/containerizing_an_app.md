@@ -36,6 +36,35 @@ docker run -it --detach --name targo --publish 8000:8000 janobourian/bank-app:ma
 Type `docker history bank-app:maxine.bankapp` to show the instructions
 Type `docker inspect bank-app:maxine.bankapp` to see the layers
 
+## Moving to production
+
+* Big is bad!
+* Stages is a good way to reduce the Image size
+
+```Dockerfile
+FROM folang:1.23.4-alpine AS base
+WORKDIR /src
+COPY go.mod go.sum .
+RUN go mod download
+COPY . . 
+
+FROM base AS build-cliente
+RUN go build -o /bin/client ./cmd/client
+
+FROM base AS build-server
+RUN go build -o /bin/server ./cmd/server
+
+FROM scratch AS prod
+COPY --from=build-client /bin/client /bin/
+COPY --from=build-server /bin/server /bin/
+ENTRYPOINT [ "/bin/server" ]
+```
+
+## Buildx, BuildKit, drivers, and Build Cloud
+
+* Client: Buildx
+* Server: BuildKit
+
 ## Commands
 
 * `docker init`
@@ -48,3 +77,8 @@ Type `docker inspect bank-app:maxine.bankapp` to see the layers
 * `docker run -it --detach --name targo --publish 8000:8000 janobourian/bank-app:maxine.bankapp`
 * `docker history janobourian/bank-app:maxine`
 * `docker inspect janobourian/bank-app:maxine`
+* `docker buildx ls`
+* `docker buildx inspect <BUILDX_NAME>`
+* `docker buildx create --driver=docker-container --name=container`
+* `docker buildx use container`
+* `docker buildx build --builder=container --platform=linux/amd64,linux/arm64 -t janobourian/bank-app:maxine.bankapp --push .`
