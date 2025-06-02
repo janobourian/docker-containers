@@ -1,0 +1,39 @@
+volumes:
+  model_data:
+
+networks:
+  internal:
+
+services:
+  frontend:
+    image: janobourian/ai-chat:ai-frontend
+    build: ./frontend
+    container_name: ai-frontend
+    networks:
+      - internal
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+  
+  backend:
+    image: janobourian/ai-chat:ai-backend
+    build: ./backend
+    container_name: ai-backend
+    networks:
+      - internal
+    expose:
+      - "8000"
+    depends_on:
+      - ai-model
+  
+  ai-model:
+    image: janobourian/ai-chat:ai-model
+    build: ./ai-model
+    container_name: ai-model
+    networks:
+      - internal
+    expose:
+      - "8001"
+    env_file:
+      - ./ai-model/.env

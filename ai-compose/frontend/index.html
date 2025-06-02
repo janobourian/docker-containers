@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+  <title>Chatbot App</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <style>
+    body, html {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+    .chat-sidebar {
+      background-color: #f8f9fa;
+      height: 100vh;
+      overflow-y: auto;
+      border-right: 1px solid #dee2e6;
+    }
+    .chat-window {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .chat-messages {
+      flex: 1;
+      padding: 1rem;
+      overflow-y: auto;
+      background-color: #fff;
+      display: flex;
+      flex-direction: column;
+    }
+    .message {
+      margin-bottom: 0.5rem;
+      padding: 0.6rem 1rem;
+      border-radius: 1rem;
+      max-width: 75%;
+      font-size: 0.95rem;
+      line-height: 1.4;
+      position: relative;
+    }
+    .message.user {
+      align-self: flex-end;
+      background-color: #d1e7dd;
+      color: #000;
+    }
+    .message.bot {
+      align-self: flex-start;
+      background-color: #e2e3e5;
+      color: #000;
+    }
+    .message .content {
+      white-space: pre-line;
+    }
+    .timestamp {
+      font-size: 0.75rem;
+      color: #6c757d;
+      margin-top: 2px;
+      text-align: right;
+    }
+    .chat-input {
+      border-top: 1px solid #dee2e6;
+      padding: 0.75rem;
+    }
+    .message pre {
+      background: #f8f9fa;
+      padding: 0.75rem;
+      border-radius: 5px;
+      overflow-x: auto;
+      font-family: monospace;
+      margin-top: 0.5rem;
+    }
+    .message code {
+      background: #e9ecef;
+      padding: 2px 4px;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+    .message h1, .message h2, .message h3 {
+      font-weight: 600;
+      margin-top: 1rem;
+    }
+    .message ul {
+      padding-left: 1.2rem;
+      margin-top: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container-fluid">
+    <div class="row justify-content-center align-items-center">
+        <!-- 
+      <div class="col-md-3 chat-sidebar p-3 mx-auto">
+        <h5>Chat History</h5>
+        <ul class="list-group">
+          <li class="list-group-item list-group-item-action">Conversation 1</li>
+          <li class="list-group-item list-group-item-action">Conversation 2</li>
+          <li class="list-group-item list-group-item-action">Conversation 3</li>
+        </ul>
+      </div>
+      -->
+      <div class="col-md-9 chat-window mx-auto">
+        <div class="chat-messages" id="chatMessages"></div>
+        <div class="chat-input">
+            <div class="input-group">
+              <textarea id="userInput" class="form-control" placeholder="Type your message..." rows="1" style="resize: none; overflow: hidden;"></textarea>
+              <button class="btn btn-primary" id="sendBtn">Send</button>
+            </div>
+          </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const chatMessages = document.getElementById("chatMessages");
+    const userInput = document.getElementById("userInput");
+    const sendBtn = document.getElementById("sendBtn");
+  
+    function formatTime() {
+      const now = new Date();
+      return `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')} hrs`;
+    }
+  
+    function addUserMessage(text) {
+      const wrapper = document.createElement("div");
+      wrapper.className = "message user";
+      wrapper.innerHTML = `<div>${text}</div><div class="timestamp">${formatTime()}</div>`;
+      chatMessages.appendChild(wrapper);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+  
+    function addTypingBotMessage(markdownText) {
+      const wrapper = document.createElement("div");
+      wrapper.className = "message bot";
+      const messageText = document.createElement("div");
+      const timeStamp = document.createElement("div");
+      timeStamp.className = "timestamp";
+      timeStamp.textContent = formatTime();
+      wrapper.appendChild(messageText);
+      wrapper.appendChild(timeStamp);
+      chatMessages.appendChild(wrapper);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+  
+      const lines = markdownText.split(/\n(?=\s*[-#*0-9]|$)/);
+      let index = 0;
+  
+      function typeLine() {
+        if (index < lines.length) {
+          messageText.innerHTML = marked.parse(lines.slice(0, index + 1).join("\n"));
+          chatMessages.scrollTop = chatMessages.scrollHeight;
+          index++;
+          setTimeout(typeLine, 80);
+        }
+      }
+      typeLine();
+    }
+  
+    async function sendMessageToBackend(text) {
+      const url = `/ask`;
+      sendBtn.disabled = true;
+      try {
+        const response = await fetch(url, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: text })
+        });
+        const data = await response.json();
+        addTypingBotMessage(data.answer || "No reply received.");
+      } catch {
+        addTypingBotMessage("❌ Error: Could not connect to backend.");
+      } finally {
+        sendBtn.disabled = false;
+      }
+    }
+  
+    function handleSend() {
+      const text = userInput.value.trim();
+      if (!text) return;
+      addUserMessage(text);
+      userInput.value = "";
+      resizeTextArea(); // reset size
+      sendMessageToBackend(text);
+    }
+  
+    sendBtn.addEventListener("click", handleSend);
+    userInput.addEventListener("keypress", (e) => {
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        handleSend();
+      }
+    });
+  
+    // Auto-resize logic
+    function resizeTextArea() {
+      userInput.style.height = "auto";
+      userInput.style.height = userInput.scrollHeight + "px";
+    }
+    userInput.addEventListener("input", resizeTextArea);
+    resizeTextArea();
+  </script>
+</body>
+</html>

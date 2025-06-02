@@ -18,6 +18,7 @@ nav:
   - Working with Images: working-with-images.md
   - Working with Containers: working-with-containers.md
   - Containerizing an Application: containerizing_an_app.md
+  - Multi-containeer apps with Compose: multi-container-apps.md
 
 markdown_extensions:
   - admonition
