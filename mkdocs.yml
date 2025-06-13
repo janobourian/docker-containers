@@ -19,6 +19,7 @@ nav:
   - Working with Containers: working-with-containers.md
   - Containerizing an Application: containerizing_an_app.md
   - Multi-containeer apps with Compose: multi-container-apps.md
+  - Docker CheatSheet: docker-cheatsheet.md
 
 markdown_extensions:
   - admonition
