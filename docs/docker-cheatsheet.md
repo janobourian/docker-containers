@@ -40,6 +40,18 @@
 * `run [--rm]` - Automatically remove the container and its associated anonymous volumes when it exits
 * `run [--restart]` - Restart policy to apply when a container exits (default "no")
 
+## Compose
+
+* `docker compose version` - To show the docker composer version
+* `docker compose up` - Create and start containers
+* `docker compose build <SERVICE>` - Build a specific service
+* `docker compose down` - Down the services
+* `docker compose down -v --remove-orphans` - Remove volumes and remove containers for services not defined in the Compose file
+* `docker compose build --no-cache <SERVICE>` - Do not use cache when building the image
+* `docker compose ps` - List containers
+* `docker compose logs -f` - Follow log output
+* `docker compose logs -f <SERVICE>` - Follow log output with specific service
+
 ## Images
 
 * `docker inspect <IMAGE_NAME>:<VERSION>`
