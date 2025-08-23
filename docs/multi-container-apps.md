@@ -28,13 +28,13 @@ docker run -it --detach --name macario --publish 8001:8000 --env-file /Users/frg
 ## Commands
 
 * `docker compose version`
+* `docker compose down -v --remove-orphans`
+* `docker system prune -f`
+* `docker compose build --no-cache`
 * `docker compose up`
 * `docker compose build frontend`
 * `docker compose up`
 * `docker compose down`
-* `docker compose down -v --remove-orphans`
-* `docker system prune -f`
-* `docker compose build --no-cache`
 * `docker compose up --detach`
 * `docker compose ps`
 * `docker compose logs -f`

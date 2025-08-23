@@ -44,6 +44,7 @@ There are three ways you can tell Docker how to start an app in a container:
 ## Docker commands
 
 * `docker build -t demoapp:latest .`
+* `docker run --detach --name test --restart no demoapp:latest`
 * `docker run -d --name macorina --publish 8000:8000 demoapp:latest`
 * `docker exec -it macorina sh`
 * `docker pull python:latest`

@@ -1,0 +1,15 @@
+volumes:
+  model_data:
+
+networks:
+  internal:
+
+services:
+  frontend:
+    image: janobourian/todoapp:frontend
+    build: ./frontend
+    container_name: todoapp-frontend
+    networks:
+      - internal
+    ports:
+      - "80:80"
