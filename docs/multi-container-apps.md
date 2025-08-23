@@ -4,6 +4,9 @@
 
 ![alt text](images/multi-container-apps/image.png)
 
+* `fig` -> `docker-compose` -> `docker compose`
+* `docker compose -f ./llm/chatbot.yaml up`
+
 ## For the Frontend app
 
 ```bash
@@ -39,3 +42,12 @@ docker run -it --detach --name macario --publish 8001:8000 --env-file /Users/frg
 * `docker compose ps`
 * `docker compose logs -f`
 * `docker compose logs -f backend`
+* `docker network ls`
+* `docker volume ls`
+* `docker compose ls`
+* `docker compose down`
+* `docker compose top`
+* `docker compose stop`
+* `docker compose ps`
+* `docker compose ps --all`
+* `docker compose restart`
