@@ -33,7 +33,7 @@
 * The daemon can expose the API on a local socket or over the network. On Linux, the local socket is `/var/run/docker.sock`
 * daemonless containers: is the ability to stop, restart, and even update the Docker daemon without impacting running containers.
 
-* Simmarizes the process
+* Summarizes the process
     * docker CLI
         * Convert docker run command into API request and send to API (daemon)
     * daemon
@@ -54,3 +54,11 @@
 * `docker ps -a`
 * `docker ps --all`
 * `docker rm web1 -f`
+
+```bash
+docker pull ollama/ollama
+docker run --detach -v ollama:/root/.ollama --publish 11434:11434 --name ollama ollama/ollama
+docker exec -it ollama ollama list
+docker exec -it ollama ollama run llama3.2
+docker rm ollama -f
+```

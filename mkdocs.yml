@@ -20,6 +20,7 @@ nav:
   - Containerizing an Application: containerizing_an_app.md
   - Multi-containeer apps with Compose: multi-container-apps.md
   - Docker and Wasm: docker-and-wasm.md
+  - Docker Swarm: docker-swarm.md
   - Docker CheatSheet: docker-cheatsheet.md
 
 markdown_extensions:
