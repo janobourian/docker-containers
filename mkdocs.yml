@@ -1,12 +1,11 @@
 site_name: Docker Containers
 theme:
-  name: material
-  palette:
-    scheme: slate
-    primary: deep purple
-  font:
-    text: Roboto
-    code: Roboto Mono
+  name: readthedocs
+  highlightjs: true
+  hljs_languages:
+    - yaml
+    - bash
+    - dockerfile
 
 use_directory_urls: false
 docs_dir: docs
@@ -18,7 +17,7 @@ nav:
   - Working with Images: working-with-images.md
   - Working with Containers: working-with-containers.md
   - Containerizing an Application: containerizing_an_app.md
-  - Multi-containeer apps with Compose: multi-container-apps.md
+  - Multi-container apps with Compose: multi-container-apps.md
   - Docker and Wasm: docker-and-wasm.md
   - Docker Swarm: docker-swarm.md
   - Docker CheatSheet: docker-cheatsheet.md
@@ -33,25 +32,9 @@ markdown_extensions:
   - tables
   - toc:
       permalink: true
-  - pymdownx.arithmatex
-  - pymdownx.betterem
-  - pymdownx.caret
-  - pymdownx.details
-  - pymdownx.highlight:
-      use_pygments: true
-  - pymdownx.inlinehilite
-  - pymdownx.keys
-  - pymdownx.magiclink
-  - pymdownx.mark
-  - pymdownx.smartsymbols
-  - pymdownx.superfences
-  - pymdownx.tasklist:
-      custom_checkbox: true
-  - pymdownx.tilde
 
 plugins:
   - search
-  - tags
 
 extra:
   generator: false
