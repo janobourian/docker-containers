@@ -20,6 +20,7 @@ nav:
   - Multi-container apps with Compose: multi-container-apps.md
   - Docker and Wasm: docker-and-wasm.md
   - Docker Swarm: docker-swarm.md
+  - Docker Networking: docker-networking.md
   - Docker CheatSheet: docker-cheatsheet.md
 
 markdown_extensions:

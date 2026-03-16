@@ -1,0 +1,54 @@
+volumes:
+  model_data:
+
+networks:
+  internal:
+
+services:
+  frontend:
+    image: janobourian/ai-model:ai-frontend
+    build: ./ai-frontend
+    container_name: ai-frontend
+    networks:
+      - internal
+    ports:
+      - "80:80"
+    depends_on:
+      - ai-agent
+      - backend
+    
+  backend:
+    image: janobourian/ai-model:ai-backend
+    build: ./ai-backend
+    container_name: ai-backend
+    networks:
+      - internal
+    environment:
+      - OLLAMA_URL=http://ai-agent:11434
+      - OLLAMA_MODEL=deepseek-coder-v2:16b
+    expose:
+      - "8000"
+    depends_on:
+      - ai-agent
+
+  ai-agent:
+    image: janobourian/ai-model:ai-agent
+    build: ./ai-model
+    container_name: ai-agent
+    networks:
+      - internal
+    expose:
+      - "11434"
+    volumes:
+      - model_data:/root/.ollama
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 120s
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 64G

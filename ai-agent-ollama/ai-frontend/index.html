@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+  <title>AI Agent | DeepSeek Coder</title>
+  
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  
+  <!-- Markdown & Code Highlighting -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+
+  <style>
+    :root {
+      --primary-bg: #0d1117;
+      --secondary-bg: #161b22;
+      --border-color: #30363d;
+      --text-main: #c9d1d9;
+      --text-muted: #8b949e;
+      --accent-color: #238636;
+      --user-msg-bg: #21262d;
+      --bot-msg-bg: #161b22;
+    }
+
+    body, html {
+      height: 100%;
+      margin: 0;
+      background-color: var(--primary-bg);
+      color: var(--text-main);
+      font-family: 'Inter', sans-serif;
+    }
+
+    .app-container {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      max-width: 1000px;
+      margin: 0 auto;
+      border-left: 1px solid var(--border-color);
+      border-right: 1px solid var(--border-color);
+    }
+
+    /* Header */
+    header {
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+      background-color: var(--secondary-bg);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand {
+      font-weight: 600;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .status-indicator {
+      font-size: 0.8rem;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      background: #21262d;
+      border: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: #e3b341; /* Warning/Pulling */
+    }
+
+    .dot.online { background-color: #238636; }
+    .dot.offline { background-color: #da3633; }
+
+    /* Chat Area */
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 2rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      scroll-behavior: smooth;
+    }
+
+    .message {
+      display: flex;
+      gap: 1rem;
+      max-width: 85%;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .message.user {
+      align-self: flex-end;
+      flex-direction: row-reverse;
+    }
+
+    .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .user .avatar { background-color: #1f6feb; }
+    .bot .avatar { background: linear-gradient(135deg, #238636, #2ea043); }
+
+    .msg-content {
+      padding: 0.8rem 1.2rem;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      border: 1px solid var(--border-color);
+    }
+
+    .user .msg-content {
+      background-color: var(--user-msg-bg);
+      border-color: #388bfd;
+    }
+
+    .bot .msg-content {
+      background-color: var(--bot-msg-bg);
+    }
+
+    /* Markdown Styling */
+    .msg-content pre {
+      margin: 1rem 0;
+      background: #0d1117 !important;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+    }
+
+    .msg-content code {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.85rem;
+    }
+
+    .msg-content p:last-child { margin-bottom: 0; }
+
+    /* Input Area */
+    .input-wrapper {
+      padding: 1.5rem;
+      background-color: var(--primary-bg);
+    }
+
+    .input-container {
+      background-color: var(--secondary-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 0.5rem;
+      display: flex;
+      align-items: flex-end;
+      gap: 0.5rem;
+      transition: border-color 0.2s;
+    }
+
+    .input-container:focus-within {
+      border-color: #58a6ff;
+    }
+
+    #userInput {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: var(--text-main);
+      padding: 0.5rem;
+      resize: none;
+      max-height: 200px;
+      outline: none;
+    }
+
+    .btn-send {
+      background-color: var(--accent-color);
+      color: white;
+      border: none;
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: filter 0.2s;
+    }
+
+    .btn-send:hover { filter: brightness(1.1); }
+    .btn-send:disabled { background-color: var(--border-color); cursor: not-allowed; }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: var(--primary-bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: #484f58; }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <header>
+      <div class="brand">
+        <i class="bi bi-robot"></i>
+        <span>AI Agent <small class="text-muted fw-normal" style="font-size: 0.7rem;">v2.0</small></span>
+      </div>
+      <div class="d-flex align-items-center gap-3">
+        <div id="generationTimer" class="text-white small" style="display: none;">
+          <i class="bi bi-hourglass-split"></i> <span id="liveTimer">0.0s</span>
+        </div>
+        <div class="status-indicator" id="statusBox">
+          <div class="dot" id="statusDot"></div>
+          <span id="statusText">Checking...</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="chat-messages" id="chatMessages">
+      <!-- Welcome Message -->
+      <div class="message bot">
+        <div class="avatar"><i class="bi bi-stars text-white"></i></div>
+        <div class="msg-content">
+          Hello! I am your AI assistant powered by DeepSeek Coder. How can I help you today?
+        </div>
+      </div>
+    </div>
+
+    <div class="input-wrapper">
+      <div class="input-container">
+        <textarea id="userInput" placeholder="Ask anything..." rows="1"></textarea>
+        <button class="btn-send" id="sendBtn" title="Send message">
+          <i class="bi bi-send-fill"></i>
+        </button>
+      </div>
+      <div class="text-center mt-2">
+        <small class="text-muted" style="font-size: 0.7rem;">Model: deepseek-coder-v2:16b</small>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const chatMessages = document.getElementById("chatMessages");
+    const userInput = document.getElementById("userInput");
+    const sendBtn = document.getElementById("sendBtn");
+    const statusDot = document.getElementById("statusDot");
+    const statusText = document.getElementById("statusText");
+
+    // Markdown Configuration
+    marked.setOptions({
+      highlight: function(code, lang) {
+        if (lang && hljs.getLanguage(lang)) {
+          return hljs.highlight(code, { language: lang }).value;
+        }
+        return hljs.highlightAuto(code).value;
+      },
+      breaks: true
+    });
+
+    async function checkStatus() {
+      try {
+        const res = await fetch('/health');
+        const data = await res.json();
+        
+        if (data.status === "ok") {
+          const models = data.details.models || [];
+          const isModelReady = models.some(m => m.name.includes("deepseek-coder-v2"));
+          
+          if (isModelReady) {
+            statusDot.className = "dot online";
+            statusText.textContent = "Ready";
+          } else {
+            statusDot.className = "dot"; // Yellow
+            statusText.textContent = "Loading Model...";
+          }
+        } else {
+          statusDot.className = "dot";
+          statusText.textContent = "Ollama Starting...";
+        }
+      } catch {
+        statusDot.className = "dot offline";
+        statusText.textContent = "Backend Offline";
+      }
+    }
+
+    // Check status periodically
+    checkStatus();
+    setInterval(checkStatus, 30000);
+
+    function createMessage(text, isUser = false) {
+      const msgDiv = document.createElement("div");
+      msgDiv.className = `message ${isUser ? 'user' : 'bot'}`;
+      
+      const avatar = document.createElement("div");
+      avatar.className = "avatar";
+      avatar.innerHTML = isUser ? '<i class="bi bi-person-fill text-white"></i>' : '<i class="bi bi-robot text-white"></i>';
+      
+      const content = document.createElement("div");
+      content.className = "msg-content";
+      
+      if (isUser) {
+        content.textContent = text;
+      } else {
+        content.innerHTML = marked.parse(text);
+      }
+      
+      msgDiv.appendChild(avatar);
+      msgDiv.appendChild(content);
+      chatMessages.appendChild(msgDiv);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+      
+      // Highlight code blocks if any
+      msgDiv.querySelectorAll('pre code').forEach((block) => {
+        hljs.highlightElement(block);
+      });
+      
+      return content;
+    }
+
+    async function handleSend() {
+      const text = userInput.value.trim();
+      if (!text || sendBtn.disabled) return;
+
+      userInput.value = "";
+      userInput.style.height = "auto";
+      createMessage(text, true);
+
+      // Loading state
+      sendBtn.disabled = true;
+      const botMsgContent = createMessage("...", false);
+      
+      const startTime = performance.now();
+      const genTimerDiv = document.getElementById("generationTimer");
+      const liveTimerSpan = document.getElementById("liveTimer");
+      
+      genTimerDiv.style.display = "block";
+      botMsgContent.innerHTML = '<div class="spinner-border spinner-border-sm text-secondary" role="status"></div>';
+
+      const timerInterval = setInterval(() => {
+        const elapsed = ((performance.now() - startTime) / 1000).toFixed(1);
+        liveTimerSpan.textContent = `${elapsed}s`;
+      }, 100);
+
+      try {
+        const response = await fetch('/ask', {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: text })
+        });
+        const data = await response.json();
+        
+        clearInterval(timerInterval);
+        const totalTime = ((performance.now() - startTime) / 1000).toFixed(1);
+        genTimerDiv.style.display = "none";
+        
+        botMsgContent.innerHTML = marked.parse(data.answer || "No response.");
+        
+        // Add subtle time footer to the message bubble
+        const footer = document.createElement("div");
+        footer.className = "text-muted small mt-2 border-top pt-1";
+        footer.style.fontSize = "0.7rem";
+        footer.style.opacity = "0.6";
+        footer.innerHTML = `<i class="bi bi-clock"></i> Generated in ${totalTime}s`;
+        botMsgContent.appendChild(footer);
+
+        botMsgContent.querySelectorAll('pre code').forEach((block) => {
+          hljs.highlightElement(block);
+        });
+        
+      } catch (err) {
+        clearInterval(timerInterval);
+        genTimerDiv.style.display = "none";
+        botMsgContent.textContent = "❌ Error connecting to backend.";
+      } finally {
+        sendBtn.disabled = false;
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }
+    }
+
+    sendBtn.addEventListener("click", handleSend);
+    userInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        handleSend();
+      }
+    });
+
+    userInput.addEventListener("input", function() {
+      this.style.height = "auto";
+      this.style.height = (this.scrollHeight) + "px";
+    });
+  </script>
+</body>
+</html>
