@@ -21,6 +21,8 @@ nav:
   - Docker and Wasm: docker-and-wasm.md
   - Docker Swarm: docker-swarm.md
   - Docker Networking: docker-networking.md
+  - Docker Volumes: docker-volumes.md
+  - Docker Swecurity: docker-security.md
   - Docker CheatSheet: docker-cheatsheet.md
 
 markdown_extensions:
