@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="img/favicon.ico" />
+    <title>Containerizing an Application - Docker Containers</title>
+    <link rel="stylesheet" href="css/theme.css" />
+    <link rel="stylesheet" href="css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Containerizing an Application";
+        var mkdocs_page_input_path = "containerizing_an_app.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/yaml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/bash.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/dockerfile.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="index.html" class="icon icon-home"> Docker Containers
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="./search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="index.html">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="docker-engine.html">Docker Engine</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="working-with-images.html">Working with Images</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="working-with-containers.html">Working with Containers</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">Containerizing an Application</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#basic-steps-to-containerizing-an-app">Basic steps to containerizing an app</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#push-the-image">Push the image</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#run-the-app">Run the app</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#about-layers">About layers</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#moving-to-production">Moving to production</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#buildx-buildkit-drivers-and-build-cloud">Buildx, BuildKit, drivers, and Build Cloud</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#commands">Commands</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="multi-container-apps.html">Multi-container apps with Compose</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="docker-and-wasm.html">Docker and Wasm</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="docker-swarm.html">Docker Swarm</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="docker-networking.html">Docker Networking</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="docker-volumes.html">Docker Volumes</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="docker-security.html">Docker Swecurity</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="docker-cheatsheet.html">Docker CheatSheet</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Docker Containers</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html" class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Containerizing an Application</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="containerizing-an-app">Containerizing an app<a class="headerlink" href="#containerizing-an-app" title="Permanent link">&para;</a></h1>
+<h2 id="basic-steps-to-containerizing-an-app">Basic steps to containerizing an app<a class="headerlink" href="#basic-steps-to-containerizing-an-app" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Create your app</li>
+<li>Create the Dockerfile</li>
+<li>Build the image</li>
+<li>Pull to the registry </li>
+<li>Run as container</li>
+</ul>
+<h2 id="push-the-image">Push the image<a class="headerlink" href="#push-the-image" title="Permanent link">&para;</a></h2>
+<p>Using docker hub or another images hub</p>
+<h2 id="run-the-app">Run the app<a class="headerlink" href="#run-the-app" title="Permanent link">&para;</a></h2>
+<p>Execute</p>
+<pre><code class="language-bash">docker run -it --detach --name targo --publish 8000:8000 janobourian/bank-app:maxine.bankapp
+</code></pre>
+<h2 id="about-layers">About layers<a class="headerlink" href="#about-layers" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Instructions that add content create a Layer<ul>
+<li>FROM</li>
+<li>RUN</li>
+<li>COPY</li>
+<li>WORKDIR</li>
+</ul>
+</li>
+<li>Instructions that does not add content create metadata<ul>
+<li>EXPOSE</li>
+<li>ENV</li>
+<li>CMD</li>
+<li>ENTRYPOINT</li>
+</ul>
+</li>
+</ul>
+<p>Type <code>docker history bank-app:maxine.bankapp</code> to show the instructions
+Type <code>docker inspect bank-app:maxine.bankapp</code> to see the layers</p>
+<h2 id="moving-to-production">Moving to production<a class="headerlink" href="#moving-to-production" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Big is bad!</li>
+<li>Stages is a good way to reduce the Image size</li>
+</ul>
+<pre><code class="language-Dockerfile">FROM folang:1.23.4-alpine AS base
+WORKDIR /src
+COPY go.mod go.sum .
+RUN go mod download
+COPY . . 
+
+FROM base AS build-cliente
+RUN go build -o /bin/client ./cmd/client
+
+FROM base AS build-server
+RUN go build -o /bin/server ./cmd/server
+
+FROM scratch AS prod
+COPY --from=build-client /bin/client /bin/
+COPY --from=build-server /bin/server /bin/
+ENTRYPOINT [ &quot;/bin/server&quot; ]
+</code></pre>
+<h2 id="buildx-buildkit-drivers-and-build-cloud">Buildx, BuildKit, drivers, and Build Cloud<a class="headerlink" href="#buildx-buildkit-drivers-and-build-cloud" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Client: Buildx</li>
+<li>Server: BuildKit</li>
+</ul>
+<h2 id="commands">Commands<a class="headerlink" href="#commands" title="Permanent link">&para;</a></h2>
+<ul>
+<li><code>docker init</code></li>
+<li><code>docker build -t bank-app:maxine.bankapp .</code></li>
+<li><code>docker inspect bank-app:maxine.bankapp</code></li>
+<li><code>docker login</code></li>
+<li><code>docker tag &lt;current-tag&gt; &lt;new-tag&gt;</code></li>
+<li><code>docker tag bank-app:maxine.bankapp janobourian/bank-app:maxine.bankapp</code></li>
+<li><code>docker push janobourian/bank-app:maxine.bankapp</code></li>
+<li><code>docker run -it --detach --name targo --publish 8000:8000 janobourian/bank-app:maxine.bankapp</code></li>
+<li><code>docker history janobourian/bank-app:maxine</code></li>
+<li><code>docker inspect janobourian/bank-app:maxine</code></li>
+<li><code>docker buildx ls</code></li>
+<li><code>docker buildx inspect &lt;BUILDX_NAME&gt;</code></li>
+<li><code>docker buildx create --driver=docker-container --name=container</code></li>
+<li><code>docker buildx use container</code></li>
+<li><code>docker buildx build --builder=container --platform=linux/amd64,linux/arm64 -t janobourian/bank-app:maxine.bankapp --push .</code></li>
+</ul>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="working-with-containers.html" class="btn btn-neutral float-left" title="Working with Containers"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="multi-container-apps.html" class="btn btn-neutral float-right" title="Multi-container apps with Compose">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="working-with-containers.html" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="multi-container-apps.html" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = ".";</script>
+    <script src="js/theme_extra.js"></script>
+    <script src="js/theme.js"></script>
+      <script src="search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
