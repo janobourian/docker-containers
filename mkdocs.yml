@@ -22,8 +22,10 @@ nav:
   - Docker Swarm: docker-swarm.md
   - Docker Networking: docker-networking.md
   - Docker Volumes: docker-volumes.md
-  - Docker Swecurity: docker-security.md
+  - Docker Security: docker-security.md
+  - Docker Docs: docker-docs.md
   - Docker CheatSheet: docker-cheatsheet.md
+  - Apache Kafka: apache-kafka-introduction.md
 
 markdown_extensions:
   - admonition

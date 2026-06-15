@@ -1,0 +1,473 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Beautiful Frontend — Sample UI</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Icon (Bootstrap Icons) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+    <meta name="description" content="A clean, accessible, responsive frontend template built with HTML, CSS3, JS and Bootstrap 5.">
+
+    <style>
+        :root{
+            --bg: #0f1724;
+            --card: #0b1220;
+            --muted: #9aa4b2;
+            --accent: #0ea5a4;
+            --glass: rgba(255,255,255,0.04);
+            --radius: .75rem;
+        }
+
+        /* Light theme */
+        @media (prefers-color-scheme: light){
+            :root{
+                --bg: #f7fafc;
+                --card: #ffffff;
+                --muted: #566573;
+                --accent: #0d9488;
+                --glass: rgba(0,0,0,0.03);
+            }
+        }
+
+        html,body{
+            height:100%;
+            background: linear-gradient(180deg, var(--bg) 0%, color-mix(in srgb, var(--bg) 90%, white 10%) 100%);
+            font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+            color: #e6eef6;
+            -webkit-font-smoothing:antialiased;
+            -moz-osx-font-smoothing:grayscale;
+            scroll-behavior: smooth;
+        }
+
+        /* Light theme text color override */
+        @media (prefers-color-scheme: light){
+            body{ color:#0b1220; }
+        }
+
+        .navbar-brand{
+            font-weight:700;
+            letter-spacing: -0.02em;
+        }
+
+        .hero{
+            padding: 4.5rem 0;
+        }
+
+        .hero-card{
+            background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+            border-radius: var(--radius);
+            padding: 1.25rem;
+            box-shadow: 0 6px 24px rgba(2,6,23,0.55);
+        }
+
+        .feature-icon{
+            width:56px;
+            height:56px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            border-radius:12px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+            margin-right:1rem;
+            flex-shrink:0;
+            color:var(--accent);
+            font-size:1.4rem;
+        }
+
+        .muted{ color: var(--muted); }
+
+        .card-plain{
+            background: var(--card);
+            border-radius: .8rem;
+            padding: 1.25rem;
+            box-shadow: 0 8px 30px rgba(2,6,23,0.5);
+            border: 1px solid rgba(255,255,255,0.02);
+        }
+
+        .glass{
+            background: var(--glass);
+            border-radius: .6rem;
+            padding: .75rem;
+        }
+
+        .cta-btn{
+            background: linear-gradient(90deg, var(--accent), #06b6d4);
+            border: none;
+            color: white;
+            padding: .75rem 1.1rem;
+            border-radius: .7rem;
+            box-shadow: 0 10px 24px rgba(13,148,136,0.12);
+            font-weight:600;
+        }
+
+        .cta-btn:focus{ box-shadow: 0 0 0 0.25rem rgba(13,148,136,0.15); outline: none; }
+
+        footer{
+            padding: 2.5rem 0;
+            border-top: 1px solid rgba(255,255,255,0.03);
+            color:var(--muted);
+        }
+
+        /* Responsive tweaks */
+        @media (max-width:767px){
+            .hero { padding: 3rem 0; }
+            .feature-icon{ width:48px; height:48px; font-size:1.1rem; }
+        }
+
+        /* Accessible focus */
+        a:focus, button:focus, input:focus, textarea:focus{
+            outline-offset: 3px;
+        }
+
+        /* subtle entrance */
+        .fade-in { opacity:0; transform: translateY(8px); transition: all .5s ease; }
+        .fade-in.show { opacity:1; transform:none; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark py-3">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center gap-2" href="#">
+                <span class="bg-white rounded-circle d-inline-block" style="width:36px;height:36px;background:linear-gradient(90deg,#06b6d4,#0ea5a4);"></span>
+                <span>NovaUI</span>
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu" aria-controls="navMenu" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navMenu">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center">
+                    <li class="nav-item"><a class="nav-link active" aria-current="page" href="#home">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#pricing">Pricing</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+                    <li class="nav-item ms-3">
+                        <button id="themeToggle" class="btn btn-outline-light btn-sm" aria-pressed="false" title="Toggle theme">
+                            <i class="bi bi-moon-fill" aria-hidden="true"></i>
+                            <span class="visually-hidden">Toggle theme</span>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main id="home" class="container">
+        <section class="hero">
+            <div class="row align-items-center gx-5">
+                <div class="col-lg-6">
+                    <div class="hero-card fade-in" id="heroCard">
+                        <h1 class="display-6 fw-bold">Design that feels effortless.</h1>
+                        <p class="muted mb-4">A lightweight, accessible, and beautiful front-end template built with modern best practices. Responsive by default, focused on usability and clarity.</p>
+
+                        <div class="d-flex gap-2 flex-wrap">
+                            <a href="#features" class="cta-btn btn btn-lg">Explore features</a>
+                            <a href="#contact" class="btn btn-outline-light btn-lg">Get in touch</a>
+                        </div>
+
+                        <ul class="list-unstyled mt-4 d-flex gap-3 muted flex-wrap">
+                            <li><strong class="text-white">99.9%</strong> uptime</li>
+                            <li><strong class="text-white">Accessible</strong> components</li>
+                            <li><strong class="text-white">Responsive</strong> layout</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 mt-4 mt-lg-0">
+                    <div class="card-plain fade-in" id="heroRight">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div>
+                                <small class="muted">Project health</small>
+                                <h5 class="mb-0">Ready for production</h5>
+                            </div>
+                            <div class="glass text-center">
+                                <strong style="color:var(--accent)">Stable</strong>
+                            </div>
+                        </div>
+
+                        <div class="row g-3">
+                            <div class="col-6">
+                                <div class="glass text-center p-3">
+                                    <div class="muted small">Performance</div>
+                                    <div class="h4 mb-0">A+</div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="glass text-center p-3">
+                                    <div class="muted small">Accessibility</div>
+                                    <div class="h4 mb-0">WCAG AA</div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="mt-3 muted small">Recent updates</div>
+                                <ul class="mt-2">
+                                    <li class="muted">Refined mobile navigation</li>
+                                    <li class="muted">Improved color contrast</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="features" class="py-5">
+            <div class="row align-items-center">
+                <div class="col-lg-4">
+                    <h2>Thoughtful features</h2>
+                    <p class="muted">Components and patterns focused on clarity, performance, and accessibility—so users can get things done quickly.</p>
+                </div>
+
+                <div class="col-lg-8">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-start card-plain">
+                                <div class="feature-icon" aria-hidden="true"><i class="bi bi-speedometer2"></i></div>
+                                <div>
+                                    <h6 class="mb-1">Fast & performant</h6>
+                                    <p class="muted mb-0">Lightweight assets and sensible defaults reduce load times for every user.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-start card-plain">
+                                <div class="feature-icon" aria-hidden="true"><i class="bi bi-shield-lock-fill"></i></div>
+                                <div>
+                                    <h6 class="mb-1">Privacy-first</h6>
+                                    <p class="muted mb-0">Minimal telemetry and predictable data flows for easier compliance.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-start card-plain">
+                                <div class="feature-icon" aria-hidden="true"><i class="bi bi-phone-fill"></i></div>
+                                <div>
+                                    <h6 class="mb-1">Responsive design</h6>
+                                    <p class="muted mb-0">Built mobile-first with fluid layouts that look great on any device.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-start card-plain">
+                                <div class="feature-icon" aria-hidden="true"><i class="bi bi-brush-fill"></i></div>
+                                <div>
+                                    <h6 class="mb-1">Refined UI</h6>
+                                    <p class="muted mb-0">Clear hierarchy, consistent spacing, and subtle motion ensure a pleasant experience.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="pricing" class="py-5">
+            <div class="text-center mb-4">
+                <h3>Simple pricing</h3>
+                <p class="muted mb-0">Transparent plans designed for teams of all sizes.</p>
+            </div>
+
+            <div class="row g-3 justify-content-center">
+                <div class="col-md-4">
+                    <div class="card-plain text-center">
+                        <div class="muted small">Starter</div>
+                        <h4 class="mt-2">$0 <small class="muted">/ month</small></h4>
+                        <p class="muted">Perfect for prototypes and small projects.</p>
+                        <ul class="list-unstyled muted text-start">
+                            <li>Basic components</li>
+                            <li>Community support</li>
+                            <li>Responsive design</li>
+                        </ul>
+                        <button class="btn btn-outline-light w-100 mt-3">Get started</button>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card-plain text-center" aria-hidden="false">
+                        <div class="muted small">Professional</div>
+                        <div class="d-flex align-items-end justify-content-center gap-2">
+                            <h3 class="mt-2 mb-0">$29</h3><small class="muted">/ month</small>
+                        </div>
+                        <p class="muted">Everything you need to ship products faster.</p>
+                        <ul class="list-unstyled muted text-start">
+                            <li>Premium components</li>
+                            <li>Email support</li>
+                            <li>Accessibility guidance</li>
+                        </ul>
+                        <button class="cta-btn w-100 mt-3">Choose plan</button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="contact" class="py-5">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h4>Contact us</h4>
+                    <p class="muted">Have a question or want help integrating the template? Send a message and we'll respond promptly.</p>
+
+                    <form id="contactForm" class="mt-3" novalidate>
+                        <div class="mb-3">
+                            <label class="form-label" for="name">Name</label>
+                            <input id="name" name="name" class="form-control form-control-lg" type="text" required minlength="2" aria-describedby="nameHelp" />
+                            <div class="invalid-feedback">Please enter your name (2+ characters).</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label" for="email">Email</label>
+                            <input id="email" name="email" class="form-control form-control-lg" type="email" required aria-describedby="emailHelp" />
+                            <div class="invalid-feedback">Please enter a valid email address.</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label" for="message">Message</label>
+                            <textarea id="message" name="message" class="form-control" rows="4" required minlength="10"></textarea>
+                            <div class="invalid-feedback">Please enter a message (10+ characters).</div>
+                        </div>
+
+                        <div class="d-flex align-items-center gap-3">
+                            <button class="cta-btn" type="submit">Send message</button>
+                            <button type="reset" class="btn btn-outline-light">Reset</button>
+                        </div>
+                    </form>
+
+                </div>
+
+                <div class="col-lg-6 mt-4 mt-lg-0">
+                    <div class="card-plain">
+                        <h6>Office</h6>
+                        <p class="muted mb-1">San Francisco, CA</p>
+                        <p class="muted small">Mon — Fri, 9:00 — 18:00</p>
+
+                        <div class="mt-3">
+                            <h6>Follow</h6>
+                            <div class="d-flex gap-2 mt-2">
+                                <a href="#" class="btn btn-outline-light btn-sm" aria-label="Twitter"><i class="bi bi-twitter"></i></a>
+                                <a href="#" class="btn btn-outline-light btn-sm" aria-label="GitHub"><i class="bi bi-github"></i></a>
+                                <a href="#" class="btn btn-outline-light btn-sm" aria-label="Dribbble"><i class="bi bi-dribbble"></i></a>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 muted small">
+                            <strong>Privacy-first:</strong> We never sell your data.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <div class="container text-center">
+            <div class="mb-2">© <span id="year"></span> NovaUI — Built with accessibility in mind.</div>
+            <small class="muted">Made with care · <a href="#" class="link-light muted">Terms</a> · <a href="#" class="link-light muted">Privacy</a></small>
+        </div>
+    </footer>
+
+    <!-- Toast for lightweight feedback -->
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index:1050">
+        <div id="feedbackToast" class="toast align-items-center text-bg-dark border-0" role="status" aria-live="polite" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">Message sent — we'll get back to you soon.</div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS + small custom script -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Small utilities and progressive enhancements
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Show fade-in elements for a subtle entrance
+            document.querySelectorAll('.fade-in').forEach(function (el, i) {
+                setTimeout(function () { el.classList.add('show'); }, 120 * i);
+            });
+
+            // Year in footer
+            document.getElementById('year').textContent = new Date().getFullYear();
+
+            // Theme toggle (basic toggle between light & dark via data attribute)
+            var themeToggle = document.getElementById('themeToggle');
+            var currentTheme = localStorage.getItem('nova-theme') || (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+            setTheme(currentTheme);
+
+            themeToggle.addEventListener('click', function () {
+                var next = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+                setTheme(next);
+                localStorage.setItem('nova-theme', next);
+            });
+
+            function setTheme(name) {
+                if (name === 'light') {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                    document.body.style.color = '#0b1220';
+                    themeToggle.innerHTML = '<i class="bi bi-sun-fill" aria-hidden="true"></i>';
+                    themeToggle.setAttribute('aria-pressed', 'true');
+                } else {
+                    document.documentElement.removeAttribute('data-theme');
+                    document.body.style.color = '';
+                    themeToggle.innerHTML = '<i class="bi bi-moon-fill" aria-hidden="true"></i>';
+                    themeToggle.setAttribute('aria-pressed', 'false');
+                }
+            }
+
+            // Contact form validation & submission (mock)
+            var form = document.getElementById('contactForm');
+            var toastEl = document.getElementById('feedbackToast');
+            var toast = new bootstrap.Toast(toastEl, { delay: 4000 });
+
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+                if (!form.checkValidity()) {
+                    form.classList.add('was-validated');
+                    var firstInvalid = form.querySelector(':invalid');
+                    if (firstInvalid) firstInvalid.focus();
+                    return;
+                }
+
+                // Simulate async submission with optimistic UI
+                var submitBtn = form.querySelector('button[type="submit"]');
+                var originalText = submitBtn.textContent;
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Sending...';
+
+                setTimeout(function () {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = originalText;
+                    form.reset();
+                    form.classList.remove('was-validated');
+                    toast.show();
+                }, 900);
+            });
+
+            // Improve keyboard accessibility for skip links if present
+            document.querySelectorAll('a[href^="#"]').forEach(function (anchor) {
+                anchor.addEventListener('click', function (e) {
+                    var target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        // let browser handle it normally (smooth scroll via CSS), then set focus
+                        setTimeout(function () { target.setAttribute('tabindex', '-1'); target.focus(); }, 300);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
