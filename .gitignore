@@ -9,3 +9,4 @@ basic-frontend/dist/*
 site/
 *.pem
 *.sig
+.DS_Store
