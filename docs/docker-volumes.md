@@ -9,6 +9,10 @@ Volumes are first-class objects in Docker.
 * `docker run -it --name voltainer --mount source=bizvol,target=/vol alpine`
 * `docker exec -it voltainer sh`
 
+## Run containers with a volume
+
+* `docker run -it --name voltainer --mount type=bind,source=/Users/frgonzal/Fluxfox/voltainer,target=/home debian:stable-slim`
+* `docker start -ai voltainer`
 
 ## Commands
 
