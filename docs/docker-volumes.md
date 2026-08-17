@@ -13,6 +13,8 @@ Volumes are first-class objects in Docker.
 
 * `docker run -it --name voltainer --mount type=bind,source=/Users/frgonzal/Fluxfox/voltainer,target=/home debian:stable-slim`
 * `docker start -ai voltainer`
+* `docker run -d --name nocodb -p 8080:8080 --mount type=bind,source=/Users/frgonzal/Fluxfox/nocodb,target=/usr/app/data nocodb/nocodb:latest`
+
 
 ## Commands
 
