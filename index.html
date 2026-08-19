@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="description" content="None" />
+      <link rel="shortcut icon" href="img/favicon.ico" />
+    <title>Docker Containers</title>
+    <link rel="stylesheet" href="css/theme.css" />
+    <link rel="stylesheet" href="css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Home";
+        var mkdocs_page_input_path = "index.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/yaml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/bash.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/dockerfile.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="index.html" class="icon icon-home"> Docker Containers
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="./search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">Home</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#table-of-contents">📑 Table of Contents</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#1-master-curriculum-architecture-track-taxonomy">1. Master Curriculum Architecture &amp; Track Taxonomy</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#2-complete-32-module-curriculum-matrix">2. Complete 32-Module Curriculum Matrix</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#3-ecosystem-competency-certification-roadmap">3. Ecosystem Competency &amp; Certification Roadmap</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#4-universal-engineering-documentation-standards-doc-std-universal-2026">4. Universal Engineering Documentation Standards (DOC-STD-UNIVERSAL-2026)</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#5-enterprise-finops-cloud-compute-governance-framework">5. Enterprise FinOps &amp; Cloud Compute Governance Framework</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="getting-started.md">Getting Started</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-engine.md">Docker Engine</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="working-with-images.md">Working with Images</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="working-with-containers.md">Working with Containers</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="containerizing_an_app.md">Containerizing an Application</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="multi-container-apps.md">Multi-container apps with Compose</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-and-wasm.md">Docker and Wasm</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-swarm.md">Docker Swarm</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-networking.md">Docker Networking</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-volumes.md">Docker Volumes</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-security.md">Docker Security</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-docs.md">Docker Docs</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-cheatsheet.md">Docker CheatSheet</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="apache-kafka-introduction.md">Apache Kafka</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Docker Containers</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html" class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Home</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="mission-critical-docker-container-systems-architecture-master-curriculum-portal">Mission-Critical Docker &amp; Container Systems Architecture — Master Curriculum Portal<a class="headerlink" href="#mission-critical-docker-container-systems-architecture-master-curriculum-portal" title="Permanent link">&para;</a></h1>
+<p><strong>Track:</strong> Enterprise Container Architecture, OCI Runtimes &amp; Cloud Native Infrastructure
+<strong>Standard Identifier:</strong> <code>DOC-STD-UNIVERSAL-2026-DOCKER</code>
+<strong>Repository:</strong> <code>vit/docker-containers</code>
+<strong>Target Level:</strong> Zero to Enterprise Container Systems Architect &amp; Cloud Infrastructure Lead
+<strong>Status:</strong> ✅ Complete 32-Module Master Encyclopedia (100% Validated &amp; Standardized)</p>
+<hr />
+<h2 id="table-of-contents">📑 Table of Contents<a class="headerlink" href="#table-of-contents" title="Permanent link">&para;</a></h2>
+<ol>
+<li>
+<p><a href="#1-master-curriculum-architecture--track-taxonomy">Master Curriculum Architecture &amp; Track Taxonomy</a></p>
+</li>
+<li>
+<p><a href="#2-complete-32-module-curriculum-matrix">Complete 32-Module Curriculum Matrix</a></p>
+</li>
+<li>
+<p><a href="#3-ecosystem-competency--certification-roadmap">Ecosystem Competency &amp; Certification Roadmap</a></p>
+</li>
+<li>
+<p><a href="#4-universal-engineering-documentation-standards-doc-std-universal-2026">Universal Engineering Documentation Standards (<code>DOC-STD-UNIVERSAL-2026</code>)</a></p>
+</li>
+<li>
+<p><a href="#5-enterprise-finops--cloud-compute-governance-framework">Enterprise FinOps &amp; Cloud Compute Governance Framework</a></p>
+</li>
+</ol>
+<hr />
+<h2 id="1-master-curriculum-architecture-track-taxonomy">1. Master Curriculum Architecture &amp; Track Taxonomy<a class="headerlink" href="#1-master-curriculum-architecture-track-taxonomy" title="Permanent link">&para;</a></h2>
+<p>This encyclopedia represents the definitive, industrial-grade learning path for <strong>Container Runtime Architecture, OCI Specifications, Linux Kernel Isolation Primitives (Namespaces, cgroups v2, OverlayFS), BuildKit Compilation, Enterprise Security Hardening, and Production Microservices Mesh Orchestration</strong>.</p>
+<pre><code class="language-mermaid">flowchart TD
+    subgraph PRE[&quot;🟢 PRE-TIER: Absolute Foundations (Modules neg04 – neg00)&quot;]
+        direction LR
+        N4[&quot;neg04: Runtime Install\n&amp; Hello World&quot;]
+        N3[&quot;neg03: CLI Verbs\n&amp; Observability&quot;]
+        N2[&quot;neg02: Dockerfile\n&amp; Layer Caching&quot;]
+        N1[&quot;neg01: Storage Mounts\n&amp; Named Volumes&quot;]
+        N0[&quot;neg00: Network Bridge\n&amp; DNS Discovery&quot;]
+        N4 --&gt; N3 --&gt; N2 --&gt; N1 --&gt; N0
+    end
+
+    subgraph T1[&quot;🟡 TIER 1: Core Engine &amp; Linux Primitives (Modules 00 – 04)&quot;]
+        direction LR
+        M00[&quot;00: Container Foundations\n&amp; Architecture&quot;]
+        M01[&quot;01: Engine Internals\n&amp; Kernel Syscalls&quot;]
+        M02[&quot;02: Process Model\n&amp; Tini Init&quot;]
+        M03[&quot;03: Multi-Stage\n&amp; BuildKit&quot;]
+        M04[&quot;04: Polyglot Apps\n&amp; Containerization&quot;]
+        M00 --&gt; M01 --&gt; M02 --&gt; M03 --&gt; M04
+    end
+
+    subgraph T2[&quot;🟠 TIER 2: Orchestration &amp; Distributed Stacks (Modules 05 – 08)&quot;]
+        direction LR
+        M05[&quot;05: Docker Compose\nSpecification&quot;]
+        M06[&quot;06: Storage OverlayFS\n&amp; Bind Mounts&quot;]
+        M07[&quot;07: Advanced Networking\n&amp; iptables NAT&quot;]
+        M08[&quot;08: Security Hardening\n&amp; Seccomp&quot;]
+        M05 --&gt; M06 --&gt; M07 --&gt; M08
+    end
+
+    subgraph T3[&quot;🔴 TIER 3: Clustering &amp; Specialized Runtimes (Modules 09 – 13)&quot;]
+        direction LR
+        M09[&quot;09: Swarm Mode\n&amp; Routing Mesh&quot;]
+        M10[&quot;10: WebAssembly WASI\n&amp; WasmEdge&quot;]
+        M11[&quot;11: Distributed Kafka\nStateful Sets&quot;]
+        M12[&quot;12: SRE Runbooks\n&amp; CLI Cheatsheet&quot;]
+        M13[&quot;13: OCI Standards\n&amp; Specifications&quot;]
+        M09 --&gt; M10 --&gt; M11 --&gt; M12 --&gt; M13
+    end
+
+    subgraph T4[&quot;⚫ TIER 4: Hardware Acceleration &amp; Modern Ecosystems (Modules 14 – 18)&quot;]
+        direction LR
+        M14[&quot;14: NVIDIA CUDA\n&amp; GPU Toolkits&quot;]
+        M15[&quot;15: Multi-Arch Buildx\n&amp; QEMU Emulation&quot;]
+        M16[&quot;16: Kubernetes CRI\n&amp; containerd&quot;]
+        M17[&quot;17: Podman &amp; Skopeo\nDaemonless&quot;]
+        M18[&quot;18: gVisor runsc\n&amp; Kata MicroVMs&quot;]
+        M14 --&gt; M15 --&gt; M16 --&gt; M17 --&gt; M18
+    end
+
+    subgraph T5[&quot;🔵 TIER 5: Supply Chain, Testing &amp; Capstone (Modules 19 – 26)&quot;]
+        direction LR
+        M19[&quot;19: eBPF Profiling\n&amp; cAdvisor&quot;]
+        M20[&quot;20: DockerSlim\n&amp; Distroless&quot;]
+        M21[&quot;21: Vault &amp; BuildKit\nSecret Mounts&quot;]
+        M22[&quot;22: SLSA Supply Chain\n&amp; Cosign Signatures&quot;]
+        M23[&quot;23: Kaniko Unprivileged\nCI/CD Pipelines&quot;]
+        M24[&quot;24: Harbor OCI\nRegistry Hub&quot;]
+        M25[&quot;25: Testcontainers\nIntegration Labs&quot;]
+        M26[&quot;26: Production Capstone\nMicroservices Mesh&quot;]
+        M19 --&gt; M20 --&gt; M21 --&gt; M22 --&gt; M23 --&gt; M24 --&gt; M25 --&gt; M26
+    end
+
+    PRE --&gt; T1 --&gt; T2 --&gt; T3 --&gt; T4 --&gt; T5
+</code></pre>
+<hr />
+<h2 id="2-complete-32-module-curriculum-matrix">2. Complete 32-Module Curriculum Matrix<a class="headerlink" href="#2-complete-32-module-curriculum-matrix" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Module</th>
+<th style="text-align: left;">Core Domain &amp; Engineering Focus</th>
+<th style="text-align: left;">Target Level</th>
+<th style="text-align: left;">Reference Document Link</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>neg04. Runtime Install</strong></td>
+<td style="text-align: left;">Docker Engine, containerd, Colima, WSL2, <code>hello-world</code> execution flow</td>
+<td style="text-align: left;">Absolute Beginner</td>
+<td style="text-align: left;"><a href="neg04_container_runtime_installation_and_hello_world.html"><code>neg04_container_runtime_installation_and_hello_world.md</code></a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>neg03. CLI Primitives</strong></td>
+<td style="text-align: left;">CLI grammar, <code>run</code> vs <code>start</code> vs <code>exec</code>, <code>logs</code>, <code>stats</code>, <code>inspect</code> JSON format</td>
+<td style="text-align: left;">Absolute Beginner</td>
+<td style="text-align: left;"><a href="neg03_container_cli_primitives_run_exec_logs_ps.html"><code>neg03_container_cli_primitives_run_exec_logs_ps.md</code></a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>neg02. Dockerfile Basics</strong></td>
+<td style="text-align: left;"><code>FROM</code>, <code>RUN</code>, <code>COPY</code>, <code>WORKDIR</code>, layer caching, <code>CMD</code> vs <code>ENTRYPOINT</code> matrix</td>
+<td style="text-align: left;">Beginner Foundations</td>
+<td style="text-align: left;"><a href="neg02_dockerfile_foundations_from_run_cmd_entrypoint.html"><code>neg02_dockerfile_foundations_from_run_cmd_entrypoint.md</code></a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>neg01. Storage Mounts</strong></td>
+<td style="text-align: left;">Ephemeral layers, Named Volumes, Bind Mounts, <code>tmpfs</code>, <code>--mount</code> syntax</td>
+<td style="text-align: left;">Beginner Foundations</td>
+<td style="text-align: left;"><a href="neg01_container_storage_bind_mounts_and_named_volumes.html"><code>neg01_container_storage_bind_mounts_and_named_volumes.md</code></a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>neg00. Networking Ports</strong></td>
+<td style="text-align: left;"><code>bridge</code>, <code>host</code>, port forwarding <code>-p</code>, iptables DNAT, embedded DNS <code>127.0.0.11</code></td>
+<td style="text-align: left;">Beginner Foundations</td>
+<td style="text-align: left;"><a href="neg00_container_networking_ports_bridge_and_host.html"><code>neg00_container_networking_ports_bridge_and_host.md</code></a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>00. Foundations &amp; Arch</strong></td>
+<td style="text-align: left;">High-level container architecture, virtualization vs containerization, OCI</td>
+<td style="text-align: left;">Foundational Systems</td>
+<td style="text-align: left;"><a href="00_container_foundations_and_docker_architecture.html"><code>00_container_foundations_and_docker_architecture.md</code></a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>01. Engine &amp; Linux Primitives</strong></td>
+<td style="text-align: left;">Namespaces (8 types), cgroups v2, OverlayFS (lower/upper/merged), <code>dockerd</code>/<code>runc</code></td>
+<td style="text-align: left;">Systems Architecture</td>
+<td style="text-align: left;"><a href="01_docker_engine_architecture_and_linux_kernel_primitives.html"><code>01_docker_engine_architecture_and_linux_kernel_primitives.md</code></a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>02. Process Model &amp; Tini</strong></td>
+<td style="text-align: left;">PID 1 responsibilities, zombie process reaping, SIGTERM signal propagation, <code>tini</code></td>
+<td style="text-align: left;">Systems Architecture</td>
+<td style="text-align: left;"><a href="02_container_lifecycle_process_model_and_tini_init.html"><code>02_container_lifecycle_process_model_and_tini_init.md</code></a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>03. Multi-Stage &amp; BuildKit</strong></td>
+<td style="text-align: left;">Multi-stage build patterns, BuildKit cache mounts, frontend syntax, <code>.dockerignore</code></td>
+<td style="text-align: left;">Build Optimization</td>
+<td style="text-align: left;"><a href="03_dockerfile_multi_stage_builds_and_buildkit.html"><code>03_dockerfile_multi_stage_builds_and_buildkit.md</code></a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>04. Polyglot Containers</strong></td>
+<td style="text-align: left;">Node.js, Python, Go, Java, Rust containerization recipes and best practices</td>
+<td style="text-align: left;">Application Systems</td>
+<td style="text-align: left;"><a href="04_containerizing_enterprise_polyglot_applications.html"><code>04_containerizing_enterprise_polyglot_applications.md</code></a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>05. Docker Compose</strong></td>
+<td style="text-align: left;">Compose v2 specification, multi-tier microservices, healthchecks, <code>depends_on</code></td>
+<td style="text-align: left;">Orchestration Lead</td>
+<td style="text-align: left;"><a href="05_docker_compose_specification_and_multi_tier_stacks.html"><code>05_docker_compose_specification_and_multi_tier_stacks.md</code></a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>06. Storage Architecture</strong></td>
+<td style="text-align: left;">OverlayFS copy-on-write internals, volume drivers, NFS/CIFS network storage</td>
+<td style="text-align: left;">Storage Specialist</td>
+<td style="text-align: left;"><a href="06_storage_architecture_volumes_bind_mounts_and_overlayfs.html"><code>06_storage_architecture_volumes_bind_mounts_and_overlayfs.md</code></a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>07. Advanced Networking</strong></td>
+<td style="text-align: left;">Virtual ethernet (<code>veth</code>) pairs, overlay VXLAN, macvlan, Linux packet traversal</td>
+<td style="text-align: left;">Network Architect</td>
+<td style="text-align: left;"><a href="07_networking_deep_dive_bridge_overlay_macvlan_and_iptables.html"><code>07_networking_deep_dive_bridge_overlay_macvlan_and_iptables.md</code></a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>08. Security &amp; Hardening</strong></td>
+<td style="text-align: left;">Dropping capabilities (<code>CAP_SYS_ADMIN</code>), Seccomp profiles, AppArmor, non-root UID</td>
+<td style="text-align: left;">Security Engineer</td>
+<td style="text-align: left;"><a href="08_container_security_hardening_rootless_seccomp_and_capabilities.html"><code>08_container_security_hardening_rootless_seccomp_and_capabilities.md</code></a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>09. Swarm &amp; Routing Mesh</strong></td>
+<td style="text-align: left;">Docker Swarm Mode, Raft consensus, Ingress routing mesh, service virtual IPs</td>
+<td style="text-align: left;">Cluster Architect</td>
+<td style="text-align: left;"><a href="09_docker_swarm_clustering_and_ingress_routing_mesh.html"><code>09_docker_swarm_clustering_and_ingress_routing_mesh.md</code></a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>10. WebAssembly WASI</strong></td>
+<td style="text-align: left;">OCI WebAssembly integration, WasmEdge, Wasmtime, sub-millisecond serverless</td>
+<td style="text-align: left;">JIT &amp; WASM Lead</td>
+<td style="text-align: left;"><a href="10_webassembly_wasi_runtimes_wasmtime_and_wasmedge.html"><code>10_webassembly_wasi_runtimes_wasmtime_and_wasmedge.md</code></a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>11. Distributed Kafka</strong></td>
+<td style="text-align: left;">Stateful clustering, ZooKeeper/KRaft quorum, volume persistence, multi-broker mesh</td>
+<td style="text-align: left;">Data Infrastructure</td>
+<td style="text-align: left;"><a href="11_distributed_kafka_and_stateful_container_workloads.html"><code>11_distributed_kafka_and_stateful_container_workloads.md</code></a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>12. SRE Runbook</strong></td>
+<td style="text-align: left;">Production debugging, forensic inspection, emergency crash-recovery runbooks</td>
+<td style="text-align: left;">SRE &amp; Operations</td>
+<td style="text-align: left;"><a href="12_production_cli_cheatsheet_and_troubleshooting_runbook.html"><code>12_production_cli_cheatsheet_and_troubleshooting_runbook.md</code></a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>13. OCI Standards</strong></td>
+<td style="text-align: left;">OCI Runtime, Image, and Distribution Specifications, content-addressable storage</td>
+<td style="text-align: left;">Systems Governance</td>
+<td style="text-align: left;"><a href="13_container_specification_and_documentation_standards.html"><code>13_container_specification_and_documentation_standards.md</code></a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>14. GPU Acceleration</strong></td>
+<td style="text-align: left;">NVIDIA Container Toolkit (<code>nvidia-ctk</code>), CDI device schema, CUDA AI workloads</td>
+<td style="text-align: left;">AI Infrastructure</td>
+<td style="text-align: left;"><a href="14_gpu_acceleration_nvidia_container_toolkit_and_cuda.html"><code>14_gpu_acceleration_nvidia_container_toolkit_and_cuda.md</code></a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>15. Multi-Arch Buildx</strong></td>
+<td style="text-align: left;">OCI Manifest Lists, QEMU <code>binfmt_misc</code> emulation, ARM64 Graviton optimization</td>
+<td style="text-align: left;">Build Engineer</td>
+<td style="text-align: left;"><a href="15_cross_platform_builds_buildx_qemu_and_multiarch.html"><code>15_cross_platform_builds_buildx_qemu_and_multiarch.md</code></a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>16. Kubernetes CRI</strong></td>
+<td style="text-align: left;">CRI gRPC interface, CRI-O vs <code>containerd</code>, Pod sandbox pause container lifecycle</td>
+<td style="text-align: left;">Cloud Native Lead</td>
+<td style="text-align: left;"><a href="16_cri_o_and_kubernetes_cri_runtimes.html"><code>16_cri_o_and_kubernetes_cri_runtimes.md</code></a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>17. Daemonless Podman</strong></td>
+<td style="text-align: left;">Rootless containers, <code>conmon</code> supervisor, Buildah image builder, Skopeo sync</td>
+<td style="text-align: left;">Hardened Systems</td>
+<td style="text-align: left;"><a href="17_podman_skopeo_and_buildah_daemonless_ecosystem.html"><code>17_podman_skopeo_and_buildah_daemonless_ecosystem.md</code></a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>18. Sandboxed MicroVMs</strong></td>
+<td style="text-align: left;">gVisor (<code>runsc</code>) user-space kernel, Kata Containers hardware-isolated MicroVMs</td>
+<td style="text-align: left;">Security Architect</td>
+<td style="text-align: left;"><a href="18_sandboxed_containers_gvisor_and_kata_containers.html"><code>18_sandboxed_containers_gvisor_and_kata_containers.md</code></a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>19. eBPF Profiling</strong></td>
+<td style="text-align: left;">Linux perf, eBPF probes, CFS CPU throttling detection, cAdvisor Prometheus metrics</td>
+<td style="text-align: left;">Observability Lead</td>
+<td style="text-align: left;"><a href="19_container_profiling_perf_ebpf_and_cadvisor.html"><code>19_container_profiling_perf_ebpf_and_cadvisor.md</code></a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>20. Image Minification</strong></td>
+<td style="text-align: left;">DockerSlim dynamic tracing, Google Distroless, scratch base, CVE elimination</td>
+<td style="text-align: left;">Quality Engineer</td>
+<td style="text-align: left;"><a href="20_image_optimization_and_docker_slim.html"><code>20_image_optimization_and_docker_slim.md</code></a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>21. Secrets Management</strong></td>
+<td style="text-align: left;">BuildKit secret mounts, HashiCorp Vault agent sidecars, tmpfs RAM credentials</td>
+<td style="text-align: left;">Security Engineer</td>
+<td style="text-align: left;"><a href="21_secrets_management_buildkit_secrets_and_vault.html"><code>21_secrets_management_buildkit_secrets_and_vault.md</code></a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>22. SLSA Supply Chain</strong></td>
+<td style="text-align: left;">Software Bill of Materials (SBOM / Syft), Sigstore Cosign cryptographic signatures</td>
+<td style="text-align: left;">Supply Chain Lead</td>
+<td style="text-align: left;"><a href="22_supply_chain_security_slsa_provenance_and_cosign.html"><code>22_supply_chain_security_slsa_provenance_and_cosign.md</code></a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>23. CI/CD Pipelines</strong></td>
+<td style="text-align: left;">Kaniko unprivileged in-cluster builds, DinD vs DooD security analysis, caching</td>
+<td style="text-align: left;">Platform Engineer</td>
+<td style="text-align: left;"><a href="23_cicd_pipeline_integration_docker_in_docker_and_kaniko.html"><code>23_cicd_pipeline_integration_docker_in_docker_and_kaniko.md</code></a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>24. Harbor Registries</strong></td>
+<td style="text-align: left;">CNCF Harbor architecture, geo-replication, proxy cache mirrors, RBAC policies</td>
+<td style="text-align: left;">Infrastructure Lead</td>
+<td style="text-align: left;"><a href="24_container_registry_architecture_harbor_and_distribution.html"><code>24_container_registry_architecture_harbor_and_distribution.md</code></a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>25. Testcontainers QA</strong></td>
+<td style="text-align: left;">Ephemeral integration test suites, automated database teardown, Ryuk reaper</td>
+<td style="text-align: left;">Quality Assurance</td>
+<td style="text-align: left;"><a href="25_container_testing_testcontainers_and_quality_assurance.html"><code>25_container_testing_testcontainers_and_quality_assurance.md</code></a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>26. Master Capstone</strong></td>
+<td style="text-align: left;">Hardened polyglot microservices mesh, NGINX gateway, Node.js API, Postgres, Redis</td>
+<td style="text-align: left;">Principal Architect</td>
+<td style="text-align: left;"><a href="26_enterprise_production_capstone_microservices_mesh.html"><code>26_enterprise_production_capstone_microservices_mesh.md</code></a></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="3-ecosystem-competency-certification-roadmap">3. Ecosystem Competency &amp; Certification Roadmap<a class="headerlink" href="#3-ecosystem-competency-certification-roadmap" title="Permanent link">&para;</a></h2>
+<pre><code class="language-text">┌────────────────────────────────────────────────────────────────────────────────┐
+│             CONTAINER &amp; CLOUD NATIVE CERTIFICATION MAPPING MATRIX              │
+├───────────────────┬───────────────────┬────────────────────────────────────────┤
+│ Certification     │ Governing Body    │ Targeted Encyclopedia Modules          │
+├───────────────────┼───────────────────┼────────────────────────────────────────┤
+│ **DCA**           │ Docker / Mirantis │ Modules neg04-neg00, 00-09, 12, 15     │
+├───────────────────┼───────────────────┼────────────────────────────────────────┤
+│ **CKA**           │ Linux Foundation  │ Modules 01, 06, 07, 16, 17, 19, 23     │
+├───────────────────┼───────────────────┼────────────────────────────────────────┤
+│ **CKS (Security)**│ Linux Foundation  │ Modules 08, 17, 18, 20, 21, 22         │
+├───────────────────┼───────────────────┼────────────────────────────────────────┤
+│ **LFCS (Linux)**  │ Linux Foundation  │ Modules 01, 02, 06, 07, 08, 19         │
+└───────────────────┴───────────────────┴────────────────────────────────────────┘
+</code></pre>
+<hr />
+<h2 id="4-universal-engineering-documentation-standards-doc-std-universal-2026">4. Universal Engineering Documentation Standards (<code>DOC-STD-UNIVERSAL-2026</code>)<a class="headerlink" href="#4-universal-engineering-documentation-standards-doc-std-universal-2026" title="Permanent link">&para;</a></h2>
+<p>Every document in this 32-module encyclopedia adheres strictly to the universal enterprise documentation standard:</p>
+<ol>
+<li><strong>Executive Summaries</strong>: High-level business purpose, mechanics, and value for executives and non-technical stakeholders.</li>
+<li><strong>Deep Architectural Diagrams</strong>: Mermaid flowcharts, sequence diagrams, mindmaps, and ASCII virtual memory topologies.</li>
+<li><strong>Reproducible Production Labs</strong>: Complete, executable configurations and scripts.</li>
+<li><strong>Pure Escaped CLI Snippets</strong>: Formatted with trailing <code>\</code> line escapes and zero in-code comments.</li>
+<li><strong>The 5+5 Reference Rule</strong>: Exactly 5 official documentation links + 5 authoritative engineering deep dives (APA 7th edition).</li>
+<li><strong>Universal FinOps &amp; Hardware Cost Governance</strong>: Financial analyses detailing exact cloud VM and storage cost savings.</li>
+</ol>
+<hr />
+<h2 id="5-enterprise-finops-cloud-compute-governance-framework">5. Enterprise FinOps &amp; Cloud Compute Governance Framework<a class="headerlink" href="#5-enterprise-finops-cloud-compute-governance-framework" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Slashes Cloud Compute Bills by 65%</strong>: Packaging microservices into lightweight containers running on shared Linux kernels multiplies compute density by 4x–8x over traditional virtual machines.</li>
+<li><strong>Reduces Storage Egress by 95%</strong>: Minifying images with Distroless and DockerSlim (from 1GB to 20MB) drops cross-region container image pull bandwidth fees to near zero.</li>
+<li><strong>Prevents Multi-Million Dollar Breaches</strong>: Cryptographic signing (Cosign) and BuildKit secret mounts eliminate hardcoded credentials and software supply chain attacks.</li>
+</ul>
+              
+            </div>
+          </div><footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+    
+  </span>
+</div>
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = ".";</script>
+    <script src="js/theme_extra.js"></script>
+    <script src="js/theme.js"></script>
+      <script src="search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
+
+<!--
+MkDocs version : 1.6.1
+Build Date UTC : 2026-08-19 02:56:01.165510+00:00
+-->

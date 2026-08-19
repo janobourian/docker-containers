@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="img/favicon.ico" />
+    <title>Module neg00: Container Networking Primitives — Ports, Bridge Networks &amp; DNS Discovery - Docker Containers</title>
+    <link rel="stylesheet" href="css/theme.css" />
+    <link rel="stylesheet" href="css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Module neg00: Container Networking Primitives \u2014 Ports, Bridge Networks \u0026amp; DNS Discovery";
+        var mkdocs_page_input_path = "neg00_container_networking_ports_bridge_and_host.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/yaml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/bash.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/dockerfile.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="index.html" class="icon icon-home"> Docker Containers
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="./search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="index.html">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="getting-started.md">Getting Started</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-engine.md">Docker Engine</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="working-with-images.md">Working with Images</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="working-with-containers.md">Working with Containers</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="containerizing_an_app.md">Containerizing an Application</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="multi-container-apps.md">Multi-container apps with Compose</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-and-wasm.md">Docker and Wasm</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-swarm.md">Docker Swarm</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-networking.md">Docker Networking</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-volumes.md">Docker Volumes</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-security.md">Docker Security</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-docs.md">Docker Docs</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-cheatsheet.md">Docker CheatSheet</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="apache-kafka-introduction.md">Apache Kafka</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Docker Containers</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html" class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Module neg00: Container Networking Primitives — Ports, Bridge Networks &amp; DNS Discovery</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="module-neg00-container-networking-primitives-ports-bridge-networks-dns-discovery">Module neg00: Container Networking Primitives — Ports, Bridge Networks &amp; DNS Discovery<a class="headerlink" href="#module-neg00-container-networking-primitives-ports-bridge-networks-dns-discovery" title="Permanent link">&para;</a></h1>
+<p><strong>Standard Identifier:</strong> <code>DOC-STD-UNIVERSAL-2026-DOCKER</code>
+<strong>Track:</strong> Enterprise Container Architecture, OCI Runtimes &amp; Cloud Native Infrastructure
+<strong>Category:</strong> Container Networking Foundations
+<strong>Status:</strong> ✅ Completed</p>
+<hr />
+<h2 id="table-of-contents">📑 Table of Contents<a class="headerlink" href="#table-of-contents" title="Permanent link">&para;</a></h2>
+<ol>
+<li>
+<p><a href="#1-high-level-overview--executive-summary">High-Level Overview &amp; Executive Summary</a></p>
+</li>
+<li>
+<p><a href="#2-the-container-network-model-cnm--network-drivers">The Container Network Model (CNM) &amp; Network Drivers</a></p>
+</li>
+<li>
+<p><a href="#3-default-bridge-vs-user-defined-bridge-networks">Default Bridge vs User-Defined Bridge Networks</a></p>
+</li>
+<li>
+<p><a href="#4-port-publishing--linux-iptables-nat-translation">Port Publishing &amp; Linux iptables NAT Translation</a></p>
+</li>
+<li>
+<p><a href="#5-automatic-dns-service-discovery-between-containers">Automatic DNS Service Discovery Between Containers</a></p>
+</li>
+<li>
+<p><a href="#6-architectural-visual-topology">Architectural Visual Topology</a></p>
+</li>
+<li>
+<p><a href="#7-step-by-step-production-lab-multi-tier-microservice-isolated-network">Step-by-Step Production Lab: Multi-Tier Microservice Isolated Network</a></p>
+</li>
+<li>
+<p><a href="#8-certification--engineering-standards-cheat-sheet">Certification &amp; Engineering Standards Cheat Sheet</a></p>
+</li>
+<li>
+<p><a href="#9-references-the-55-rule">References (The 5+5 Rule)</a></p>
+</li>
+<li>
+<p><a href="#10-universal-finops--hardware-cost-governance">Universal FinOps &amp; Hardware Cost Governance</a></p>
+</li>
+</ol>
+<hr />
+<h2 id="1-high-level-overview-executive-summary">1. High-Level Overview &amp; Executive Summary<a class="headerlink" href="#1-high-level-overview-executive-summary" title="Permanent link">&para;</a></h2>
+<p>Container networking isolates a container's TCP/IP stack (routing tables, network interfaces, firewall rules) within an independent <strong>Network Namespace</strong> while facilitating controlled inter-process communication across bridge virtual ethernet interfaces (<code>veth</code> pairs) (Stevens et al., 2013).</p>
+<h3 id="executive-summary-for-managers-non-technical-stakeholders">👔 Executive Summary (For Managers &amp; Non-Technical Stakeholders)<a class="headerlink" href="#executive-summary-for-managers-non-technical-stakeholders" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Business Purpose</strong>: Provides secure, software-defined network isolation for microservices running on shared cloud hardware.</li>
+<li><strong>How It Works</strong>: Containers communicate across virtual private networks where applications can discover each other automatically by service name without hardcoding dynamic IP addresses.</li>
+<li><strong>Key Business Value &amp; ROI</strong>: Prevents network intrusion attacks by isolating internal databases from the public internet using private container networks.</li>
+</ul>
+<hr />
+<h2 id="2-the-container-network-model-cnm-network-drivers">2. The Container Network Model (CNM) &amp; Network Drivers<a class="headerlink" href="#2-the-container-network-model-cnm-network-drivers" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Driver</th>
+<th style="text-align: left;">Description</th>
+<th style="text-align: left;">Use Case</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong><code>bridge</code></strong></td>
+<td style="text-align: left;">Default software virtual switch on single host</td>
+<td style="text-align: left;">Standard standalone microservice communication.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>host</code></strong></td>
+<td style="text-align: left;">Bypasses container network namespace; shares host IP</td>
+<td style="text-align: left;">Ultra-high performance, low-latency packet processing.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>overlay</code></strong></td>
+<td style="text-align: left;">Multi-host VXLAN tunnel network</td>
+<td style="text-align: left;">Docker Swarm &amp; multi-node clusters.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>macvlan</code></strong></td>
+<td style="text-align: left;">Assigns physical MAC address directly to container</td>
+<td style="text-align: left;">Legacy enterprise application migrations requiring direct LAN IPs.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>none</code></strong></td>
+<td style="text-align: left;">Disables all external network interfaces</td>
+<td style="text-align: left;">Air-gapped batch computation, cryptographic processors.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="3-default-bridge-vs-user-defined-bridge-networks">3. Default Bridge vs User-Defined Bridge Networks<a class="headerlink" href="#3-default-bridge-vs-user-defined-bridge-networks" title="Permanent link">&para;</a></h2>
+<pre><code class="language-mermaid">flowchart TD
+    subgraph DefaultBridge[&quot;Default Bridge (docker0)&quot;]
+        A1[&quot;Container A&quot;] &lt;--&gt;|Only IP communication| B1[&quot;Container B&quot;]
+        Note1[&quot;No automatic DNS resolution! Must use legacy links&quot;]
+    end
+
+    subgraph UserBridge[&quot;User-Defined Bridge (app-net)&quot;]
+        A2[&quot;api-service&quot;] &lt;--&gt;|Automatic DNS by name: http://db:5432| B2[&quot;db-service&quot;]
+        Note2[&quot;Isolated subnet, automatic service discovery&quot;]
+    end
+</code></pre>
+<hr />
+<h2 id="4-port-publishing-linux-iptables-nat-translation">4. Port Publishing &amp; Linux iptables NAT Translation<a class="headerlink" href="#4-port-publishing-linux-iptables-nat-translation" title="Permanent link">&para;</a></h2>
+<p>Publishing a port (<code>-p 8080:80</code>) creates an <code>iptables</code> Destination NAT (DNAT) rule in the Linux kernel:</p>
+<pre><code class="language-text">[External Traffic: Host Port 8080]
+       │
+       ▼ (Linux Kernel iptables PREROUTING Chain)
+[DNAT Translation: docker0 Bridge -&gt; 172.18.0.2:80]
+       │
+       ▼
+[Container Process: NGINX Listening on Port 80]
+</code></pre>
+<hr />
+<h2 id="5-automatic-dns-service-discovery-between-containers">5. Automatic DNS Service Discovery Between Containers<a class="headerlink" href="#5-automatic-dns-service-discovery-between-containers" title="Permanent link">&para;</a></h2>
+<p>On user-defined networks, Docker runs an embedded DNS server at <code>127.0.0.11</code>:</p>
+<pre><code class="language-bash">
+# Query embedded DNS server for container IP
+docker exec -i frontend nslookup backend_service
+</code></pre>
+<hr />
+<h2 id="6-architectural-visual-topology">6. Architectural Visual Topology<a class="headerlink" href="#6-architectural-visual-topology" title="Permanent link">&para;</a></h2>
+<pre><code class="language-mermaid">sequenceDiagram
+    participant Client as Web Client
+    participant Host as Host Interface (eth0)
+    participant Bridge as Docker Bridge (br-app)
+    participant API as API Container (172.20.0.2)
+    participant DB as DB Container (172.20.0.3)
+
+    Client-&gt;&gt;Host: HTTP Request (host:8080)
+    Host-&gt;&gt;Bridge: iptables DNAT -&gt; 172.20.0.2:8080
+    Bridge-&gt;&gt;API: Forward packet to API veth
+    API-&gt;&gt;DB: Query DNS 'db-service' -&gt; 172.20.0.3:5432
+    DB--&gt;&gt;API: Return query result
+    API--&gt;&gt;Client: HTTP 200 OK Response
+</code></pre>
+<hr />
+<h2 id="7-step-by-step-production-lab-multi-tier-microservice-isolated-network">7. Step-by-Step Production Lab: Multi-Tier Microservice Isolated Network<a class="headerlink" href="#7-step-by-step-production-lab-multi-tier-microservice-isolated-network" title="Permanent link">&para;</a></h2>
+<pre><code class="language-bash">
+# Step 1: Create isolated custom bridge network
+docker network create --driver bridge internal_tier_net
+
+# Step 2: Run backend database attached to private network (NO host ports published!)
+docker run -d --name backend_db     --network internal_tier_net     -e REDIS_PASSWORD=SecretProdPass     redis:7-alpine
+
+# Step 3: Run frontend API attached to network and publish host port
+docker run -d --name frontend_api     --network internal_tier_net     -p 8080:80     nginx:alpine
+
+# Step 4: Verify automatic DNS service discovery from frontend to backend
+docker exec -i frontend_api ping -c 2 backend_db
+
+# Clean up
+docker stop frontend_api backend_db &amp;&amp; docker rm frontend_api backend_db &amp;&amp; docker network rm internal_tier_net
+</code></pre>
+<hr />
+<h2 id="8-certification-engineering-standards-cheat-sheet">8. Certification &amp; Engineering Standards Cheat Sheet<a class="headerlink" href="#8-certification-engineering-standards-cheat-sheet" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Network Flag</th>
+<th style="text-align: left;">Purpose</th>
+<th style="text-align: left;">Standard Rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>--network &lt;name&gt;</code></td>
+<td style="text-align: left;">Connect container to network</td>
+<td style="text-align: left;">Always use custom networks in production.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>-p 127.0.0.1:8080:80</code></td>
+<td style="text-align: left;">Bind port to localhost only</td>
+<td style="text-align: left;">Prevent accidental public exposure of internal admin APIs.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>--internal</code></td>
+<td style="text-align: left;">Restrict network from external egress</td>
+<td style="text-align: left;">Isolate backend database subnets.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="9-references-the-55-rule">9. References (The 5+5 Rule)<a class="headerlink" href="#9-references-the-55-rule" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Docker Inc. (2024). <em>Docker container networking architecture</em>. <a href="https://docs.docker.com/network/">https://docs.docker.com/network/</a></li>
+<li>Open Container Initiative. (2021). <em>OCI runtime specification</em>.</li>
+<li>Stevens, W. R., Fenner, B., &amp; Rudoff, A. M. (2013). <em>UNIX network programming</em>. Addison-Wesley.</li>
+<li>Kerrisk, M. (2010). <em>The Linux programming interface</em>. No Starch Press.</li>
+<li>Burns, B. (2018). <em>Designing distributed systems</em>. O'Reilly Media.</li>
+<li>Tanenbaum, A. S., &amp; Wetherall, D. J. (2011). <em>Computer networks</em> (5th ed.). Pearson.</li>
+<li>Poulton, N. (2023). <em>Docker deep dive</em>.</li>
+<li>Mouat, A. (2015). <em>Using Docker</em>.</li>
+<li>Turnbull, J. (2014). <em>The Docker book</em>.</li>
+<li>NIST. (2017). <em>Application container security guide (NIST SP 800-190)</em>.</li>
+</ol>
+<hr />
+<h2 id="10-universal-finops-hardware-cost-governance">10. Universal FinOps &amp; Hardware Cost Governance<a class="headerlink" href="#10-universal-finops-hardware-cost-governance" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Networking Optimization</th>
+<th style="text-align: left;">Mechanism</th>
+<th style="text-align: left;">FinOps Impact</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong><code>host</code> Network Driver</strong></td>
+<td style="text-align: left;">Eliminates bridge NAT packet traversal</td>
+<td style="text-align: left;">Slashes CPU latency overhead by 20% on high-PPS workloads</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Internal Database Networks</strong></td>
+<td style="text-align: left;">Restricts egress via <code>--internal</code></td>
+<td style="text-align: left;">Eliminates accidental cloud NAT Gateway egress bandwidth bills</td>
+</tr>
+</tbody>
+</table>
+              
+            </div>
+          </div><footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+    
+  </span>
+</div>
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = ".";</script>
+    <script src="js/theme_extra.js"></script>
+    <script src="js/theme.js"></script>
+      <script src="search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

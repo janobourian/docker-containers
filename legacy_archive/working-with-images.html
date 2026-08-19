@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Module 04: Docker Images, Multi-Stage Builds, BuildKit &amp; Multi-Arch Architecture - Docker Containers</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Module 04: Docker Images, Multi-Stage Builds, BuildKit \u0026amp; Multi-Arch Architecture";
+        var mkdocs_page_input_path = "legacy_archive/working-with-images.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/yaml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/bash.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/dockerfile.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../index.html" class="icon icon-home"> Docker Containers
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../index.html">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="../getting-started.md">Getting Started</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="../docker-engine.md">Docker Engine</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="../working-with-images.md">Working with Images</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="../working-with-containers.md">Working with Containers</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="../containerizing_an_app.md">Containerizing an Application</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="../multi-container-apps.md">Multi-container apps with Compose</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="../docker-and-wasm.md">Docker and Wasm</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="../docker-swarm.md">Docker Swarm</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="../docker-networking.md">Docker Networking</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="../docker-volumes.md">Docker Volumes</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="../docker-security.md">Docker Security</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="../docker-docs.md">Docker Docs</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="../docker-cheatsheet.md">Docker CheatSheet</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="../apache-kafka-introduction.md">Apache Kafka</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Docker Containers</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html" class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Module 04: Docker Images, Multi-Stage Builds, BuildKit &amp; Multi-Arch Architecture</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="module-04-docker-images-multi-stage-builds-buildkit-multi-arch-architecture">Module 04: Docker Images, Multi-Stage Builds, BuildKit &amp; Multi-Arch Architecture<a class="headerlink" href="#module-04-docker-images-multi-stage-builds-buildkit-multi-arch-architecture" title="Permanent link">&para;</a></h1>
+<p><strong>Track:</strong> Docker Container Systems &amp; Virtualization Architecture
+<strong>Category:</strong> Container Image Architecture, Build Optimization, Multi-Stage Builds &amp; OCI Manifests
+<strong>Standard Identifier:</strong> <code>DOC-STD-UNIVERSAL-2026</code>
+<strong>Status:</strong> ✅ Completed</p>
+<hr />
+<h2 id="table-of-contents">📑 Table of Contents<a class="headerlink" href="#table-of-contents" title="Permanent link">&para;</a></h2>
+<ol>
+<li><a href="#1-high-level-overview--executive-summary">High-Level Overview &amp; Executive Summary</a></li>
+<li><a href="#2-anatomy-of-a-docker-image-manifests-blobs--layer-invariants">Anatomy of a Docker Image: Manifests, Blobs &amp; Layer Invariants</a></li>
+<li><a href="#3-multi-stage-builds--size-minimization-patterns">Multi-Stage Builds &amp; Size Minimization Patterns</a></li>
+<li><a href="#4-buildkit-architecture-caching--parallel-graph-execution">BuildKit Architecture, Caching &amp; Parallel Graph Execution</a></li>
+<li><a href="#5-multi-architecture-images--oci-manifest-lists-buildx">Multi-Architecture Images &amp; OCI Manifest Lists (Buildx)</a></li>
+<li><a href="#6-certification--exam-essentials-cheat-sheet">Certification &amp; Exam Essentials (Cheat Sheet)</a></li>
+<li><a href="#7-comparative-analysis-matrix-base-image-strategies">Comparative Analysis Matrix: Base Image Strategies</a></li>
+<li><a href="#8-performance--resource-optimization">Performance &amp; Resource Optimization</a></li>
+<li><a href="#9-in-depth-engineering-perspectives">In-Depth Engineering Perspectives</a></li>
+<li><a href="#9-well-architected-framework-alignment">Well-Architected Framework Alignment</a></li>
+<li><a href="#10-step-by-step-hands-on-production-walkthrough">Step-by-Step Hands-On Production Walkthrough</a></li>
+<li><a href="#11-pure-cli--command-interface">Pure CLI / Command Interface</a></li>
+<li><a href="#12-advanced-architecture--edge-case-failure-modes">Advanced Architecture &amp; Edge-Case Failure Modes</a></li>
+<li><a href="#13-detailed-sub-components--subsystems">Detailed Sub-Components &amp; Subsystems</a></li>
+<li><a href="#14-references-the-55-rule">References (The 5+5 Rule)</a></li>
+<li><a href="#15-universal-finops--resource-cost-governance">Universal FinOps &amp; Resource Cost Governance</a></li>
+</ol>
+<hr />
+<h2 id="1-high-level-overview-executive-summary">1. High-Level Overview &amp; Executive Summary<a class="headerlink" href="#1-high-level-overview-executive-summary" title="Permanent link">&para;</a></h2>
+<p>A <strong>Docker Image</strong> is an immutable, cryptographically verifiable, read-only package containing application binaries, libraries, system configurations, and metadata required to instantiate a container. Images follow the <strong>Open Container Initiative (OCI) Image Specification</strong>, comprising a JSON Manifest, configuration descriptor, and an ordered stack of tarball filesystem layers.</p>
+<p>Modern production container engineering mandates the use of <strong>Multi-Stage Builds</strong> and <strong>BuildKit</strong> (the next-generation build engine backed by LLB - Low-Level Builder). By separating the compilation SDK environment from the final runtime container, teams eliminate heavy compilers, package managers, and debug tools, shrinking image sizes from 1.5GB to under 20MB while dramatically reducing CVE security vulnerabilities.</p>
+<pre><code class="language-text">┌────────────────────────────────────────────────────────────────────────────────┐
+│               MULTI-STAGE BUILD &amp; LAYER STRIPPING ARCHITECTURE                 │
+├────────────────────────────────────────────────────────────────────────────────┤
+│ STAGE 1: COMPILATION &amp; BUILD ENVIRONMENT (Heavyweight SDK: ~1.4 GB)            │
+│ ┌────────────────────────────────────────────────────────────────────────────┐ │
+│ │ FROM golang:1.22-alpine AS builder                                         │ │
+│ │ - Includes Go compiler, git, libc headers, build tools                     │ │
+│ │ - Compiles static binary: `CGO_ENABLED=0 go build -ldflags=&quot;-s -w&quot;`        │ │
+│ └──────────────────────────────────────┬─────────────────────────────────────┘ │
+│                                        │ (Zero-copy artifact extraction)       │
+│                                        ▼                                       │
+│ STAGE 2: PRODUCTION RUNTIME ENVIRONMENT (Ultra-Minimal: ~15 MB)                │
+│ ┌────────────────────────────────────────────────────────────────────────────┐ │
+│ │ FROM gcr.io/distroless/static-debian12                                     │ │
+│ │ COPY --from=builder /bin/app /bin/app                                      │ │
+│ │ USER 10001:10001                                                           │ │
+│ │ ENTRYPOINT [&quot;/bin/app&quot;]                                                    │ │
+│ └────────────────────────────────────────────────────────────────────────────┘ │
+└────────────────────────────────────────────────────────────────────────────────┘
+</code></pre>
+<h3 id="executive-summary-for-managers-non-technical-stakeholders">👔 Executive Summary (For Managers &amp; Non-Technical Stakeholders)<a class="headerlink" href="#executive-summary-for-managers-non-technical-stakeholders" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Business Purpose</strong>: Transforms raw application source code into secure, standardized, lightweight deployable software containers that boot instantly and can be stored in corporate cloud registries.</li>
+<li><strong>How It Works</strong>: Uses an automated multi-stage assembly recipe. The heavy construction tools (compilers, debuggers, source files) are used to build the software and then thrown away, leaving only the tiny finished product in the final container.</li>
+<li><strong>Key Business Value &amp; ROI</strong>: Slashes container image download times by 90%, reduces cloud container storage and network egress costs by up to 85%, and eliminates 99% of cybersecurity vulnerabilities (CVEs) by removing unused operating system binaries.</li>
+</ul>
+<hr />
+<h2 id="2-anatomy-of-a-docker-image-manifests-blobs-layer-invariants">2. Anatomy of a Docker Image: Manifests, Blobs &amp; Layer Invariants<a class="headerlink" href="#2-anatomy-of-a-docker-image-manifests-blobs-layer-invariants" title="Permanent link">&para;</a></h2>
+<pre><code class="language-text">┌────────────────────────────────────────────────────────────────────────────────┐
+│                     OCI CONTAINER IMAGE DATA STRUCTURE                         │
+├────────────────────────────────────────────────────────────────────────────────┤
+│ 1. OCI MANIFEST (JSON): References Config Descriptor and Array of Layers       │
+│    ├── Config Digest : `sha256:8a1b2c...` (Env vars, entrypoint, architecture) │
+│    └── Layers Array  : [`sha256:layer1...`, `sha256:layer2...`]                │
+├────────────────────────────────────────────────────────────────────────────────┤
+│ 2. LAYER INVARIANTS:                                                           │
+│    - Layers are immutable; once built, a layer hash never changes.             │
+│    - Content Addressable: Layer identity is its cryptographic SHA-256 digest. │
+│    - Shared Storage: Identical base layers across 10 images are stored ONCE.   │
+└────────────────────────────────────────────────────────────────────────────────┘
+</code></pre>
+<h3 id="21-content-hash-vs-distribution-hash">2.1 Content Hash vs Distribution Hash<a class="headerlink" href="#21-content-hash-vs-distribution-hash" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Content Hash (DiffID)</strong>: The SHA-256 digest calculated over the <strong>uncompressed</strong> layer filesystem tarball. Used locally by the engine.</li>
+<li><strong>Distribution Hash (Digest)</strong>: The SHA-256 digest calculated over the <strong>gzip-compressed</strong> layer transferred over the network to registries.</li>
+</ul>
+<hr />
+<h2 id="3-multi-stage-builds-size-minimization-patterns">3. Multi-Stage Builds &amp; Size Minimization Patterns<a class="headerlink" href="#3-multi-stage-builds-size-minimization-patterns" title="Permanent link">&para;</a></h2>
+<h3 id="the-layer-caching-anti-pattern-vs-best-practice">The Layer Caching Anti-Pattern vs Best Practice:<a class="headerlink" href="#the-layer-caching-anti-pattern-vs-best-practice" title="Permanent link">&para;</a></h3>
+<p>Docker builds layers sequentially. Modifying any file copied into a layer invalidates all subsequent layer caches.</p>
+<pre><code class="language-dockerfile"># ❌ SLOW ANTI-PATTERN: Invalidates npm install on ANY source code change:
+FROM node:20-alpine
+WORKDIR /app
+COPY . .
+RUN npm install # ◄── Re-runs npm install for every 1-line JS edit!
+CMD [&quot;node&quot;, &quot;server.js&quot;]
+
+# ✅ OPTIMIZED LAYER CACHING: Caches dependencies until package.json changes:
+FROM node:20-alpine
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci --only=production # ◄── Cached! Takes 0.01s on subsequent builds!
+COPY . .
+CMD [&quot;node&quot;, &quot;server.js&quot;]
+</code></pre>
+<hr />
+<h2 id="4-buildkit-architecture-caching-parallel-graph-execution">4. BuildKit Architecture, Caching &amp; Parallel Graph Execution<a class="headerlink" href="#4-buildkit-architecture-caching-parallel-graph-execution" title="Permanent link">&para;</a></h2>
+<p><strong>BuildKit</strong> replaces the legacy Docker daemon builder with a decoupled, high-performance execution engine:</p>
+<pre><code class="language-text">┌────────────────────────────────────────────────────────────────────────────────┐
+│                       BUILDKIT PIPELINE ADVANTAGES                             │
+├────────────────────────────────────────────────────────────────────────────────┤
+│ 1. Concurrent Stage Execution: Unrelated build stages execute in parallel.    │
+│ 2. Granular Context Transfer: Transfers ONLY files matched by COPY rules.      │
+│ 3. Secret Mounts (`--mount=type=secret`): Mounts build tokens without leaks.   │
+│ 4. SSH Forwarding (`--mount=type=ssh`): Clones private git repositories safely.│
+│ 5. Compiler Cache Mounts (`--mount=type=cache,target=/root/.cache`): Persists  │
+│    Go/Rust/Node package caches across builds without bloating final image!     │
+└────────────────────────────────────────────────────────────────────────────────┘
+</code></pre>
+<hr />
+<h2 id="5-multi-architecture-images-oci-manifest-lists-buildx">5. Multi-Architecture Images &amp; OCI Manifest Lists (Buildx)<a class="headerlink" href="#5-multi-architecture-images-oci-manifest-lists-buildx" title="Permanent link">&para;</a></h2>
+<p>Enterprise environments run heterogeneous CPU architectures (AMD64 servers in cloud data centers, ARM64 Apple Silicon developer laptops, AWS Graviton instances).</p>
+<p><strong>OCI Manifest Lists (Fat Manifests)</strong>:
+A single image tag (e.g. <code>nginx:latest</code>) points to an index mapping CPU architectures to specific image digests:</p>
+<pre><code class="language-bash">docker buildx build \
+    --platform linux/amd64,linux/arm64 \
+    --tag myorg/api:1.0.0 \
+    --push .
+</code></pre>
+<hr />
+<h2 id="6-certification-exam-essentials-cheat-sheet">6. Certification &amp; Exam Essentials (Cheat Sheet)<a class="headerlink" href="#6-certification-exam-essentials-cheat-sheet" title="Permanent link">&para;</a></h2>
+<ul>
+<li>⚠️ <strong>Secret Leakage in Build History</strong>: Passing secrets via <code>ARG</code> (<code>ARG GITHUB_TOKEN</code>) bakes the secret permanently into the image metadata JSON (<code>docker history</code>). <strong>Always use BuildKit Secret Mounts</strong>:
+  <code>dockerfile
+  RUN --mount=type=secret,id=gh_token \
+      GITHUB_TOKEN=$(cat /run/secrets/gh_token) ./download_private_deps.sh</code></li>
+<li>🔒 <strong>Distroless Images</strong>: <code>gcr.io/distroless/static-debian12</code> contains only your application binary and minimal SSL CA certificates. It contains <strong>no shell (<code>sh</code>/<code>bash</code>) and no package manager (<code>apt</code>/<code>apk</code>)</strong>, preventing attackers from opening interactive reverse shells.</li>
+<li>⚙️ <strong>Cache Mounts with BuildKit</strong>: Speed up npm/Go builds by $10\times$ by caching dependency downloads across builds:
+  <code>dockerfile
+  RUN --mount=type=cache,target=/root/.npm npm ci</code></li>
+<li>⚠️ <strong>Dangling Images (<code>&lt;none&gt;:&lt;none&gt;</code>)</strong>: Dangling images occur when a new image is built with the same tag as an existing image. Prune dangling layers with <code>docker image prune</code>.</li>
+</ul>
+<hr />
+<h2 id="7-comparative-analysis-matrix-base-image-strategies">7. Comparative Analysis Matrix: Base Image Strategies<a class="headerlink" href="#7-comparative-analysis-matrix-base-image-strategies" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Base Image Strategy</th>
+<th style="text-align: left;">Typical Size</th>
+<th style="text-align: left;">Included Tools</th>
+<th style="text-align: left;">CVE Risk Level</th>
+<th style="text-align: left;">Best Use Case</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Ubuntu / Debian</strong></td>
+<td style="text-align: left;">80 MB – 150 MB</td>
+<td style="text-align: left;">Full package manager, bash, coreutils</td>
+<td style="text-align: left;">Moderate to High</td>
+<td style="text-align: left;">Complex legacy apps</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Alpine Linux</strong></td>
+<td style="text-align: left;">~5 MB</td>
+<td style="text-align: left;"><code>apk</code> manager, BusyBox shell, musl libc</td>
+<td style="text-align: left;">Low</td>
+<td style="text-align: left;">General microservices</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Distroless</strong></td>
+<td style="text-align: left;">~15 MB</td>
+<td style="text-align: left;">CA certs, tzdata, glibc (No shell!)</td>
+<td style="text-align: left;"><strong>Extremely Low</strong></td>
+<td style="text-align: left;">Hardened production</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Scratch</strong></td>
+<td style="text-align: left;"><strong>0 Bytes</strong></td>
+<td style="text-align: left;">Absolutely nothing (Static binary only)</td>
+<td style="text-align: left;"><strong>Zero Base CVEs</strong></td>
+<td style="text-align: left;">Statically linked Go/Rust</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="8-performance-resource-optimization">8. Performance &amp; Resource Optimization<a class="headerlink" href="#8-performance-resource-optimization" title="Permanent link">&para;</a></h2>
+<pre><code class="language-text">┌────────────────────────────────────────────────────────────────────────────────┐
+│                       IMAGE OPTIMIZATION PLAYBOOK                              │
+├────────────────────────────────────────────────────────────────────────────────┤
+│ 1. Always enable BuildKit (`export DOCKER_BUILDKIT=1`).                        │
+│ 2. Structure Dockerfile to copy dependency locks before application code.      │
+│ 3. Combine multi-command `RUN` instructions (`&amp;&amp;`) to minimize image layers.   │
+│ 4. Clean package manager caches in the same layer (`rm -rf /var/cache/apk/*`). │
+│ 5. Use `.dockerignore` to exclude `.git`, `node_modules`, and test fixtures.   │
+└────────────────────────────────────────────────────────────────────────────────┘
+</code></pre>
+<hr />
+<h2 id="9-step-by-step-hands-on-production-walkthrough">9. Step-by-Step Hands-On Production Walkthrough<a class="headerlink" href="#9-step-by-step-hands-on-production-walkthrough" title="Permanent link">&para;</a></h2>
+<h3 id="step-1-create-hardened-multi-stage-go-application-dockerfile">Step 1: Create Hardened Multi-Stage Go Application Dockerfile<a class="headerlink" href="#step-1-create-hardened-multi-stage-go-application-dockerfile" title="Permanent link">&para;</a></h3>
+<pre><code class="language-dockerfile"># /Users/frgonzal/Documents/vit/docker-containers/Dockerfile.production
+# syntax=docker/dockerfile:1.4
+
+# STAGE 1: Compilation Builder
+FROM golang:1.22-alpine AS builder
+WORKDIR /src
+
+# Leverage layer cache for Go modules:
+COPY go.mod go.sum* ./
+RUN --mount=type=cache,target=/go/pkg/mod \
+    go mod download
+
+# Copy source and compile statically linked binary:
+COPY . .
+RUN --mount=type=cache,target=/go/pkg/mod \
+    --mount=type=cache,target=/root/.cache/go-build \
+    CGO_ENABLED=0 GOOS=linux GOARCH=amd64 \
+    go build -trimpath -ldflags=&quot;-s -w&quot; -o /bin/enterprise-server .
+
+# STAGE 2: Ultra-Minimal Hardened Runtime
+FROM gcr.io/distroless/static-debian12:nonroot
+COPY --from=builder /bin/enterprise-server /bin/enterprise-server
+EXPOSE 8080
+USER nonroot:nonroot
+ENTRYPOINT [&quot;/bin/enterprise-server&quot;]
+</code></pre>
+<hr />
+<h3 id="step-2-configure-comprehensive-dockerignore">Step 2: Configure Comprehensive <code>.dockerignore</code><a class="headerlink" href="#step-2-configure-comprehensive-dockerignore" title="Permanent link">&para;</a></h3>
+<pre><code class="language-dockerignore"># .dockerignore
+.git
+.gitignore
+.env*
+*.md
+Dockerfile*
+docker-compose*
+tests/
+tmp/
+node_modules/
+bin/
+dist/
+coverage/
+</code></pre>
+<hr />
+<h3 id="step-3-build-multi-architecture-image-with-buildx">Step 3: Build Multi-Architecture Image with Buildx<a class="headerlink" href="#step-3-build-multi-architecture-image-with-buildx" title="Permanent link">&para;</a></h3>
+<pre><code class="language-bash"># 1. Initialize Docker Buildx Multi-Architecture Builder
+docker buildx create --name enterprise-builder --use --bootstrap
+
+# 2. Build Multi-Platform Image with BuildKit Cache Mounts
+docker buildx build \
+    --platform linux/amd64,linux/arm64 \
+    --file Dockerfile.production \
+    --tag enterprise/api-gateway:1.0.0 \
+    --load .
+
+# 3. Inspect Image Layer History and Footprint
+docker history enterprise/api-gateway:1.0.0
+</code></pre>
+<hr />
+<h2 id="10-pure-cli-command-interface">10. Pure CLI / Command Interface<a class="headerlink" href="#10-pure-cli-command-interface" title="Permanent link">&para;</a></h2>
+<h3 id="1-inspect-multi-architecture-manifest-list">1. Inspect Multi-Architecture Manifest List<a class="headerlink" href="#1-inspect-multi-architecture-manifest-list" title="Permanent link">&para;</a></h3>
+<p>Inspect remote architecture manifest metadata:</p>
+<pre><code class="language-bash">docker manifest inspect nginx:latest
+</code></pre>
+<h3 id="2-scan-image-for-security-vulnerabilities-cves">2. Scan Image for Security Vulnerabilities (CVEs)<a class="headerlink" href="#2-scan-image-for-security-vulnerabilities-cves" title="Permanent link">&para;</a></h3>
+<p>Execute vulnerability scan on target container image:</p>
+<pre><code class="language-bash">docker scout cves nginx:alpine
+</code></pre>
+<h3 id="3-remove-all-unused-and-dangling-images">3. Remove All Unused and Dangling Images<a class="headerlink" href="#3-remove-all-unused-and-dangling-images" title="Permanent link">&para;</a></h3>
+<p>Reclaim storage from obsolete image versions:</p>
+<pre><code class="language-bash">docker image prune \
+    --all \
+    --force \
+    --filter &quot;until=72h&quot;
+</code></pre>
+<hr />
+<h2 id="11-advanced-architecture-edge-case-failure-modes">11. Advanced Architecture &amp; Edge-Case Failure Modes<a class="headerlink" href="#11-advanced-architecture-edge-case-failure-modes" title="Permanent link">&para;</a></h2>
+<pre><code class="language-text">┌────────────────────────────────────────────────────────────────────────────────┐
+│                    IMAGE BUILD FAILURE RECOVERY MATRIX                         │
+├──────────────────────┬────────────────────────┬────────────────────────────────┤
+│ Failure Scenario     │ Underlying Root Cause  │ Production Mitigation Runbook  │
+├──────────────────────┼────────────────────────┼────────────────────────────────┤
+│ **Cache Bust on**    │ Copying whole repo     │ Copy `package.json` before     │
+│ **Every Build**      │ before dependency step.│ application source code.       │
+├──────────────────────┼────────────────────────┼────────────────────────────────┤
+│ **Secret Leaked in** │ Passing API token via  │ Use BuildKit Secret Mounts:    │
+│ **Image History**    │ `ARG` or `ENV`.        │ `RUN --mount=type=secret`.     │
+├──────────────────────┼────────────────────────┼────────────────────────────────┤
+│ **Musl / Glibc Incompat│ Statically linking on  │ Compile with `CGO_ENABLED=0`   │
+│ **Crash on Scratch** │ Alpine vs Debian host. │ or use Distroless-glibc.       │
+├──────────────────────┼────────────────────────┼────────────────────────────────┤
+│ **Multi-Arch Emulation│ QEMU ARM64 build       │ Use Native ARM64 build runners │
+│ **Build Timeout**    │ CPU emulation penalty. │ in CI/CD pipeline.             │
+└──────────────────────┴────────────────────────┴────────────────────────────────┘
+</code></pre>
+<hr />
+<h2 id="12-detailed-sub-components-subsystems">12. Detailed Sub-Components &amp; Subsystems<a class="headerlink" href="#12-detailed-sub-components-subsystems" title="Permanent link">&para;</a></h2>
+<h3 id="1-low-level-builder-llb-engine">1. Low-Level Builder (LLB) Engine<a class="headerlink" href="#1-low-level-builder-llb-engine" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Key Concepts</strong>: BuildKit intermediate directed acyclic graph (DAG) representation that executes independent build instructions concurrently.</li>
+<li><strong>CLI / Tool Snippet</strong>:</li>
+</ul>
+<pre><code class="language-bash">docker buildx version
+</code></pre>
+<h3 id="2-oci-image-manifest-parser">2. OCI Image Manifest Parser<a class="headerlink" href="#2-oci-image-manifest-parser" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Key Concepts</strong>: JSON deserializer validating layer hashes, media types (<code>application/vnd.oci.image.manifest.v1+json</code>), and schema versions.</li>
+<li><strong>CLI / Tool Snippet</strong>:</li>
+</ul>
+<pre><code class="language-bash">docker inspect --format '{{json .RootFS.Layers}}' alpine:latest
+</code></pre>
+<h3 id="3-buildkit-cache-storage-manager">3. BuildKit Cache Storage Manager<a class="headerlink" href="#3-buildkit-cache-storage-manager" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Key Concepts</strong>: Manages persistent layer cache backends (local, inline, registry, s3) in <code>/var/lib/docker/buildkit/</code>.</li>
+<li><strong>CLI / Tool Snippet</strong>:</li>
+</ul>
+<pre><code class="language-bash">docker buildx du
+</code></pre>
+<h3 id="4-qemu-multi-arch-binary-binfmt-handler">4. QEMU Multi-Arch Binary Binfmt Handler<a class="headerlink" href="#4-qemu-multi-arch-binary-binfmt-handler" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Key Concepts</strong>: Linux kernel <code>binfmt_misc</code> module intercepting foreign CPU instruction sets, executing ARM64 binaries on AMD64 hosts via user-space emulation.</li>
+<li><strong>CLI / Tool Snippet</strong>:</li>
+</ul>
+<pre><code class="language-bash">cat /proc/sys/fs/binfmt_misc/status
+</code></pre>
+<hr />
+<h2 id="13-references-the-55-rule">13. References (The 5+5 Rule)<a class="headerlink" href="#13-references-the-55-rule" title="Permanent link">&para;</a></h2>
+<h3 id="official-documentation-oci-specifications">Official Documentation &amp; OCI Specifications<a class="headerlink" href="#official-documentation-oci-specifications" title="Permanent link">&para;</a></h3>
+<ol>
+<li><a href="https://docs.docker.com/build/building/multi-stage/">Docker Official Documentation: Multi-Stage Builds Guide</a></li>
+<li><a href="https://docs.docker.com/develop/develop-images/dockerfile_best-practices/">Docker Official Documentation: Dockerfile Best Practices</a></li>
+<li><a href="https://opencontainers.org/specs/image/">Open Container Initiative (OCI): Image Format Specification v1.1</a></li>
+<li><a href="https://github.com/moby/buildkit">Moby BuildKit Official Architecture &amp; Features Guide</a></li>
+<li><a href="https://github.com/GoogleContainerTools/distroless">GoogleContainerTools: Distroless Images Specification</a></li>
+</ol>
+<h3 id="authoritative-engineering-blogs-architecture-deep-dives">Authoritative Engineering Blogs &amp; Architecture Deep Dives<a class="headerlink" href="#authoritative-engineering-blogs-architecture-deep-dives" title="Permanent link">&para;</a></h3>
+<ol start="6">
+<li><a href="https://www.lizrice.com/">Liz Rice: Anatomy of a Container Image and OCI Manifests</a></li>
+<li><a href="https://jvns.ca/">Julia Evans: How Docker Builds Layers and Cache Invalidation</a></li>
+<li><a href="https://martinfowler.com/">Martin Fowler: Patterns for Container Image Delivery and Immutability</a></li>
+<li><a href="https://www.brendangregg.com/">Brendan Gregg: Performance Profiling of Container Build Systems</a></li>
+<li><a href="https://www.kernel.org/">High-Performance Linux Systems: Multi-Arch Emulation with QEMU and Binfmt</a></li>
+</ol>
+<hr />
+<h2 id="14-universal-finops-resource-cost-governance">14. Universal FinOps &amp; Resource Cost Governance<a class="headerlink" href="#14-universal-finops-resource-cost-governance" title="Permanent link">&para;</a></h2>
+<pre><code class="language-text">┌────────────────────────────────────────────────────────────────────────────────┐
+│                       IMAGE FINOPS SAVINGS MATRIX                              │
+├──────────────────────────┬──────────────────────────┬──────────────────────────┤
+│ Optimization Strategy    │ Technical Mechanism      │ Measurable FinOps ROI    │
+├──────────────────────────┼──────────────────────────┼──────────────────────────┤
+│ **Multi-Stage Distroless**| Shrinks image from       │ 85% reduction in cloud   │
+│                          │ 1.2GB to 18MB            │ registry storage &amp; egress│
+├──────────────────────────┼──────────────────────────┼──────────────────────────┤
+│ **BuildKit Cache Mounts**│ Caches package manager   │ Cuts CI/CD build compute │
+│                          │ downloads across runs    │ duration by 70%          │
+├──────────────────────────┼──────────────────────────┼──────────────────────────┤
+│ **Shared Base Layers**   │ Standardizes 1 company   │ Maximizes layer reuse on │
+│                          │ Alpine/Distroless base   │ node hosts and registries│
+├──────────────────────────┼──────────────────────────┼──────────────────────────┤
+│ **Automated Pruning**    │ Deletes dangling and     │ Eliminates billable EBS  │
+│                          │ untagged build layers    │ storage expansion costs  │
+└──────────────────────────┴──────────────────────────┴──────────────────────────┘
+</code></pre>
+<h3 id="1-multi-stage-registry-storage-cross-az-egress-roi">1. Multi-Stage Registry Storage &amp; Cross-AZ Egress ROI<a class="headerlink" href="#1-multi-stage-registry-storage-cross-az-egress-roi" title="Permanent link">&para;</a></h3>
+<p>In an enterprise deploying 150 microservices updated 5 times daily across 3 AWS Availability Zones:</p>
+<ul>
+<li><strong>Unoptimized Images (1.2GB each)</strong>:</li>
+<li>150 services $\times 5\text{ builds} \times 1.2\text{GB} = 900\text{ GB daily storage churn}$.</li>
+<li>Pulling 900GB across cross-AZ networks generates <strong>\$2,430/month in AWS Cross-AZ Data Transfer fees</strong> plus \$270/month in ECR storage charges ($~\$32,400/\text{year}$).</li>
+<li><strong>Multi-Stage Distroless Images (20MB each)</strong>:</li>
+<li>150 services $\times 5\text{ builds} \times 20\text{MB} = 15\text{ GB daily storage churn}$.</li>
+<li>Monthly egress and storage costs drop from \$2,700 to <strong>under \$45/month</strong>.</li>
+<li><strong>FinOps ROI</strong>: <strong>\$31,860/year in direct cloud infrastructure savings</strong>.</li>
+</ul>
+<h3 id="2-buildkit-cicd-compute-minute-reduction">2. BuildKit CI/CD Compute Minute Reduction<a class="headerlink" href="#2-buildkit-cicd-compute-minute-reduction" title="Permanent link">&para;</a></h3>
+<p>In automated GitHub Actions / GitLab CI pipelines:</p>
+<ul>
+<li>Running <code>npm ci</code> and compiling Go binaries without cache mounts takes 8 minutes per pipeline run.</li>
+<li>With 1,000 monthly pipeline runs at \$0.008/minute, CI compute costs \$64/month per repository.</li>
+<li>Enabling BuildKit <code>--mount=type=cache</code> allows dependencies to persist across runs, cutting build times from 8 minutes to <strong>1.5 minutes</strong>.</li>
+<li>Across 50 repositories, this saves <strong>\$2,600/year in CI/CD pipeline runner billing</strong>.</li>
+</ul>
+              
+            </div>
+          </div><footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="img/favicon.ico" />
+    <title>Module 22: Supply Chain Security — SLSA Provenance, SBOM &amp; Cosign Signatures - Docker Containers</title>
+    <link rel="stylesheet" href="css/theme.css" />
+    <link rel="stylesheet" href="css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Module 22: Supply Chain Security \u2014 SLSA Provenance, SBOM \u0026amp; Cosign Signatures";
+        var mkdocs_page_input_path = "22_supply_chain_security_slsa_provenance_and_cosign.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/yaml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/bash.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/dockerfile.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="index.html" class="icon icon-home"> Docker Containers
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="./search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="index.html">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="getting-started.md">Getting Started</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-engine.md">Docker Engine</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="working-with-images.md">Working with Images</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="working-with-containers.md">Working with Containers</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="containerizing_an_app.md">Containerizing an Application</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="multi-container-apps.md">Multi-container apps with Compose</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-and-wasm.md">Docker and Wasm</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-swarm.md">Docker Swarm</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-networking.md">Docker Networking</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-volumes.md">Docker Volumes</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-security.md">Docker Security</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-docs.md">Docker Docs</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-cheatsheet.md">Docker CheatSheet</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="apache-kafka-introduction.md">Apache Kafka</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Docker Containers</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html" class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Module 22: Supply Chain Security — SLSA Provenance, SBOM &amp; Cosign Signatures</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="module-22-supply-chain-security-slsa-provenance-sbom-cosign-signatures">Module 22: Supply Chain Security — SLSA Provenance, SBOM &amp; Cosign Signatures<a class="headerlink" href="#module-22-supply-chain-security-slsa-provenance-sbom-cosign-signatures" title="Permanent link">&para;</a></h1>
+<p><strong>Standard Identifier:</strong> <code>DOC-STD-UNIVERSAL-2026-DOCKER</code>
+<strong>Track:</strong> Enterprise Container Architecture, OCI Runtimes &amp; Cloud Native Infrastructure
+<strong>Category:</strong> Software Supply Chain Security &amp; Attestations
+<strong>Status:</strong> ✅ Completed</p>
+<hr />
+<h2 id="table-of-contents">📑 Table of Contents<a class="headerlink" href="#table-of-contents" title="Permanent link">&para;</a></h2>
+<ol>
+<li>
+<p><a href="#1-high-level-overview--executive-summary">High-Level Overview &amp; Executive Summary</a></p>
+</li>
+<li>
+<p><a href="#2-software-supply-chain-attack-vectors">Software Supply Chain Attack Vectors</a></p>
+</li>
+<li>
+<p><a href="#3-software-bill-of-materials-sbom-generation-with-syft--trivy">Software Bill of Materials (SBOM) Generation with Syft &amp; Trivy</a></p>
+</li>
+<li>
+<p><a href="#4-cryptographic-image-signing-with-sigstore-cosign">Cryptographic Image Signing with Sigstore Cosign</a></p>
+</li>
+<li>
+<p><a href="#5-slsa-framework-supply-chain-levels-for-software-artifacts">SLSA Framework (Supply-Chain Levels for Software Artifacts)</a></p>
+</li>
+<li>
+<p><a href="#6-architectural-visual-topology">Architectural Visual Topology</a></p>
+</li>
+<li>
+<p><a href="#7-step-by-step-production-lab-end-to-end-image-signing--verification">Step-by-Step Production Lab: End-to-End Image Signing &amp; Verification</a></p>
+</li>
+<li>
+<p><a href="#8-certification--engineering-standards-cheat-sheet">Certification &amp; Engineering Standards Cheat Sheet</a></p>
+</li>
+<li>
+<p><a href="#9-references-the-55-rule">References (The 5+5 Rule)</a></p>
+</li>
+<li>
+<p><a href="#10-universal-finops--hardware-cost-governance">Universal FinOps &amp; Hardware Cost Governance</a></p>
+</li>
+</ol>
+<hr />
+<h2 id="1-high-level-overview-executive-summary">1. High-Level Overview &amp; Executive Summary<a class="headerlink" href="#1-high-level-overview-executive-summary" title="Permanent link">&para;</a></h2>
+<p>Compromising software supply chains bypasses runtime firewalls. <strong>Supply Chain Security</strong> ensures image integrity by generating <strong>SBOMs (Software Bill of Materials)</strong>, signing OCI images with <strong>Sigstore Cosign</strong>, and enforcing <strong>SLSA Level 3</strong> build provenance attestations (OpenSSF, 2024).</p>
+<h3 id="executive-summary-for-managers-non-technical-stakeholders">👔 Executive Summary (For Managers &amp; Non-Technical Stakeholders)<a class="headerlink" href="#executive-summary-for-managers-non-technical-stakeholders" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Business Purpose</strong>: Guarantees that only verified, cryptographically signed container images built by authorized CI pipelines can execute in production clusters.</li>
+<li><strong>How It Works</strong>: Attaches a tamper-proof digital signature and dependency manifest directly to the container image in the registry.</li>
+<li><strong>Key Business Value &amp; ROI</strong>: Prevents SolarWinds-style supply chain compromises and satisfies US Executive Order 14028 cybersecurity mandates.</li>
+</ul>
+<hr />
+<h2 id="2-software-supply-chain-attack-vectors">2. Software Supply Chain Attack Vectors<a class="headerlink" href="#2-software-supply-chain-attack-vectors" title="Permanent link">&para;</a></h2>
+<pre><code class="language-mermaid">flowchart TD
+    Source[&quot;Source Code Repo&quot;] --&gt;|1. Malicious PR| Build[&quot;CI/CD Build System&quot;]
+    Build --&gt;|2. Compromised Runner| Registry[&quot;OCI Container Registry&quot;]
+    Registry --&gt;|3. Tampered Image Layers| Cluster[&quot;Production Kubernetes Cluster&quot;]
+</code></pre>
+<hr />
+<h2 id="3-software-bill-of-materials-sbom-generation-with-syft-trivy">3. Software Bill of Materials (SBOM) Generation with Syft &amp; Trivy<a class="headerlink" href="#3-software-bill-of-materials-sbom-generation-with-syft-trivy" title="Permanent link">&para;</a></h2>
+<p>An SBOM catalogs every operating system package and language dependency inside an image:</p>
+<pre><code class="language-bash">
+# Generate SPDX SBOM JSON using Syft
+syft nginx:alpine -o spdx-json &gt; nginx_sbom.spdx.json
+</code></pre>
+<hr />
+<h2 id="4-cryptographic-image-signing-with-sigstore-cosign">4. Cryptographic Image Signing with Sigstore Cosign<a class="headerlink" href="#4-cryptographic-image-signing-with-sigstore-cosign" title="Permanent link">&para;</a></h2>
+<p>Cosign signs container images using ECDSA key pairs or keyless OIDC identities:</p>
+<pre><code class="language-bash">
+# Sign remote image with Cosign
+cosign sign --key cosign.key myregistry.io/org/app:v1.0.0
+
+# Verify signature
+cosign verify --key cosign.pub myregistry.io/org/app:v1.0.0
+</code></pre>
+<hr />
+<h2 id="5-slsa-framework-supply-chain-levels-for-software-artifacts">5. SLSA Framework (Supply-Chain Levels for Software Artifacts)<a class="headerlink" href="#5-slsa-framework-supply-chain-levels-for-software-artifacts" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>SLSA Level 1</strong>: Scripted build process with provenance metadata.</li>
+<li><strong>SLSA Level 2</strong>: Hosted build service with authenticated provenance.</li>
+<li><strong>SLSA Level 3</strong>: Isolated, ephemeral build environments with non-falsifiable provenance.</li>
+</ul>
+<hr />
+<h2 id="6-architectural-visual-topology">6. Architectural Visual Topology<a class="headerlink" href="#6-architectural-visual-topology" title="Permanent link">&para;</a></h2>
+<pre><code class="language-mermaid">sequenceDiagram
+    participant CI as GitHub Actions CI
+    participant Cosign as Sigstore Cosign
+    participant Registry as OCI Registry
+    participant K8s as Cluster Admission Controller
+
+    CI-&gt;&gt;CI: Build OCI Image &amp; Generate SBOM
+    CI-&gt;&gt;Cosign: Sign image hash with private key / OIDC
+    Cosign-&gt;&gt;Registry: Push image signature artifact (.sig)
+    K8s-&gt;&gt;Registry: Verify signature against public key
+    alt Valid Signature
+        K8s-&gt;&gt;K8s: Allow Pod deployment
+    else Invalid / Unsigned
+        K8s--&gt;&gt;K8s: REJECT: Untrusted image blocked!
+    end
+</code></pre>
+<hr />
+<h2 id="7-step-by-step-production-lab-end-to-end-image-signing-verification">7. Step-by-Step Production Lab: End-to-End Image Signing &amp; Verification<a class="headerlink" href="#7-step-by-step-production-lab-end-to-end-image-signing-verification" title="Permanent link">&para;</a></h2>
+<pre><code class="language-bash">
+# Step 1: Generate Cosign cryptographic keypair
+cosign generate-key-pair
+
+# Step 2: Build local image
+docker build -t local-signed-app:v1.0.0 - &lt;&lt;EOF
+FROM alpine:3.19
+CMD [&quot;echo&quot;, &quot;Signed production workload running!&quot;]
+EOF
+
+# Step 3: Verify signature verification command structure
+echo &quot;✅ Cosign Public Key Ready for Admission Governance:&quot;
+cat cosign.pub
+</code></pre>
+<hr />
+<h2 id="8-certification-engineering-standards-cheat-sheet">8. Certification &amp; Engineering Standards Cheat Sheet<a class="headerlink" href="#8-certification-engineering-standards-cheat-sheet" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Standard / Tool</th>
+<th style="text-align: left;">Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Cosign</strong></td>
+<td style="text-align: left;">CLI for OCI image signing, verification, and storage in registry.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Kyverno / Gatekeeper</strong></td>
+<td style="text-align: left;">Kubernetes admission controllers enforcing valid Cosign signatures.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="9-references-the-55-rule">9. References (The 5+5 Rule)<a class="headerlink" href="#9-references-the-55-rule" title="Permanent link">&para;</a></h2>
+<ol>
+<li>OpenSSF. (2024). <em>SLSA: Supply-chain Levels for Software Artifacts (v1.0)</em>. Open Source Security Foundation. <a href="https://slsa.dev/">https://slsa.dev/</a></li>
+<li>Sigstore Community. (2024). <em>Cosign container signing specification</em>. <a href="https://docs.sigstore.dev/">https://docs.sigstore.dev/</a></li>
+<li>Anchore. (2024). <em>Syft CLI: CLI tool and library for generating SBOMs</em>.</li>
+<li>NIST. (2021). <em>Executive Order 14028: Improving the Nation's Cybersecurity</em>.</li>
+<li>CNCF. (2023). <em>Cloud native security whitepaper</em>.</li>
+<li>Turnbull, J. (2014). <em>The Docker book</em>.</li>
+<li>Poulton, N. (2023). <em>Docker deep dive</em>.</li>
+<li>Kerrisk, M. (2010). <em>The Linux programming interface</em>.</li>
+<li>Burns, B. (2018). <em>Designing distributed systems</em>.</li>
+<li>Tanenbaum, A. S., &amp; Bos, H. (2015). <em>Modern operating systems</em>.</li>
+</ol>
+<hr />
+<h2 id="10-universal-finops-hardware-cost-governance">10. Universal FinOps &amp; Hardware Cost Governance<a class="headerlink" href="#10-universal-finops-hardware-cost-governance" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Optimization Strategy</th>
+<th style="text-align: left;">Mechanism</th>
+<th style="text-align: left;">FinOps Cloud Impact</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Pre-Admission Image Rejection</strong></td>
+<td style="text-align: left;">Blocks unverified images at cluster ingress</td>
+<td style="text-align: left;">Prevents costly security incident response investigations ($500k+ avg cost)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>SBOM Deduplication</strong></td>
+<td style="text-align: left;">Identify shared vulnerable dependencies</td>
+<td style="text-align: left;">Streamlines security patching across hundreds of microservice repositories</td>
+</tr>
+</tbody>
+</table>
+              
+            </div>
+          </div><footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+    
+  </span>
+</div>
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = ".";</script>
+    <script src="js/theme_extra.js"></script>
+    <script src="js/theme.js"></script>
+      <script src="search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="img/favicon.ico" />
+    <title>Module 24: Container Registries — Harbor Architecture, OCI Distribution &amp; Geo-Replication - Docker Containers</title>
+    <link rel="stylesheet" href="css/theme.css" />
+    <link rel="stylesheet" href="css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Module 24: Container Registries \u2014 Harbor Architecture, OCI Distribution \u0026amp; Geo-Replication";
+        var mkdocs_page_input_path = "24_container_registry_architecture_harbor_and_distribution.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/yaml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/bash.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/dockerfile.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="index.html" class="icon icon-home"> Docker Containers
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="./search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="index.html">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="getting-started.md">Getting Started</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-engine.md">Docker Engine</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="working-with-images.md">Working with Images</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="working-with-containers.md">Working with Containers</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="containerizing_an_app.md">Containerizing an Application</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="multi-container-apps.md">Multi-container apps with Compose</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-and-wasm.md">Docker and Wasm</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-swarm.md">Docker Swarm</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-networking.md">Docker Networking</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-volumes.md">Docker Volumes</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-security.md">Docker Security</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-docs.md">Docker Docs</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-cheatsheet.md">Docker CheatSheet</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="apache-kafka-introduction.md">Apache Kafka</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Docker Containers</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html" class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Module 24: Container Registries — Harbor Architecture, OCI Distribution &amp; Geo-Replication</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="module-24-container-registries-harbor-architecture-oci-distribution-geo-replication">Module 24: Container Registries — Harbor Architecture, OCI Distribution &amp; Geo-Replication<a class="headerlink" href="#module-24-container-registries-harbor-architecture-oci-distribution-geo-replication" title="Permanent link">&para;</a></h1>
+<p><strong>Standard Identifier:</strong> <code>DOC-STD-UNIVERSAL-2026-DOCKER</code>
+<strong>Track:</strong> Enterprise Container Architecture, OCI Runtimes &amp; Cloud Native Infrastructure
+<strong>Category:</strong> Artifact Distribution &amp; Registry Architecture
+<strong>Status:</strong> ✅ Completed</p>
+<hr />
+<h2 id="table-of-contents">📑 Table of Contents<a class="headerlink" href="#table-of-contents" title="Permanent link">&para;</a></h2>
+<ol>
+<li>
+<p><a href="#1-high-level-overview--executive-summary">High-Level Overview &amp; Executive Summary</a></p>
+</li>
+<li>
+<p><a href="#2-the-oci-distribution-specification-v11">The OCI Distribution Specification (v1.1)</a></p>
+</li>
+<li>
+<p><a href="#3-harbor-enterprise-architecture--subsystems">Harbor Enterprise Architecture &amp; Subsystems</a></p>
+</li>
+<li>
+<p><a href="#4-cross-region-geo-replication--proxy-caches">Cross-Region Geo-Replication &amp; Proxy Caches</a></p>
+</li>
+<li>
+<p><a href="#5-architectural-visual-topology">Architectural Visual Topology</a></p>
+</li>
+<li>
+<p><a href="#6-step-by-step-production-lab-deploying-private-oci-registry-with-basic-auth">Step-by-Step Production Lab: Deploying Private OCI Registry with Basic Auth</a></p>
+</li>
+<li>
+<p><a href="#7-certification--engineering-standards-cheat-sheet">Certification &amp; Engineering Standards Cheat Sheet</a></p>
+</li>
+<li>
+<p><a href="#8-references-the-55-rule">References (The 5+5 Rule)</a></p>
+</li>
+<li>
+<p><a href="#9-universal-finops--hardware-cost-governance">Universal FinOps &amp; Hardware Cost Governance</a></p>
+</li>
+</ol>
+<hr />
+<h2 id="1-high-level-overview-executive-summary">1. High-Level Overview &amp; Executive Summary<a class="headerlink" href="#1-high-level-overview-executive-summary" title="Permanent link">&para;</a></h2>
+<p>Enterprise software delivery relies on <strong>Container Registries</strong> to store, index, scan, and distribute immutable OCI image layers. The <strong>OCI Distribution Specification</strong> standardizes HTTP API endpoints, while enterprise registries like <strong>CNCF Harbor</strong> provide role-based access control (RBAC), automated vulnerability scanning, and multi-region replication (CNCF Harbor, 2024).</p>
+<h3 id="executive-summary-for-managers-non-technical-stakeholders">👔 Executive Summary (For Managers &amp; Non-Technical Stakeholders)<a class="headerlink" href="#executive-summary-for-managers-non-technical-stakeholders" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Business Purpose</strong>: Acts as the central warehouse and distribution hub for all enterprise container images and Helm charts.</li>
+<li><strong>How It Works</strong>: Content-addressable storage saves each distinct filesystem layer exactly once by its cryptographic SHA256 hash.</li>
+<li><strong>Key Business Value &amp; ROI</strong>: Slashes cross-region cloud data transfer fees by 80% through local registry proxy caches in every data center.</li>
+</ul>
+<hr />
+<h2 id="2-the-oci-distribution-specification-v11">2. The OCI Distribution Specification (v1.1)<a class="headerlink" href="#2-the-oci-distribution-specification-v11" title="Permanent link">&para;</a></h2>
+<pre><code class="language-mermaid">flowchart TD
+    Client[&quot;Docker / containerd Client&quot;] --&gt;|1. GET /v2/myorg/app/manifests/v1.0| RegAPI[&quot;Registry API (v2)&quot;]
+    RegAPI --&gt;|2. Returns JSON Manifest with Layer SHA256s| Client
+    Client --&gt;|3. GET /v2/myorg/app/blobs/sha256:abc...| Storage[&quot;Object Storage (S3 / GCS / Local Storage)&quot;]
+    Storage --&gt;|4. Stream compressed tarball layers| Client
+</code></pre>
+<hr />
+<h2 id="3-harbor-enterprise-architecture-subsystems">3. Harbor Enterprise Architecture &amp; Subsystems<a class="headerlink" href="#3-harbor-enterprise-architecture-subsystems" title="Permanent link">&para;</a></h2>
+<p>Harbor bundles <strong>Core Services</strong> (RBAC, Webhooks), <strong>Trivy / Clair</strong> (Vulnerability Scanner), <strong>Notary / Cosign</strong> (Image Signing), and <strong>Redis</strong> (Session Cache &amp; Job Queue).</p>
+<hr />
+<h2 id="4-cross-region-geo-replication-proxy-caches">4. Cross-Region Geo-Replication &amp; Proxy Caches<a class="headerlink" href="#4-cross-region-geo-replication-proxy-caches" title="Permanent link">&para;</a></h2>
+<p>Proxy caching automatically mirrors images from public Docker Hub locally, eliminating rate limits and external network latency.</p>
+<hr />
+<h2 id="5-architectural-visual-topology">5. Architectural Visual Topology<a class="headerlink" href="#5-architectural-visual-topology" title="Permanent link">&para;</a></h2>
+<pre><code class="language-mermaid">sequenceDiagram
+    participant K8s as Regional Kubernetes Cluster
+    participant Proxy as Harbor Local Proxy Cache
+    participant Upstream as Primary Central Harbor
+
+    K8s-&gt;&gt;Proxy: Pull image: internal-registry/app:v1.0
+    alt Cached Locally
+        Proxy--&gt;&gt;K8s: Stream layers instantly via local LAN (10 Gbps)
+    else Cache Miss
+        Proxy-&gt;&gt;Upstream: Download layer blobs from central S3 bucket
+        Proxy-&gt;&gt;Proxy: Store copy in local SSD cache
+        Proxy--&gt;&gt;K8s: Stream layer blobs to worker nodes
+    end
+</code></pre>
+<hr />
+<h2 id="6-step-by-step-production-lab-deploying-private-oci-registry-with-basic-auth">6. Step-by-Step Production Lab: Deploying Private OCI Registry with Basic Auth<a class="headerlink" href="#6-step-by-step-production-lab-deploying-private-oci-registry-with-basic-auth" title="Permanent link">&para;</a></h2>
+<pre><code class="language-bash">
+# Step 1: Create registry data directory and htpasswd credentials
+mkdir -p /tmp/registry_lab/data /tmp/registry_lab/auth
+docker run --rm     --entrypoint htpasswd     httpd:2 -Bbn admin SecretRegistryPass2026 &gt; /tmp/registry_lab/auth/htpasswd
+
+# Step 2: Launch standalone OCI Registry v2 with authentication
+docker run -d     --name local_registry     -p 5001:5000     -e REGISTRY_AUTH=htpasswd     -e REGISTRY_AUTH_HTPASSWD_REALM=&quot;Registry Realm&quot;     -e REGISTRY_AUTH_HTPASSWD_PATH=/auth/htpasswd     -v /tmp/registry_lab/data:/var/lib/registry     -v /tmp/registry_lab/auth:/auth     registry:2
+
+# Step 3: Authenticate and push test image
+docker login localhost:5001 -u admin -p SecretRegistryPass2026
+docker tag alpine:latest localhost:5001/my-alpine:v1.0.0
+docker push localhost:5001/my-alpine:v1.0.0
+
+# Step 4: Query registry catalog API
+curl -u admin:SecretRegistryPass2026 http://localhost:5001/v2/_catalog
+
+# Clean up
+docker stop local_registry &amp;&amp; docker rm local_registry
+</code></pre>
+<hr />
+<h2 id="7-certification-engineering-standards-cheat-sheet">7. Certification &amp; Engineering Standards Cheat Sheet<a class="headerlink" href="#7-certification-engineering-standards-cheat-sheet" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Directive</th>
+<th style="text-align: left;">Standard Rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Garbage Collection</strong></td>
+<td style="text-align: left;">Run periodic registry GC sweeps to delete unreferenced layer blobs.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Read-Only Maintenance</strong></td>
+<td style="text-align: left;">Switch registry to read-only during storage defragmentation.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="8-references-the-55-rule">8. References (The 5+5 Rule)<a class="headerlink" href="#8-references-the-55-rule" title="Permanent link">&para;</a></h2>
+<ol>
+<li>CNCF. (2024). <em>Harbor: Cloud native trusted open source container registry</em>. <a href="https://goharbor.io/">https://goharbor.io/</a></li>
+<li>Open Container Initiative. (2023). <em>OCI Distribution Specification (v1.1.0)</em>.</li>
+<li>Docker Inc. (2024). <em>Docker Registry HTTP API v2</em>.</li>
+<li>CNCF. (2023). <em>Cloud native artifact distribution whitepaper</em>.</li>
+<li>NIST. (2017). <em>Application container security guide</em>.</li>
+<li>Turnbull, J. (2014). <em>The Docker book</em>.</li>
+<li>Poulton, N. (2023). <em>Docker deep dive</em>.</li>
+<li>Kerrisk, M. (2010). <em>The Linux programming interface</em>.</li>
+<li>Burns, B. (2018). <em>Designing distributed systems</em>.</li>
+<li>Tanenbaum, A. S., &amp; Bos, H. (2015). <em>Modern operating systems</em>.</li>
+</ol>
+<hr />
+<h2 id="9-universal-finops-hardware-cost-governance">9. Universal FinOps &amp; Hardware Cost Governance<a class="headerlink" href="#9-universal-finops-hardware-cost-governance" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Optimization Strategy</th>
+<th style="text-align: left;">Mechanism</th>
+<th style="text-align: left;">FinOps Cloud Impact</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Regional Proxy Caches</strong></td>
+<td style="text-align: left;">Serve image layers from local availability zone</td>
+<td style="text-align: left;">Drops cross-AZ and cross-region AWS egress fees by 80%</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Deduplicated Blob Storage</strong></td>
+<td style="text-align: left;">Content-addressable layer storage</td>
+<td style="text-align: left;">Prevents redundant storage billing for shared base layers</td>
+</tr>
+</tbody>
+</table>
+              
+            </div>
+          </div><footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+    
+  </span>
+</div>
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = ".";</script>
+    <script src="js/theme_extra.js"></script>
+    <script src="js/theme.js"></script>
+      <script src="search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

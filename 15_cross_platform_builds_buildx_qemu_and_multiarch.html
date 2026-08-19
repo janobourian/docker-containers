@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="img/favicon.ico" />
+    <title>Module 15: Cross-Platform Builds — Docker Buildx, QEMU Emulation &amp; Multi-Arch Manifests - Docker Containers</title>
+    <link rel="stylesheet" href="css/theme.css" />
+    <link rel="stylesheet" href="css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Module 15: Cross-Platform Builds \u2014 Docker Buildx, QEMU Emulation \u0026amp; Multi-Arch Manifests";
+        var mkdocs_page_input_path = "15_cross_platform_builds_buildx_qemu_and_multiarch.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/yaml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/bash.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/dockerfile.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="index.html" class="icon icon-home"> Docker Containers
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="./search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="index.html">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="getting-started.md">Getting Started</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-engine.md">Docker Engine</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="working-with-images.md">Working with Images</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="working-with-containers.md">Working with Containers</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="containerizing_an_app.md">Containerizing an Application</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="multi-container-apps.md">Multi-container apps with Compose</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-and-wasm.md">Docker and Wasm</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-swarm.md">Docker Swarm</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-networking.md">Docker Networking</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-volumes.md">Docker Volumes</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-security.md">Docker Security</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-docs.md">Docker Docs</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-cheatsheet.md">Docker CheatSheet</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="apache-kafka-introduction.md">Apache Kafka</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Docker Containers</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html" class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Module 15: Cross-Platform Builds — Docker Buildx, QEMU Emulation &amp; Multi-Arch Manifests</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="module-15-cross-platform-builds-docker-buildx-qemu-emulation-multi-arch-manifests">Module 15: Cross-Platform Builds — Docker Buildx, QEMU Emulation &amp; Multi-Arch Manifests<a class="headerlink" href="#module-15-cross-platform-builds-docker-buildx-qemu-emulation-multi-arch-manifests" title="Permanent link">&para;</a></h1>
+<p><strong>Standard Identifier:</strong> <code>DOC-STD-UNIVERSAL-2026-DOCKER</code>
+<strong>Track:</strong> Enterprise Container Architecture, OCI Runtimes &amp; Cloud Native Infrastructure
+<strong>Category:</strong> Advanced Image Compilation &amp; Multi-Arch Toolchains
+<strong>Status:</strong> ✅ Completed</p>
+<hr />
+<h2 id="table-of-contents">📑 Table of Contents<a class="headerlink" href="#table-of-contents" title="Permanent link">&para;</a></h2>
+<ol>
+<li>
+<p><a href="#1-high-level-overview--executive-summary">High-Level Overview &amp; Executive Summary</a></p>
+</li>
+<li>
+<p><a href="#2-the-multi-architecture-cpu-landscape-amd64-vs-arm64">The Multi-Architecture CPU Landscape (amd64 vs arm64)</a></p>
+</li>
+<li>
+<p><a href="#3-oci-multi-platform-manifest-lists--index-descriptors">OCI Multi-Platform Manifest Lists &amp; Index Descriptors</a></p>
+</li>
+<li>
+<p><a href="#4-docker-buildx-architecture--qemu-binfmt_misc-emulation">Docker Buildx Architecture &amp; QEMU binfmt_misc Emulation</a></p>
+</li>
+<li>
+<p><a href="#5-architectural-visual-topology">Architectural Visual Topology</a></p>
+</li>
+<li>
+<p><a href="#6-step-by-step-production-lab-multi-platform-manifest-compilation--push">Step-by-Step Production Lab: Multi-Platform Manifest Compilation &amp; Push</a></p>
+</li>
+<li>
+<p><a href="#7-certification--engineering-standards-cheat-sheet">Certification &amp; Engineering Standards Cheat Sheet</a></p>
+</li>
+<li>
+<p><a href="#8-references-the-55-rule">References (The 5+5 Rule)</a></p>
+</li>
+<li>
+<p><a href="#9-universal-finops--hardware-cost-governance">Universal FinOps &amp; Hardware Cost Governance</a></p>
+</li>
+</ol>
+<hr />
+<h2 id="1-high-level-overview-executive-summary">1. High-Level Overview &amp; Executive Summary<a class="headerlink" href="#1-high-level-overview-executive-summary" title="Permanent link">&para;</a></h2>
+<p>Modern enterprise compute runs across heterogeneous CPU architectures: Apple Silicon (ARM64), AWS Graviton (ARM64), and AMD/Intel (AMD64). <strong>Docker Buildx</strong> compiles a single semantic image tag into an <strong>OCI Manifest List</strong> that automatically serves the native CPU architecture binary to requesting clients (Docker Inc., 2024).</p>
+<h3 id="executive-summary-for-managers-non-technical-stakeholders">👔 Executive Summary (For Managers &amp; Non-Technical Stakeholders)<a class="headerlink" href="#executive-summary-for-managers-non-technical-stakeholders" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Business Purpose</strong>: Enables seamless application execution across Apple laptops, AWS ARM Graviton servers, and legacy x86 cloud hosts without maintaining separate codebase forks.</li>
+<li><strong>How It Works</strong>: Creates an umbrella image manifest pointing to distinct CPU-specific binaries. The container runtime automatically downloads the matching binary for the host chip.</li>
+<li><strong>Key Business Value &amp; ROI</strong>: Unlocks AWS Graviton3 cloud instances which offer 40% better price-performance over comparable x86 compute instances.</li>
+</ul>
+<hr />
+<h2 id="2-the-multi-architecture-cpu-landscape-amd64-vs-arm64">2. The Multi-Architecture CPU Landscape (amd64 vs arm64)<a class="headerlink" href="#2-the-multi-architecture-cpu-landscape-amd64-vs-arm64" title="Permanent link">&para;</a></h2>
+<pre><code class="language-mermaid">flowchart TD
+    Index[&quot;OCI Manifest List (myorg/api:v1.0)&quot;] --&gt; D1[&quot;Descriptor: linux/amd64 -&gt; Layer SHA256 (x86_64)&quot;]
+    Index --&gt; D2[&quot;Descriptor: linux/arm64 -&gt; Layer SHA256 (aarch64)&quot;]
+    Index --&gt; D3[&quot;Descriptor: linux/arm/v7 -&gt; Layer SHA256 (32-bit ARM)&quot;]
+</code></pre>
+<hr />
+<h2 id="3-oci-multi-platform-manifest-lists-index-descriptors">3. OCI Multi-Platform Manifest Lists &amp; Index Descriptors<a class="headerlink" href="#3-oci-multi-platform-manifest-lists-index-descriptors" title="Permanent link">&para;</a></h2>
+<p>An OCI Image Index descriptor contains platform specifications linking architecture and OS to exact sha256 layer hashes.</p>
+<hr />
+<h2 id="4-docker-buildx-architecture-qemu-binfmt_misc-emulation">4. Docker Buildx Architecture &amp; QEMU binfmt_misc Emulation<a class="headerlink" href="#4-docker-buildx-architecture-qemu-binfmt_misc-emulation" title="Permanent link">&para;</a></h2>
+<p>BuildKit uses Linux kernel <code>binfmt_misc</code> to intercept non-native binary execution and route it through QEMU user-mode emulators.</p>
+<hr />
+<h2 id="5-architectural-visual-topology">5. Architectural Visual Topology<a class="headerlink" href="#5-architectural-visual-topology" title="Permanent link">&para;</a></h2>
+<pre><code class="language-mermaid">sequenceDiagram
+    participant Dev as CI/CD Pipeline
+    participant Buildx as Docker Buildx (BuildKit Engine)
+    participant QEMU as QEMU Emulation
+    participant Registry as OCI Container Registry
+
+    Dev-&gt;&gt;Buildx: docker buildx build --platform linux/amd64,linux/arm64
+    par Concurrent Build
+        Buildx-&gt;&gt;Buildx: Native compilation for Host Arch
+    and Emulated Build
+        Buildx-&gt;&gt;QEMU: Emulate foreign CPU instructions (binfmt)
+    end
+    Buildx-&gt;&gt;Registry: Push AMD64 Layer Blobs + ARM64 Layer Blobs
+    Buildx-&gt;&gt;Registry: Push OCI Manifest Index Descriptor
+</code></pre>
+<hr />
+<h2 id="6-step-by-step-production-lab-multi-platform-manifest-compilation-push">6. Step-by-Step Production Lab: Multi-Platform Manifest Compilation &amp; Push<a class="headerlink" href="#6-step-by-step-production-lab-multi-platform-manifest-compilation-push" title="Permanent link">&para;</a></h2>
+<pre><code class="language-bash">
+# Step 1: Create dedicated multi-arch builder instance
+docker buildx create --name enterprise_builder --driver docker-container --use
+docker buildx inspect --bootstrap
+
+# Step 2: Build multi-arch image targeting amd64 and arm64
+docker buildx build     --platform linux/amd64,linux/arm64     --tag multiarch-demo:latest     .
+</code></pre>
+<hr />
+<h2 id="7-certification-engineering-standards-cheat-sheet">7. Certification &amp; Engineering Standards Cheat Sheet<a class="headerlink" href="#7-certification-engineering-standards-cheat-sheet" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Command / Flag</th>
+<th style="text-align: left;">Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>--platform linux/amd64,linux/arm64</code></td>
+<td style="text-align: left;">Specifies target architectures for Buildx build.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>docker buildx imagetools inspect</code></td>
+<td style="text-align: left;">Inspects remote manifest list platforms without pulling full image layers.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="8-references-the-55-rule">8. References (The 5+5 Rule)<a class="headerlink" href="#8-references-the-55-rule" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Docker Inc. (2024). <em>Docker Buildx documentation</em>. <a href="https://docs.docker.com/build/buildx/">https://docs.docker.com/build/buildx/</a></li>
+<li>Open Container Initiative. (2021). <em>OCI image index specification</em>.</li>
+<li>Linux Foundation. (2023). <em>BuildKit toolkit specification</em>.</li>
+<li>ARM Ltd. (2023). <em>ARM architecture reference manual</em>.</li>
+<li>Intel Corporation. (2024). <em>Intel 64 and IA-32 architectures software developer manual</em>.</li>
+<li>Turnbull, J. (2014). <em>The Docker book</em>.</li>
+<li>Poulton, N. (2023). <em>Docker deep dive</em>.</li>
+<li>Mouat, A. (2015). <em>Using Docker</em>.</li>
+<li>Tanenbaum, A. S., &amp; Bos, H. (2015). <em>Modern operating systems</em>.</li>
+<li>Burns, B. (2018). <em>Designing distributed systems</em>.</li>
+</ol>
+<hr />
+<h2 id="9-universal-finops-hardware-cost-governance">9. Universal FinOps &amp; Hardware Cost Governance<a class="headerlink" href="#9-universal-finops-hardware-cost-governance" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Optimization Strategy</th>
+<th style="text-align: left;">Operational Vector</th>
+<th style="text-align: left;">FinOps Cloud ROI</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>AWS Graviton Migration</strong></td>
+<td style="text-align: left;">Compile native ARM64 container images</td>
+<td style="text-align: left;">Drops cloud compute infrastructure costs by 20–40% per core</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Native Builder Instances</strong></td>
+<td style="text-align: left;">Use remote ARM/x86 native nodes over QEMU</td>
+<td style="text-align: left;">Reduces CI build time by 75%, lowering GitHub Actions runner fees</td>
+</tr>
+</tbody>
+</table>
+              
+            </div>
+          </div><footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+    
+  </span>
+</div>
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = ".";</script>
+    <script src="js/theme_extra.js"></script>
+    <script src="js/theme.js"></script>
+      <script src="search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

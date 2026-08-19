@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="img/favicon.ico" />
+    <title>Module neg04: Container Runtime Installation, Toolchain Setup &amp; First Container - Docker Containers</title>
+    <link rel="stylesheet" href="css/theme.css" />
+    <link rel="stylesheet" href="css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Module neg04: Container Runtime Installation, Toolchain Setup \u0026amp; First Container";
+        var mkdocs_page_input_path = "neg04_container_runtime_installation_and_hello_world.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/yaml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/bash.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/dockerfile.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="index.html" class="icon icon-home"> Docker Containers
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="./search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="index.html">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="getting-started.md">Getting Started</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-engine.md">Docker Engine</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="working-with-images.md">Working with Images</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="working-with-containers.md">Working with Containers</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="containerizing_an_app.md">Containerizing an Application</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="multi-container-apps.md">Multi-container apps with Compose</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-and-wasm.md">Docker and Wasm</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-swarm.md">Docker Swarm</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-networking.md">Docker Networking</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-volumes.md">Docker Volumes</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-security.md">Docker Security</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-docs.md">Docker Docs</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-cheatsheet.md">Docker CheatSheet</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="apache-kafka-introduction.md">Apache Kafka</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Docker Containers</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html" class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Module neg04: Container Runtime Installation, Toolchain Setup &amp; First Container</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="module-neg04-container-runtime-installation-toolchain-setup-first-container">Module neg04: Container Runtime Installation, Toolchain Setup &amp; First Container<a class="headerlink" href="#module-neg04-container-runtime-installation-toolchain-setup-first-container" title="Permanent link">&para;</a></h1>
+<p><strong>Standard Identifier:</strong> <code>DOC-STD-UNIVERSAL-2026-DOCKER</code>
+<strong>Track:</strong> Enterprise Container Architecture, OCI Runtimes &amp; Cloud Native Infrastructure
+<strong>Category:</strong> Toolchain Setup &amp; Container Foundations
+<strong>Status:</strong> ✅ Completed</p>
+<hr />
+<h2 id="table-of-contents">📑 Table of Contents<a class="headerlink" href="#table-of-contents" title="Permanent link">&para;</a></h2>
+<ol>
+<li>
+<p><a href="#1-high-level-overview--executive-summary">High-Level Overview &amp; Executive Summary</a></p>
+</li>
+<li>
+<p><a href="#2-what-a-container-is-historical--architectural-evolution">What a Container IS: Historical &amp; Architectural Evolution</a></p>
+</li>
+<li>
+<p><a href="#3-installing-the-container-engine-across-operating-systems">Installing the Container Engine Across Operating Systems</a></p>
+</li>
+<li>
+<p><a href="#4-anatomy-of-the-first-container-execution-docker-run">Anatomy of the First Container Execution (<code>docker run</code>)</a></p>
+</li>
+<li>
+<p><a href="#5-the-container-lifecycle--state-transitions">The Container Lifecycle &amp; State Transitions</a></p>
+</li>
+<li>
+<p><a href="#6-architectural-visual-topology">Architectural Visual Topology</a></p>
+</li>
+<li>
+<p><a href="#7-step-by-step-production-lab-zero-pollution-nginx-web-server-setup">Step-by-Step Production Lab: Zero-Pollution NGINX Web Server Setup</a></p>
+</li>
+<li>
+<p><a href="#8-certification--engineering-standards-cheat-sheet">Certification &amp; Engineering Standards Cheat Sheet</a></p>
+</li>
+<li>
+<p><a href="#9-references-the-55-rule">References (The 5+5 Rule)</a></p>
+</li>
+<li>
+<p><a href="#10-universal-finops--hardware-cost-governance">Universal FinOps &amp; Hardware Cost Governance</a></p>
+</li>
+</ol>
+<hr />
+<h2 id="1-high-level-overview-executive-summary">1. High-Level Overview &amp; Executive Summary<a class="headerlink" href="#1-high-level-overview-executive-summary" title="Permanent link">&para;</a></h2>
+<p>In enterprise software engineering, deploying applications directly to host operating systems introduces the "works on my machine" anti-pattern: divergent dependency versions, conflicting system libraries, and uncontrolled process interference.</p>
+<p>Containers solve environment divergence by encapsulating an application process along with its exact runtime filesystem dependencies into an immutable, portable artifact known as an <strong>OCI (Open Container Initiative) Image</strong> (Turnbull, 2014).</p>
+<h3 id="executive-summary-for-managers-non-technical-stakeholders">👔 Executive Summary (For Managers &amp; Non-Technical Stakeholders)<a class="headerlink" href="#executive-summary-for-managers-non-technical-stakeholders" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Business Purpose</strong>: Eliminates deployment inconsistencies by packaging applications and dependencies into standardized, lightweight containers.</li>
+<li><strong>How It Works</strong>: Unlike traditional Virtual Machines (VMs) which emulate full hardware and guest operating systems, containers share the host Linux kernel, using kernel namespaces for isolation and control groups (cgroups) for resource limits.</li>
+<li><strong>Key Business Value &amp; ROI</strong>: Achieves 10x faster startup times (milliseconds vs minutes) and reduces infrastructure compute expenses by 60–80% through ultra-dense workload packing.</li>
+</ul>
+<hr />
+<h2 id="2-what-a-container-is-historical-architectural-evolution">2. What a Container IS: Historical &amp; Architectural Evolution<a class="headerlink" href="#2-what-a-container-is-historical-architectural-evolution" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p><strong>Definition</strong>: A <strong>Container</strong> is an isolated Linux process running in user space whose visibility into system resources (process tree, network interfaces, mount tables) is constrained by Linux Kernel <strong>Namespaces</strong> and whose resource consumption (CPU, RAM, Block I/O) is metered by <strong>Control Groups (cgroups)</strong>.</p>
+</blockquote>
+<pre><code class="language-mermaid">flowchart TD
+    subgraph VM[&quot;Traditional Virtual Machine Architecture&quot;]
+        AppA[&quot;App A&quot;] --&gt; GuestOSA[&quot;Guest OS (Linux)&quot;]
+        AppB[&quot;App B&quot;] --&gt; GuestOSB[&quot;Guest OS (Windows)&quot;]
+        GuestOSA --&gt; Hyp[&quot;Hypervisor (Type 1/2)&quot;]
+        GuestOSB --&gt; Hyp
+        Hyp --&gt; HostOS1[&quot;Host OS &amp; Hardware&quot;]
+    end
+
+    subgraph CTR[&quot;Modern Container Architecture&quot;]
+        App1[&quot;App 1 (Container)&quot;] --&gt; Engine[&quot;Container Engine (containerd/runc)&quot;]
+        App2[&quot;App 2 (Container)&quot;] --&gt; Engine
+        Engine --&gt; Kernel[&quot;Shared Host Linux Kernel (Namespaces/cgroups)&quot;]
+        Kernel --&gt; Hardware[&quot;Physical Hardware / Cloud VM&quot;]
+    end
+</code></pre>
+<hr />
+<h2 id="3-installing-the-container-engine-across-operating-systems">3. Installing the Container Engine Across Operating Systems<a class="headerlink" href="#3-installing-the-container-engine-across-operating-systems" title="Permanent link">&para;</a></h2>
+<h3 id="31-linux-installation-docker-ce-on-ubuntudebian">3.1 Linux Installation (Docker CE on Ubuntu/Debian)<a class="headerlink" href="#31-linux-installation-docker-ce-on-ubuntudebian" title="Permanent link">&para;</a></h3>
+<pre><code class="language-bash">
+# 1. Update APT repository index and install prerequisite packages
+sudo apt-get update &amp;&amp; sudo apt-get install -y     ca-certificates     curl     gnupg     lsb-release
+
+# 2. Add Docker official GPG signing key
+sudo mkdir -p /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+
+# 3. Set up the stable Docker repository
+echo   &quot;deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu   $(lsb_release -cs) stable&quot; | sudo tee /etc/apt/sources.list.d/docker.list &gt; /dev/null
+
+# 4. Install Docker Engine, containerd, and Docker Compose plugin
+sudo apt-get update &amp;&amp; sudo apt-get install -y     docker-ce     docker-ce-cli     containerd.io     docker-compose-plugin
+
+# 5. Enable and start Docker systemd service
+sudo systemctl enable --now docker
+</code></pre>
+<hr />
+<h2 id="4-anatomy-of-the-first-container-execution-docker-run">4. Anatomy of the First Container Execution (<code>docker run</code>)<a class="headerlink" href="#4-anatomy-of-the-first-container-execution-docker-run" title="Permanent link">&para;</a></h2>
+<p>When executing <code>docker run --name web -d -p 8080:80 nginx:alpine</code>, the container engine performs a multi-stage orchestration sequence:</p>
+<pre><code class="language-mermaid">sequenceDiagram
+    participant User as Developer / CLI
+    participant Daemon as Docker Daemon (dockerd)
+    participant Registry as OCI Registry (Docker Hub)
+    participant Runtime as containerd &amp; runc
+    participant Kernel as Linux Kernel
+
+    User-&gt;&gt;Daemon: docker run -d -p 8080:80 nginx:alpine
+    Daemon-&gt;&gt;Daemon: Check local image cache
+    opt Image Not Local
+        Daemon-&gt;&gt;Registry: Pull manifest &amp; layers
+        Registry--&gt;&gt;Daemon: Return compressed tar layers
+    end
+    Daemon-&gt;&gt;Runtime: Create container bundle (rootfs + config.json)
+    Runtime-&gt;&gt;Kernel: clone() with CLONE_NEWPID, CLONE_NEWNET, CLONE_NEWNS
+    Kernel-&gt;&gt;Kernel: Apply cgroups limits &amp; pivot_root()
+    Kernel--&gt;&gt;Runtime: Process PID in container namespace
+    Runtime--&gt;&gt;Daemon: Container running (ID: 64-char hash)
+    Daemon--&gt;&gt;User: Container ContainerID
+</code></pre>
+<hr />
+<h2 id="5-the-container-lifecycle-state-transitions">5. The Container Lifecycle &amp; State Transitions<a class="headerlink" href="#5-the-container-lifecycle-state-transitions" title="Permanent link">&para;</a></h2>
+<p>Containers transition through deterministic states:</p>
+<ul>
+<li><strong>Created</strong>: Container root filesystem and metadata prepared; process not yet started.</li>
+<li><strong>Running</strong>: Active process executing with isolated PID and namespaces.</li>
+<li><strong>Paused</strong>: Container processes frozen via <code>cgroup.freezer</code>.</li>
+<li><strong>Stopped (Exited)</strong>: Main process (PID 1) terminated; status code recorded.</li>
+<li><strong>Dead</strong>: Faulted state during deallocation.</li>
+</ul>
+<hr />
+<h2 id="6-architectural-visual-topology">6. Architectural Visual Topology<a class="headerlink" href="#6-architectural-visual-topology" title="Permanent link">&para;</a></h2>
+<pre><code class="language-mermaid">stateDiagram-v2
+    [*] --&gt; Created: docker create
+    Created --&gt; Running: docker start
+    Running --&gt; Paused: docker pause
+    Paused --&gt; Running: docker unpause
+    Running --&gt; Stopped: docker stop (SIGTERM -&gt; SIGKILL)
+    Running --&gt; Running: docker restart
+    Stopped --&gt; Running: docker start
+    Stopped --&gt; [*]: docker rm
+</code></pre>
+<hr />
+<h2 id="7-step-by-step-production-lab-zero-pollution-nginx-web-server-setup">7. Step-by-Step Production Lab: Zero-Pollution NGINX Web Server Setup<a class="headerlink" href="#7-step-by-step-production-lab-zero-pollution-nginx-web-server-setup" title="Permanent link">&para;</a></h2>
+<p>In this lab, we provision an isolated NGINX web server with a custom HTML index page and verify port forwarding and process isolation.</p>
+<pre><code class="language-bash">
+# Step 1: Create isolated work directory and index page
+mkdir -p ~/container_lab/html
+cat &lt;&lt; 'HTMLEOF' &gt; ~/container_lab/html/index.html
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;&lt;title&gt;Enterprise Container Platform&lt;/title&gt;&lt;/head&gt;
+&lt;body style=&quot;font-family:sans-serif; text-align:center; padding:50px;&quot;&gt;
+    &lt;h1&gt;🚀 Mission-Critical Container Active&lt;/h1&gt;
+    &lt;p&gt;Zero host pollution achieved via OCI isolated namespaces.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+HTMLEOF
+
+# Step 2: Run container in detached mode with bind mount and port publishing
+docker run --name enterprise_web     --detach     --restart unless-stopped     --publish 8080:80     --volume ~/container_lab/html:/usr/share/nginx/html:ro     nginx:alpine
+
+# Step 3: Verify container execution and HTTP response
+curl -s http://localhost:8080 | grep &quot;Mission-Critical&quot;
+
+# Step 4: Clean up container resources
+docker stop enterprise_web &amp;&amp; docker rm enterprise_web
+</code></pre>
+<hr />
+<h2 id="8-certification-engineering-standards-cheat-sheet">8. Certification &amp; Engineering Standards Cheat Sheet<a class="headerlink" href="#8-certification-engineering-standards-cheat-sheet" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Standard / Tool</th>
+<th style="text-align: left;">Description</th>
+<th style="text-align: left;">Critical Practice</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>OCI Runtime Spec</strong></td>
+<td style="text-align: left;">Standard for runtime execution (<code>runc</code>).</td>
+<td style="text-align: left;">Standardized <code>config.json</code> execution bundles.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>OCI Image Spec</strong></td>
+<td style="text-align: left;">Content-addressable layer tarballs.</td>
+<td style="text-align: left;">SHA256 hashed immutable layers.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>DCA Certification</strong></td>
+<td style="text-align: left;">Docker Certified Associate Exam.</td>
+<td style="text-align: left;">Master <code>docker run</code>, <code>--restart</code>, <code>--net</code>, <code>--mount</code>.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="9-references-the-55-rule">9. References (The 5+5 Rule)<a class="headerlink" href="#9-references-the-55-rule" title="Permanent link">&para;</a></h2>
+<h3 id="official-specifications-standards">Official Specifications &amp; Standards<a class="headerlink" href="#official-specifications-standards" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Open Container Initiative. (2021). <em>OCI runtime specification (v1.0.2)</em>. Linux Foundation. <a href="https://opencontainers.org/">https://opencontainers.org/</a></li>
+<li>Docker Documentation. (2024). <em>Docker Engine architecture and reference manuals</em>. Docker Inc. <a href="https://docs.docker.com/engine/">https://docs.docker.com/engine/</a></li>
+<li>Linux Foundation. (2023). <em>containerd: An industry-standard container runtime</em>. CNCF. <a href="https://containerd.io/">https://containerd.io/</a></li>
+<li>IEEE. (2018). <em>POSIX standard operating system interfaces (IEEE Std 1003.1)</em>. IEEE.</li>
+<li>National Institute of Standards and Technology. (2017). <em>Application container security guide (NIST SP 800-190)</em>. NIST.</li>
+</ol>
+<h3 id="authoritative-textbooks-engineering-papers">Authoritative Textbooks &amp; Engineering Papers<a class="headerlink" href="#authoritative-textbooks-engineering-papers" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Turnbull, J. (2014). <em>The Docker book: Containerization is the new virtualization</em>. James Turnbull.</li>
+<li>Kerrisk, M. (2010). <em>The Linux programming interface: A Linux and UNIX system programming handbook</em>. No Starch Press.</li>
+<li>Burns, B. (2018). <em>Designing distributed systems: Patterns and paradigms for scalable, reliable services</em>. O'Reilly Media.</li>
+<li>Mouat, A. (2015). <em>Using Docker: Developing and deploying software with containers</em>. O'Reilly Media.</li>
+<li>Tanenbaum, A. S., &amp; Bos, H. (2015). <em>Modern operating systems</em> (4th ed.). Pearson.</li>
+</ol>
+<hr />
+<h2 id="10-universal-finops-hardware-cost-governance">10. Universal FinOps &amp; Hardware Cost Governance<a class="headerlink" href="#10-universal-finops-hardware-cost-governance" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Optimization Vector</th>
+<th style="text-align: left;">Technical Mechanism</th>
+<th style="text-align: left;">Quantifiable FinOps ROI</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Host VM Consolidation</strong></td>
+<td style="text-align: left;">Replaces heavy hypervisors with kernel namespace isolation</td>
+<td style="text-align: left;">Increases compute density by 4x–8x per AWS EC2 instance</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Rapid Autoscaling</strong></td>
+<td style="text-align: left;">Sub-second container spin-up vs 3-minute VM boot</td>
+<td style="text-align: left;">Slashes idle compute capacity waste during traffic lulls</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Minimal Base Images</strong></td>
+<td style="text-align: left;">Use Alpine/Distroless (5MB vs 1GB Ubuntu)</td>
+<td style="text-align: left;">Cuts container registry egress network bandwidth fees by 95%</td>
+</tr>
+</tbody>
+</table>
+              
+            </div>
+          </div><footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+    
+  </span>
+</div>
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = ".";</script>
+    <script src="js/theme_extra.js"></script>
+    <script src="js/theme.js"></script>
+      <script src="search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

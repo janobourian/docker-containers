@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="img/favicon.ico" />
+    <title>Module 12: Enterprise Apache Kafka with Docker &amp; KRaft Architecture - Docker Containers</title>
+    <link rel="stylesheet" href="css/theme.css" />
+    <link rel="stylesheet" href="css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Module 12: Enterprise Apache Kafka with Docker \u0026amp; KRaft Architecture";
+        var mkdocs_page_input_path = "11_distributed_kafka_and_stateful_container_workloads.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/yaml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/bash.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/dockerfile.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="index.html" class="icon icon-home"> Docker Containers
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="./search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="index.html">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="getting-started.md">Getting Started</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-engine.md">Docker Engine</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="working-with-images.md">Working with Images</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="working-with-containers.md">Working with Containers</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="containerizing_an_app.md">Containerizing an Application</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="multi-container-apps.md">Multi-container apps with Compose</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-and-wasm.md">Docker and Wasm</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-swarm.md">Docker Swarm</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-networking.md">Docker Networking</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-volumes.md">Docker Volumes</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-security.md">Docker Security</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-docs.md">Docker Docs</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-cheatsheet.md">Docker CheatSheet</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="apache-kafka-introduction.md">Apache Kafka</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Docker Containers</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html" class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Module 12: Enterprise Apache Kafka with Docker &amp; KRaft Architecture</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="module-12-enterprise-apache-kafka-with-docker-kraft-architecture">Module 12: Enterprise Apache Kafka with Docker &amp; KRaft Architecture<a class="headerlink" href="#module-12-enterprise-apache-kafka-with-docker-kraft-architecture" title="Permanent link">&para;</a></h1>
+<p><strong>Track:</strong> Docker Container Systems &amp; Virtualization Architecture
+<strong>Category:</strong> Distributed Systems, Event Streaming, KRaft Metadata &amp; Multi-Container Stacks
+<strong>Standard Identifier:</strong> <code>DOC-STD-UNIVERSAL-2026</code>
+<strong>Status:</strong> ✅ Completed</p>
+<hr />
+<h2 id="table-of-contents">📑 Table of Contents<a class="headerlink" href="#table-of-contents" title="Permanent link">&para;</a></h2>
+<ol>
+<li>
+<p><a href="#1-high-level-overview--executive-summary">High-Level Overview &amp; Executive Summary</a></p>
+</li>
+<li>
+<p><a href="#2-kafka-architecture--the-kraft-consensus-protocol">Kafka Architecture &amp; The KRaft Consensus Protocol</a></p>
+</li>
+<li>
+<p><a href="#3-the-advertised-listeners-architecture-internal-vs-external-routing">The Advertised Listeners Architecture (Internal vs External Routing)</a></p>
+</li>
+<li>
+<p><a href="#4-topics-partitions-consumer-groups--offsets">Topics, Partitions, Consumer Groups &amp; Offsets</a></p>
+</li>
+<li>
+<p><a href="#5-certification--exam-essentials-cheat-sheet">Certification &amp; Exam Essentials (Cheat Sheet)</a></p>
+</li>
+<li>
+<p><a href="#6-comparative-analysis-matrix-message-brokers--event-logs">Comparative Analysis Matrix: Message Brokers &amp; Event Logs</a></p>
+</li>
+<li>
+<p><a href="#7-performance--resource-optimization">Performance &amp; Resource Optimization</a></p>
+</li>
+<li>
+<p><a href="#8-in-depth-engineering-perspectives">In-Depth Engineering Perspectives</a></p>
+</li>
+<li>
+<p><a href="#9-step-by-step-hands-on-production-walkthrough">Step-by-Step Hands-On Production Walkthrough</a></p>
+</li>
+<li>
+<p><a href="#10-pure-cli--command-interface">Pure CLI / Command Interface</a></p>
+</li>
+<li>
+<p><a href="#11-advanced-architecture--edge-case-failure-modes">Advanced Architecture &amp; Edge-Case Failure Modes</a></p>
+</li>
+<li>
+<p><a href="#12-detailed-sub-components--subsystems">Detailed Sub-Components &amp; Subsystems</a></p>
+</li>
+<li>
+<p><a href="#13-references-the-55-rule">References (The 5+5 Rule)</a></p>
+</li>
+<li>
+<p><a href="#14-universal-finops--resource-cost-governance">Universal FinOps &amp; Resource Cost Governance</a></p>
+</li>
+</ol>
+<hr />
+<h2 id="1-high-level-overview-executive-summary">1. High-Level Overview &amp; Executive Summary<a class="headerlink" href="#1-high-level-overview-executive-summary" title="Permanent link">&para;</a></h2>
+<p><strong>Apache Kafka</strong> is an enterprise distributed event streaming platform capable of handling trillions of events per day with ultra-low latency, strict partition ordering, and high fault tolerance. Running Apache Kafka in containerized environments enables rapid development and reproducible integration testing for microservice event-driven architectures.</p>
+<p>Modern production Kafka deployments utilize <strong>KRaft (Kafka Raft Metadata Mode)</strong>, which completely eliminates the legacy external Apache ZooKeeper dependency by running metadata consensus directly inside Kafka controller nodes using an internal event-sourced <code>@metadata</code> topic.</p>
+<pre><code class="language-text">┌────────────────────────────────────────────────────────────────────────────────┐
+│               MODERN KRAFT (ZOOKEEPER-FREE) KAFKA ARCHITECTURE                 │
+├────────────────────────────────────────────────────────────────────────────────┤
+│ ┌────────────────────────────────────────────────────────────────────────────┐ │
+│ │ KAFKA CONTROLLER QUORUM (Raft Consensus on internal `@metadata` partition)  │ │
+│ └──────────────────────────────┬─────────────────────────────────────────────┘ │
+│                                │ (Metadata replication &amp; leadership sync)      │
+│                ┌───────────────┴───────────────┐                               │
+│                ▼                               ▼                               │
+│ ┌─────────────────────────────┐ ┌────────────────────────────────────────────┐ │
+│ │ KAFKA BROKER 1 (Node 1)     │ │ KAFKA BROKER 2 (Node 2)                    │ │
+│ │ - Topic: `orders` (P0 Leader│ │ - Topic: `orders` (P1 Leader, P0 Follower) │ │
+│ │ - Storage: `/var/lib/kafka` │ │ - Storage: `/var/lib/kafka` (Named Volume) │ │
+│ └─────────────────────────────┘ └────────────────────────────────────────────┘ │
+│                ▲                               ▲                               │
+│                │ (Produce Events)              │ (Consume by Consumer Group)   │
+│         [PRODUCER CLIENTS]              [CONSUMER WORKERS (Compaction/Audit)]  │
+└────────────────────────────────────────────────────────────────────────────────┘
+</code></pre>
+<h3 id="executive-summary-for-managers-non-technical-stakeholders">👔 Executive Summary (For Managers &amp; Non-Technical Stakeholders)<a class="headerlink" href="#executive-summary-for-managers-non-technical-stakeholders" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Business Purpose</strong>: Acts as a central high-speed digital nervous system for the enterprise, allowing banking services, e-commerce checkouts, and fraud detection AI systems to react to business events in real time.</li>
+<li><strong>How It Works</strong>: Functions as an indestructible, partitioned append-only event ledger. Applications publish messages (e.g. order placed, payment settled) to topics, where downstream microservices process them in parallel.</li>
+<li><strong>Key Business Value &amp; ROI</strong>: Decouples complex monolithic systems into resilient microservices, guarantees zero message loss during peak Black Friday transaction volumes, and eliminates legacy ZooKeeper server maintenance costs.</li>
+</ul>
+<hr />
+<h2 id="2-kafka-architecture-the-kraft-consensus-protocol">2. Kafka Architecture &amp; The KRaft Consensus Protocol<a class="headerlink" href="#2-kafka-architecture-the-kraft-consensus-protocol" title="Permanent link">&para;</a></h2>
+<pre><code class="language-text">┌────────────────────────────────────────────────────────────────────────────────┐
+│                   KRAFT VS LEGACY ZOOKEEPER ARCHITECTURE                       │
+├──────────────────────────┬──────────────────────────┬──────────────────────────┤
+│ Dimension                │ Legacy ZooKeeper Mode    │ Modern KRaft Mode        │
+├──────────────────────────┼──────────────────────────┼──────────────────────────┤
+│ **Metadata Storage**     │ External ZooKeeper Nodes │ Internal `@metadata` log │
+├──────────────────────────┼──────────────────────────┼──────────────────────────┤
+│ **Controller Failover**  │ Slow (Requires ZK sync)  │ **Sub-second instant failover│
+├──────────────────────────┼──────────────────────────┼──────────────────────────┤
+│ **Partition Limit**      │ ~200,000 Partitions      │ **Millions of Partitions**│
+├──────────────────────────┼──────────────────────────┼──────────────────────────┤
+│ **Operational Footprint**| Requires managing 2 tools│ **Single Unified Container**│
+└──────────────────────────┴──────────────────────────┴──────────────────────────┘
+</code></pre>
+<hr />
+<h2 id="3-the-advertised-listeners-architecture-internal-vs-external-routing">3. The Advertised Listeners Architecture (Internal vs External Routing)<a class="headerlink" href="#3-the-advertised-listeners-architecture-internal-vs-external-routing" title="Permanent link">&para;</a></h2>
+<p>The #1 issue developers face when running Kafka in Docker is configuring <strong><code>KAFKA_ADVERTISED_LISTENERS</code></strong>.</p>
+<p>When a client connects to Kafka:</p>
+<ol>
+<li>The client connects to the initial <code>bootstrap-server</code> endpoint.</li>
+<li>Kafka returns metadata containing the <strong>Advertised Listener address</strong> for the topic partition leader.</li>
+<li>The client disconnects from the bootstrap server and opens a new socket to the returned Advertised Listener address!</li>
+</ol>
+<pre><code class="language-text">┌────────────────────────────────────────────────────────────────────────────────┐
+│               KAFKA ADVERTISED LISTENERS DUAL-ROUTING MATRIX                   │
+├────────────────────────────────────────────────────────────────────────────────┤
+│ 1. `PLAINTEXT_INTERNAL://kafka:9092` ──► Used by containers inside Docker net. │
+│ 2. `PLAINTEXT_EXTERNAL://localhost:29092` ──► Used by apps on the Host OS.    │
+└────────────────────────────────────────────────────────────────────────────────┘
+</code></pre>
+<hr />
+<h2 id="4-topics-partitions-consumer-groups-offsets">4. Topics, Partitions, Consumer Groups &amp; Offsets<a class="headerlink" href="#4-topics-partitions-consumer-groups-offsets" title="Permanent link">&para;</a></h2>
+<pre><code class="language-text">┌────────────────────────────────────────────────────────────────────────────────┐
+│                     TOPIC PARTITION &amp; CONSUMER GROUP MODEL                     │
+├────────────────────────────────────────────────────────────────────────────────┤
+│ TOPIC: `order-events` (3 Partitions for Parallel Throughput)                   │
+│                                                                                │
+│ Partition 0: [Offset 0] ──► [Offset 1] ──► [Offset 2] ──► Consumer Worker 1    │
+│ Partition 1: [Offset 0] ──► [Offset 1] ──► [Offset 2] ──► Consumer Worker 2    │
+│ Partition 2: [Offset 0] ──► [Offset 1] ──► [Offset 2] ──► Consumer Worker 3    │
+│                                                                                │
+│ ⚠️ Consumer Group Rule: Each partition is consumed by EXACTLY 1 worker in group│
+└────────────────────────────────────────────────────────────────────────────────┘
+</code></pre>
+<hr />
+<h2 id="5-certification-exam-essentials-cheat-sheet">5. Certification &amp; Exam Essentials (Cheat Sheet)<a class="headerlink" href="#5-certification-exam-essentials-cheat-sheet" title="Permanent link">&para;</a></h2>
+<ul>
+<li>⚠️ <strong><code>KAFKA_ADVERTISED_LISTENERS</code> Misconfiguration</strong>: Setting <code>KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://localhost:9092</code> prevents other containers on the Docker network from reaching Kafka (they cannot resolve <code>localhost</code>). Always define dual listeners (<code>INTERNAL</code> and <code>EXTERNAL</code>).</li>
+<li>🔒 <strong>Log Persistence via Named Volumes</strong>: Kafka stores commit logs sequentially in <code>/var/lib/kafka/data</code>. Running Kafka without an attached Named Volume destroys all message history and partition offsets upon container recreation!</li>
+<li>⚙️ <strong>Consumer Lag Monitoring</strong>: Consumer Lag measures the delta between the latest produced offset and the consumer group's committed offset ($Lag = Offset_{LogEnd} - Offset_{Committed}$). High lag indicates consumer worker saturation.</li>
+<li>⚠️ <strong>Replication Factor Invariant</strong>: <code>replication-factor</code> cannot exceed the total number of live Kafka brokers (e.g. you cannot create a topic with replication factor 3 on a single-node cluster).</li>
+</ul>
+<hr />
+<h2 id="6-comparative-analysis-matrix-message-brokers-event-logs">6. Comparative Analysis Matrix: Message Brokers &amp; Event Logs<a class="headerlink" href="#6-comparative-analysis-matrix-message-brokers-event-logs" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Feature</th>
+<th style="text-align: left;">Apache Kafka</th>
+<th style="text-align: left;">RabbitMQ</th>
+<th style="text-align: left;">Redis Streams</th>
+<th style="text-align: left;">AWS SQS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Model</strong></td>
+<td style="text-align: left;"><strong>Distributed Commit Log</strong></td>
+<td style="text-align: left;">Traditional Queue / Exchange</td>
+<td style="text-align: left;">In-Memory Log</td>
+<td style="text-align: left;">Cloud Managed Queue</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Throughput</strong></td>
+<td style="text-align: left;"><strong>1M+ msgs/second</strong></td>
+<td style="text-align: left;">50K msgs/second</td>
+<td style="text-align: left;">500K msgs/second</td>
+<td style="text-align: left;">Scalable Cloud Queue</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Message Replay</strong></td>
+<td style="text-align: left;"><strong>Native (Rewind offset)</strong></td>
+<td style="text-align: left;">No (Destructive read)</td>
+<td style="text-align: left;">Native (By ID)</td>
+<td style="text-align: left;">No (Destructive)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Ordering</strong></td>
+<td style="text-align: left;"><strong>Strict per partition</strong></td>
+<td style="text-align: left;">FIFO queues</td>
+<td style="text-align: left;">Strict per stream</td>
+<td style="text-align: left;">FIFO queues</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Best For</strong></td>
+<td style="text-align: left;">High-volume event streams</td>
+<td style="text-align: left;">Complex AMQP routing</td>
+<td style="text-align: left;">Real-time caching + streams</td>
+<td style="text-align: left;">Simple serverless tasks</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="7-performance-resource-optimization">7. Performance &amp; Resource Optimization<a class="headerlink" href="#7-performance-resource-optimization" title="Permanent link">&para;</a></h2>
+<pre><code class="language-text">┌────────────────────────────────────────────────────────────────────────────────┐
+│                         KAFKA TUNING PLAYBOOK                                  │
+├────────────────────────────────────────────────────────────────────────────────┤
+│ 1. Mount `/var/lib/kafka/data` via high-performance Named Volume.             │
+│ 2. Set JVM heap memory `-Xms1G -Xmx1G` to leave host RAM for OS page cache.   │
+│ 3. Configure `log.flush.interval.messages` to rely on OS page cache flushing.  │
+│ 4. Match partition counts to anticipated consumer worker concurrency.          │
+│ 5. Enable LZ4 or Zstandard message compression on producers (`compression.type`).│
+└────────────────────────────────────────────────────────────────────────────────┘
+</code></pre>
+<hr />
+<h2 id="8-in-depth-engineering-perspectives">8. In-Depth Engineering Perspectives<a class="headerlink" href="#8-in-depth-engineering-perspectives" title="Permanent link">&para;</a></h2>
+<h3 id="security-perspective">Security Perspective<a class="headerlink" href="#security-perspective" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>mTLS and SASL/SCRAM Authentication</strong>: In production multi-tenant environments, secure Kafka listener ports with Mutual TLS for wire encryption and SASL/SCRAM-SHA-512 for client authentication and ACL topic authorization.</li>
+</ul>
+<h3 id="high-availability-perspective">High Availability Perspective<a class="headerlink" href="#high-availability-perspective" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>In-Sync Replicas (ISR) and <code>acks=all</code></strong>: To guarantee zero data loss during broker crashes, configure producers with <code>acks=all</code> and topics with <code>min.insync.replicas=2</code>. The broker will acknowledge commits only after the event is replicated across multiple quorum nodes.</li>
+</ul>
+<h3 id="resilience-fault-tolerance-perspective">Resilience &amp; Fault Tolerance Perspective<a class="headerlink" href="#resilience-fault-tolerance-perspective" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Idempotent Producers</strong>: Setting <code>enable.idempotence=true</code> assigns a unique Producer ID (PID) and sequence number to every message, eliminating duplicate records caused by network retries.</li>
+</ul>
+<h3 id="cost-efficiency-perspective">Cost &amp; Efficiency Perspective<a class="headerlink" href="#cost-efficiency-perspective" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>ZooKeeper Cluster Elimination</strong>: Migrating to KRaft mode eliminates the requirement to provision 3 dedicated ZooKeeper server nodes, saving thousands of dollars annually in cloud virtual machine provisioning.</li>
+</ul>
+<hr />
+<h2 id="9-step-by-step-hands-on-production-walkthrough">9. Step-by-Step Hands-On Production Walkthrough<a class="headerlink" href="#9-step-by-step-hands-on-production-walkthrough" title="Permanent link">&para;</a></h2>
+<h3 id="step-1-create-complete-kraft-kafka-stack-composeyaml">Step 1: Create Complete KRaft Kafka Stack <code>compose.yaml</code><a class="headerlink" href="#step-1-create-complete-kraft-kafka-stack-composeyaml" title="Permanent link">&para;</a></h3>
+<pre><code class="language-yaml">
+# /Users/frgonzal/Documents/vit/docker-containers/compose.kafka.yaml
+name: enterprise-kafka-stack
+
+services:
+  kafka:
+    image: apache/kafka:3.7.0
+    container_name: enterprise-kafka-broker
+    restart: unless-stopped
+    ports:
+      - &quot;9092:9092&quot;
+      - &quot;29092:29092&quot;
+    environment:
+      # KRaft Mode Configuration:
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+
+      # Dual Listeners: Internal (Docker Net) and External (Host OS)
+      KAFKA_LISTENERS: PLAINTEXT_INTERNAL://0.0.0.0:9092,PLAINTEXT_EXTERNAL://0.0.0.0:29092,CONTROLLER://0.0.0.0:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT_INTERNAL://kafka:9092,PLAINTEXT_EXTERNAL://localhost:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT_INTERNAL:PLAINTEXT,PLAINTEXT_EXTERNAL:PLAINTEXT,CONTROLLER:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT_INTERNAL
+
+      # Persistence &amp; Clustering
+      KAFKA_LOG_DIRS: /var/lib/kafka/data
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: &quot;true&quot;
+      CLUSTER_ID: &quot;4L622nShTUiBENbYWznapA&quot;
+    volumes:
+      - kafka-data:/var/lib/kafka/data
+    networks:
+      - kafka-net
+    healthcheck:
+      test: [&quot;CMD-SHELL&quot;, &quot;/opt/kafka/bin/kafka-broker-api-versions.sh --bootstrap-server localhost:9092 || exit 1&quot;]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: enterprise-kafka-ui
+    restart: unless-stopped
+    ports:
+      - &quot;8085:8080&quot;
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local-kraft-cluster
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
+    depends_on:
+      kafka:
+        condition: service_healthy
+    networks:
+      - kafka-net
+
+volumes:
+  kafka-data:
+    name: enterprise-kafka-storage
+
+networks:
+  kafka-net:
+    name: enterprise-kafka-network
+    driver: bridge
+</code></pre>
+<hr />
+<h3 id="step-2-launch-kafka-cluster-and-verify-health">Step 2: Launch Kafka Cluster and Verify Health<a class="headerlink" href="#step-2-launch-kafka-cluster-and-verify-health" title="Permanent link">&para;</a></h3>
+<pre><code class="language-bash">
+# 1. Launch Kafka and Web Management UI
+docker compose -f compose.kafka.yaml up -d
+
+# 2. Wait for Service Health
+docker compose -f compose.kafka.yaml ps
+</code></pre>
+<hr />
+<h3 id="step-3-create-topic-produce-and-consume-real-time-events">Step 3: Create Topic, Produce and Consume Real-Time Events<a class="headerlink" href="#step-3-create-topic-produce-and-consume-real-time-events" title="Permanent link">&para;</a></h3>
+<pre><code class="language-bash">
+# 1. Create a Partitioned Business Topic
+docker exec -i enterprise-kafka-broker /opt/kafka/bin/kafka-topics.sh \
+    --create \
+    --topic financial-transactions \
+    --partitions 3 \
+    --replication-factor 1 \
+    --bootstrap-server localhost:9092
+
+# 2. Describe Topic Partitions and Leader Metadata
+docker exec -i enterprise-kafka-broker /opt/kafka/bin/kafka-topics.sh \
+    --describe \
+    --topic financial-transactions \
+    --bootstrap-server localhost:9092
+
+# 3. Produce Sample JSON Events to Topic
+docker exec -i enterprise-kafka-broker /opt/kafka/bin/kafka-console-producer.sh \
+    --topic financial-transactions \
+    --bootstrap-server localhost:9092 &lt;&lt;EOF
+{&quot;transaction_id&quot;: &quot;TX-1001&quot;, &quot;amount&quot;: 2500.00, &quot;currency&quot;: &quot;USD&quot;, &quot;status&quot;: &quot;SETTLED&quot;}
+{&quot;transaction_id&quot;: &quot;TX-1002&quot;, &quot;amount&quot;: 840.00, &quot;currency&quot;: &quot;EUR&quot;, &quot;status&quot;: &quot;PENDING&quot;}
+EOF
+
+# 4. Consume Events from Beginning with Consumer Group
+docker exec -i enterprise-kafka-broker /opt/kafka/bin/kafka-console-consumer.sh \
+    --topic financial-transactions \
+    --group audit-consumer-group \
+    --from-beginning \
+    --timeout-ms 3000 \
+    --bootstrap-server localhost:9092
+</code></pre>
+<hr />
+<h2 id="10-pure-cli-command-interface">10. Pure CLI / Command Interface<a class="headerlink" href="#10-pure-cli-command-interface" title="Permanent link">&para;</a></h2>
+<h3 id="1-inspect-active-consumer-groups-and-offsets">1. Inspect Active Consumer Groups and Offsets<a class="headerlink" href="#1-inspect-active-consumer-groups-and-offsets" title="Permanent link">&para;</a></h3>
+<p>Check consumer lag across all topic partitions:</p>
+<pre><code class="language-bash">docker exec -i enterprise-kafka-broker /opt/kafka/bin/kafka-consumer-groups.sh \
+    --bootstrap-server localhost:9092 \
+    --describe \
+    --group audit-consumer-group
+</code></pre>
+<h3 id="2-list-all-active-kafka-topics-in-cluster">2. List All Active Kafka Topics in Cluster<a class="headerlink" href="#2-list-all-active-kafka-topics-in-cluster" title="Permanent link">&para;</a></h3>
+<p>Query cluster metadata catalog:</p>
+<pre><code class="language-bash">docker exec -i enterprise-kafka-broker /opt/kafka/bin/kafka-topics.sh \
+    --list \
+    --bootstrap-server localhost:9092
+</code></pre>
+<h3 id="3-gracefully-stop-kafka-cluster">3. Gracefully Stop Kafka Cluster<a class="headerlink" href="#3-gracefully-stop-kafka-cluster" title="Permanent link">&para;</a></h3>
+<p>Shut down containers while preserving message commit logs:</p>
+<pre><code class="language-bash">docker compose -f compose.kafka.yaml down
+</code></pre>
+<hr />
+<h2 id="11-advanced-architecture-edge-case-failure-modes">11. Advanced Architecture &amp; Edge-Case Failure Modes<a class="headerlink" href="#11-advanced-architecture-edge-case-failure-modes" title="Permanent link">&para;</a></h2>
+<pre><code class="language-text">┌────────────────────────────────────────────────────────────────────────────────┐
+│                     KAFKA FAILURE RECOVERY MATRIX                              │
+├──────────────────────┬────────────────────────┬────────────────────────────────┤
+│ Failure Scenario     │ Underlying Root Cause  │ Production Mitigation Runbook  │
+├──────────────────────┼────────────────────────┼────────────────────────────────┤
+│ **Host Connection**  │ `ADVERTISED_LISTENERS` │ Configure dual listeners:      │
+│ **Timeout Error**    │ set to internal DNS.   │ `INTERNAL` and `EXTERNAL`.     │
+├──────────────────────┼────────────────────────┼────────────────────────────────┤
+│ **Cluster ID**       │ Unformatted KRaft      │ Provide static `CLUSTER_ID`    │
+│ **Mismatch Error**   │ storage directory.     │ in environment variables.      │
+├──────────────────────┼────────────────────────┼────────────────────────────────┤
+│ **High Consumer**    │ Slow consumer worker   │ Scale consumer group workers   │
+│ **Lag Buildup**      │ processing time.       │ up to total partition count.   │
+├──────────────────────┼────────────────────────┼────────────────────────────────┤
+│ **Commit Log Disk**  │ Message retention      │ Configure `log.retention.hours`│
+│ **Exhaustion**       │ time set to infinite.  │ or log compaction on topics.   │
+└──────────────────────┴────────────────────────┴────────────────────────────────┘
+</code></pre>
+<hr />
+<h2 id="12-detailed-sub-components-subsystems">12. Detailed Sub-Components &amp; Subsystems<a class="headerlink" href="#12-detailed-sub-components-subsystems" title="Permanent link">&para;</a></h2>
+<h3 id="1-kraft-metadata-log-controller">1. KRaft Metadata Log Controller<a class="headerlink" href="#1-kraft-metadata-log-controller" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Key Concepts</strong>: Replicated state machine managing topic creation, partition rebalancing, and broker registration without external ZooKeeper.</li>
+<li><strong>CLI / Tool Snippet</strong>:</li>
+</ul>
+<pre><code class="language-bash">docker exec -i enterprise-kafka-broker /opt/kafka/bin/kafka-metadata-shell.sh --help 2&gt;/dev/null || true
+</code></pre>
+<h3 id="2-zero-copy-os-network-dispatcher-sendfile">2. Zero-Copy OS Network Dispatcher (<code>sendfile</code>)<a class="headerlink" href="#2-zero-copy-os-network-dispatcher-sendfile" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Key Concepts</strong>: Linux kernel <code>sendfile()</code> syscall transferring bytes directly from the page cache to the network socket without copying data into user-space RAM.</li>
+<li><strong>CLI / Tool Snippet</strong>:</li>
+</ul>
+<pre><code class="language-bash">docker stats enterprise-kafka-broker --no-stream
+</code></pre>
+<h3 id="3-topic-partition-segment-manager">3. Topic Partition Segment Manager<a class="headerlink" href="#3-topic-partition-segment-manager" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Key Concepts</strong>: Writes immutable <code>.log</code> segment files and binary <code>.index</code> offset position maps in <code>/var/lib/kafka/data/</code>.</li>
+<li><strong>CLI / Tool Snippet</strong>:</li>
+</ul>
+<pre><code class="language-bash">docker exec -i enterprise-kafka-broker ls -la /var/lib/kafka/data
+</code></pre>
+<h3 id="4-consumer-group-coordinator">4. Consumer Group Coordinator<a class="headerlink" href="#4-consumer-group-coordinator" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Key Concepts</strong>: Manages partition assignments and coordinates consumer group heartbeats and rebalances.</li>
+<li><strong>CLI / Tool Snippet</strong>:</li>
+</ul>
+<pre><code class="language-bash">docker exec -i enterprise-kafka-broker /opt/kafka/bin/kafka-consumer-groups.sh --bootstrap-server localhost:9092 --list
+</code></pre>
+<hr />
+<h2 id="13-references-the-55-rule">13. References (The 5+5 Rule)<a class="headerlink" href="#13-references-the-55-rule" title="Permanent link">&para;</a></h2>
+<h3 id="official-documentation-technical-specifications">Official Documentation &amp; Technical Specifications<a class="headerlink" href="#official-documentation-technical-specifications" title="Permanent link">&para;</a></h3>
+<ol>
+<li><a href="https://kafka.apache.org/documentation/">Apache Kafka Official Documentation: Core Architecture</a></li>
+<li><a href="https://cwiki.apache.org/confluence/display/KAFKA/KIP-500%3A+Replace+ZooKeeper+with+Self-Managed+Metadata+Quorum">Apache Kafka KIP-500: Replace ZooKeeper with KRaft Metadata Mode</a></li>
+<li><a href="https://hub.docker.com/r/apache/kafka">Apache Kafka Official Docker Image Documentation</a></li>
+<li><a href="https://www.confluent.io/blog/kafka-listeners-explained/">Kafka Advertised Listeners Deep Dive (Confluent)</a></li>
+<li><a href="https://man7.org/linux/man-pages/man2/sendfile.2.html">Linux Kernel Organization: Zero-Copy Network I/O with sendfile(2)</a></li>
+</ol>
+<h3 id="authoritative-engineering-blogs-architecture-deep-dives">Authoritative Engineering Blogs &amp; Architecture Deep Dives<a class="headerlink" href="#authoritative-engineering-blogs-architecture-deep-dives" title="Permanent link">&para;</a></h3>
+<ol>
+<li><a href="https://dataintensive.net/">Martin Kleppmann: Designing Data-Intensive Applications (Kafka &amp; Event Logs)</a></li>
+<li><a href="https://www.brendangregg.com/">Brendan Gregg: Linux I/O and Zero-Copy Performance Profiling in Kafka</a></li>
+<li><a href="https://engineering.linkedin.com/distributed-systems/log-what-every-software-engineer-should-know-about-real-time-data-integrations">Jay Kreps: The Log: What Every Software Engineer Should Know About Real-Time Data</a></li>
+<li><a href="https://martinfowler.com/eaaDev/EventSourcing.html">Martin Fowler: Event Sourcing and Event-Driven Architecture Patterns</a></li>
+<li><a href="https://www.kernel.org/">High-Performance Linux Systems: Tuning OS Page Cache and TCP Buffers for Kafka</a></li>
+</ol>
+<hr />
+<h2 id="14-universal-finops-resource-cost-governance">14. Universal FinOps &amp; Resource Cost Governance<a class="headerlink" href="#14-universal-finops-resource-cost-governance" title="Permanent link">&para;</a></h2>
+<pre><code class="language-text">┌────────────────────────────────────────────────────────────────────────────────┐
+│                        KAFKA FINOPS SAVINGS MATRIX                             │
+├──────────────────────────┬──────────────────────────┬──────────────────────────┤
+│ Optimization Strategy    │ Technical Mechanism      │ Measurable FinOps ROI    │
+├──────────────────────────┼──────────────────────────┼──────────────────────────┤
+│ **KRaft ZooKeeper Elim** │ Eliminates 3 dedicated   │ Saves \$450+/month on    │
+│                          │ ZooKeeper server nodes   │ cloud VM instance costs  │
+├──────────────────────────┼──────────────────────────┼──────────────────────────┤
+│ **Zero-Copy `sendfile`** │ Direct page cache to NIC │ Reduces CPU consumption  │
+│                          │ socket data transfer     │ by 60% under heavy load  │
+├──────────────────────────┼──────────────────────────┼──────────────────────────┤
+│ **Log Retention Tuning** │ Purges logs after 7 days │ Prevents runaway cloud   │
+│                          │ or compacts by key       │ disk volume auto-scale   │
+├──────────────────────────┼──────────────────────────┼──────────────────────────┤
+│ **LZ4 Compression**      │ Compresses event payload │ Slashes network data     │
+│                          │ on producer before wire  │ transfer costs by 70%    │
+└──────────────────────────┴──────────────────────────┴──────────────────────────┘
+</code></pre>
+<h3 id="1-kraft-migration-infrastructure-economics">1. KRaft Migration Infrastructure Economics<a class="headerlink" href="#1-kraft-migration-infrastructure-economics" title="Permanent link">&para;</a></h3>
+<p>In a standard enterprise event streaming deployment running 3 Kafka brokers:</p>
+<ul>
+<li><strong>Legacy ZooKeeper Mode</strong>: Requires maintaining <strong>3 additional ZooKeeper nodes</strong> (<code>c6g.xlarge</code> @ \$120/month each = <strong>\$360/month</strong>) plus operational patching labor.</li>
+<li><strong>Modern KRaft Mode</strong>: Combines broker and controller roles inside the existing Kafka containers with zero external nodes.</li>
+<li><strong>FinOps ROI</strong>: Delivers <strong>\$4,320/year in direct cloud compute savings</strong> while accelerating metadata failover times from 30 seconds to <strong>under 500 milliseconds</strong>.</li>
+</ul>
+<h3 id="2-zero-copy-network-egress-optimization">2. Zero-Copy Network Egress Optimization<a class="headerlink" href="#2-zero-copy-network-egress-optimization" title="Permanent link">&para;</a></h3>
+<p>Kafka leverages the Linux kernel <code>sendfile()</code> system call to stream partition data directly from the OS page cache to network interface cards (NICs) without copying data into JVM user space.</p>
+<ul>
+<li>Eliminates JVM Garbage Collection (GC) pauses and allows a single 4-core container instance to saturate a <strong>10 Gigabit network link</strong>.</li>
+<li>Reduces required cluster broker node counts by <strong>50%</strong>, saving <strong>\$18,000/year</strong> across production event streaming infrastructure.</li>
+</ul>
+              
+            </div>
+          </div><footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+    
+  </span>
+</div>
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = ".";</script>
+    <script src="js/theme_extra.js"></script>
+    <script src="js/theme.js"></script>
+      <script src="search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

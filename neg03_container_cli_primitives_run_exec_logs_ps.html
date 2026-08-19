@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="img/favicon.ico" />
+    <title>Module neg03: Container CLI Primitives — run, exec, logs, inspect &amp; Process Control - Docker Containers</title>
+    <link rel="stylesheet" href="css/theme.css" />
+    <link rel="stylesheet" href="css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Module neg03: Container CLI Primitives \u2014 run, exec, logs, inspect \u0026amp; Process Control";
+        var mkdocs_page_input_path = "neg03_container_cli_primitives_run_exec_logs_ps.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/yaml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/bash.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/dockerfile.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="index.html" class="icon icon-home"> Docker Containers
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="./search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="index.html">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="getting-started.md">Getting Started</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-engine.md">Docker Engine</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="working-with-images.md">Working with Images</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="working-with-containers.md">Working with Containers</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="containerizing_an_app.md">Containerizing an Application</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="multi-container-apps.md">Multi-container apps with Compose</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-and-wasm.md">Docker and Wasm</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-swarm.md">Docker Swarm</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-networking.md">Docker Networking</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-volumes.md">Docker Volumes</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-security.md">Docker Security</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-docs.md">Docker Docs</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-cheatsheet.md">Docker CheatSheet</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="apache-kafka-introduction.md">Apache Kafka</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Docker Containers</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html" class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Module neg03: Container CLI Primitives — run, exec, logs, inspect &amp; Process Control</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="module-neg03-container-cli-primitives-run-exec-logs-inspect-process-control">Module neg03: Container CLI Primitives — run, exec, logs, inspect &amp; Process Control<a class="headerlink" href="#module-neg03-container-cli-primitives-run-exec-logs-inspect-process-control" title="Permanent link">&para;</a></h1>
+<p><strong>Standard Identifier:</strong> <code>DOC-STD-UNIVERSAL-2026-DOCKER</code>
+<strong>Track:</strong> Enterprise Container Architecture, OCI Runtimes &amp; Cloud Native Infrastructure
+<strong>Category:</strong> CLI Primitives &amp; Operational Commands
+<strong>Status:</strong> ✅ Completed</p>
+<hr />
+<h2 id="table-of-contents">📑 Table of Contents<a class="headerlink" href="#table-of-contents" title="Permanent link">&para;</a></h2>
+<ol>
+<li>
+<p><a href="#1-high-level-overview--executive-summary">High-Level Overview &amp; Executive Summary</a></p>
+</li>
+<li>
+<p><a href="#2-anatomy-of-the-docker-cli-command-grammar">Anatomy of the Docker CLI Command Grammar</a></p>
+</li>
+<li>
+<p><a href="#3-process-execution-run-vs-start-vs-exec">Process Execution: run vs start vs exec</a></p>
+</li>
+<li>
+<p><a href="#4-real-time-observability-logs-top-stats--events">Real-Time Observability: logs, top, stats &amp; events</a></p>
+</li>
+<li>
+<p><a href="#5-deep-metadata-inspection-docker-inspect--json-formatting">Deep Metadata Inspection (<code>docker inspect</code>) &amp; JSON Formatting</a></p>
+</li>
+<li>
+<p><a href="#6-architectural-visual-topology">Architectural Visual Topology</a></p>
+</li>
+<li>
+<p><a href="#7-step-by-step-production-lab-interactive-troubleshooting--telemetry-capture">Step-by-Step Production Lab: Interactive Troubleshooting &amp; Telemetry Capture</a></p>
+</li>
+<li>
+<p><a href="#8-certification--engineering-standards-cheat-sheet">Certification &amp; Engineering Standards Cheat Sheet</a></p>
+</li>
+<li>
+<p><a href="#9-references-the-55-rule">References (The 5+5 Rule)</a></p>
+</li>
+<li>
+<p><a href="#10-universal-finops--hardware-cost-governance">Universal FinOps &amp; Hardware Cost Governance</a></p>
+</li>
+</ol>
+<hr />
+<h2 id="1-high-level-overview-executive-summary">1. High-Level Overview &amp; Executive Summary<a class="headerlink" href="#1-high-level-overview-executive-summary" title="Permanent link">&para;</a></h2>
+<p>The Docker CLI provides the primary operational interface for orchestrating containerized processes. Every command corresponds to an HTTP request sent across the local UNIX socket (<code>/var/run/docker.sock</code>) to the Docker Daemon REST API (Docker Inc., 2024).</p>
+<h3 id="executive-summary-for-managers-non-technical-stakeholders">👔 Executive Summary (For Managers &amp; Non-Technical Stakeholders)<a class="headerlink" href="#executive-summary-for-managers-non-technical-stakeholders" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Business Purpose</strong>: Standardizes developer and SRE interactions with running application containers across development, staging, and production environments.</li>
+<li><strong>How It Works</strong>: Developers issue structured CLI verbs (<code>run</code>, <code>exec</code>, <code>logs</code>, <code>inspect</code>) which translate into precise kernel-level namespace modifications and runtime process invocations.</li>
+<li><strong>Key Business Value &amp; ROI</strong>: Minimizes Mean Time to Resolution (MTTR) during outages through instantaneous live process inspection and log streaming.</li>
+</ul>
+<hr />
+<h2 id="2-anatomy-of-the-docker-cli-command-grammar">2. Anatomy of the Docker CLI Command Grammar<a class="headerlink" href="#2-anatomy-of-the-docker-cli-command-grammar" title="Permanent link">&para;</a></h2>
+<p>Modern Docker CLI adheres to structured noun-verb semantics:</p>
+<pre><code class="language-bash">docker &lt;management-command&gt; &lt;sub-command&gt; [OPTIONS] &lt;TARGET&gt;
+</code></pre>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Legacy Syntax</th>
+<th style="text-align: left;">Modern Standardized Syntax</th>
+<th style="text-align: left;">Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>docker run</code></td>
+<td style="text-align: left;"><code>docker container run</code></td>
+<td style="text-align: left;">Create and start a container</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>docker ps</code></td>
+<td style="text-align: left;"><code>docker container ls</code></td>
+<td style="text-align: left;">List active containers</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>docker images</code></td>
+<td style="text-align: left;"><code>docker image ls</code></td>
+<td style="text-align: left;">List local OCI images</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>docker rm</code></td>
+<td style="text-align: left;"><code>docker container rm</code></td>
+<td style="text-align: left;">Remove terminated containers</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>docker rmi</code></td>
+<td style="text-align: left;"><code>docker image rm</code></td>
+<td style="text-align: left;">Delete local image layers</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="3-process-execution-run-vs-start-vs-exec">3. Process Execution: run vs start vs exec<a class="headerlink" href="#3-process-execution-run-vs-start-vs-exec" title="Permanent link">&para;</a></h2>
+<pre><code class="language-mermaid">flowchart TD
+    Image[&quot;OCI Image (Layer Tarballs)&quot;] --&gt;|docker create| Created[&quot;Created (Rootfs mounted)&quot;]
+    Created --&gt;|docker start| Running[&quot;Running (PID 1 Active)&quot;]
+    Image --&gt;|docker run| Running
+    Running --&gt;|docker exec| SubProcess[&quot;Auxiliary Process (Shares Namespaces)&quot;]
+    Running --&gt;|docker stop| Stopped[&quot;Stopped / Exited&quot;]
+    Stopped --&gt;|docker rm| Deleted[&quot;Destroyed&quot;]
+</code></pre>
+<ul>
+<li><strong><code>docker run</code></strong>: Instantiates a brand new container instance from an image and starts its entrypoint process (PID 1).</li>
+<li><strong><code>docker start</code></strong>: Restarts an existing stopped container without re-creating its writable layer.</li>
+<li><strong><code>docker exec</code></strong>: Spawns a secondary process inside an <em>already running</em> container, joining its existing Linux namespaces (<code>setns()</code> syscall).</li>
+</ul>
+<hr />
+<h2 id="4-real-time-observability-logs-top-stats-events">4. Real-Time Observability: logs, top, stats &amp; events<a class="headerlink" href="#4-real-time-observability-logs-top-stats-events" title="Permanent link">&para;</a></h2>
+<h3 id="41-telemetry-streaming-commands">4.1 Telemetry Streaming Commands<a class="headerlink" href="#41-telemetry-streaming-commands" title="Permanent link">&para;</a></h3>
+<pre><code class="language-bash">
+# 1. Stream live logs with nanosecond timestamps and tail limit
+docker logs -f --tail 100 --timestamps my_service
+
+# 2. Inspect running processes inside container with host PID mapping
+docker top my_service -ef
+
+# 3. Stream real-time CPU, RAM, Network I/O and Block I/O metrics
+docker stats --no-trunc --format &quot;table {{.Name}} {{.CPUPerc}} {{.MemUsage}} {{.NetIO}}&quot;
+</code></pre>
+<hr />
+<h2 id="5-deep-metadata-inspection-docker-inspect-json-formatting">5. Deep Metadata Inspection (<code>docker inspect</code>) &amp; JSON Formatting<a class="headerlink" href="#5-deep-metadata-inspection-docker-inspect-json-formatting" title="Permanent link">&para;</a></h2>
+<p>The <code>docker inspect</code> command outputs the complete JSON state of a container or image. Using Go templates (<code>--format</code>) enables granular data extraction:</p>
+<pre><code class="language-bash">
+# Extract exact IP address allocated on bridge network
+docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' my_service
+
+# Extract healthcheck status and last 3 failure logs
+docker inspect --format='{{json .State.Health}}' my_service
+</code></pre>
+<hr />
+<h2 id="6-architectural-visual-topology">6. Architectural Visual Topology<a class="headerlink" href="#6-architectural-visual-topology" title="Permanent link">&para;</a></h2>
+<pre><code class="language-mermaid">sequenceDiagram
+    participant SRE as Operator / Script
+    participant CLI as Docker CLI
+    participant Sock as UNIX Socket (/var/run/docker.sock)
+    participant Engine as dockerd Engine
+    participant Ctr as Container (PID 1)
+
+    SRE-&gt;&gt;CLI: docker exec -it web_server sh
+    CLI-&gt;&gt;Sock: POST /v1.43/containers/web_server/exec
+    Sock-&gt;&gt;Engine: Create exec instance
+    Engine-&gt;&gt;Ctr: setns(PID_NS, NET_NS, MNT_NS) -&gt; fork /bin/sh
+    Ctr--&gt;&gt;Engine: Attach TTY streams (stdin/stdout)
+    Engine--&gt;&gt;CLI: Interactive PTY stream
+    CLI--&gt;&gt;SRE: Shell prompt inside container
+</code></pre>
+<hr />
+<h2 id="7-step-by-step-production-lab-interactive-troubleshooting-telemetry-capture">7. Step-by-Step Production Lab: Interactive Troubleshooting &amp; Telemetry Capture<a class="headerlink" href="#7-step-by-step-production-lab-interactive-troubleshooting-telemetry-capture" title="Permanent link">&para;</a></h2>
+<pre><code class="language-bash">
+# Step 1: Run isolated Alpine container generating continuous background telemetry
+docker run -d --name metric_generator alpine:latest     sh -c &quot;while true; do echo '{&quot;timestamp&quot;:&quot;'\$(date -u +%FT%TZ)'&quot;,&quot;event&quot;:&quot;heartbeat&quot;,&quot;status&quot;:&quot;ok&quot;}'; sleep 2; done&quot;
+
+# Step 2: Stream formatted JSON logs with timestamp filter
+docker logs --tail 5 --timestamps metric_generator
+
+# Step 3: Execute diagnostic probe inside the running container namespace
+docker exec -i metric_generator uname -a
+
+# Step 4: Extract container memory limit and IP address
+docker inspect --format 'IP: {{.NetworkSettings.IPAddress}} | MemLimit: {{.HostConfig.Memory}}' metric_generator
+
+# Step 5: Clean up
+docker stop metric_generator &amp;&amp; docker rm metric_generator
+</code></pre>
+<hr />
+<h2 id="8-certification-engineering-standards-cheat-sheet">8. Certification &amp; Engineering Standards Cheat Sheet<a class="headerlink" href="#8-certification-engineering-standards-cheat-sheet" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Command / Flag</th>
+<th style="text-align: left;">Purpose</th>
+<th style="text-align: left;">DCA / CKA Exam Context</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>-it</code></td>
+<td style="text-align: left;">Allocate pseudo-TTY and keep stdin open</td>
+<td style="text-align: left;">Interactive container debugging.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>--rm</code></td>
+<td style="text-align: left;">Automatically remove container on exit</td>
+<td style="text-align: left;">Ephemeral build tasks.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>--restart=on-failure:5</code></td>
+<td style="text-align: left;">Restart policy with exponential backoff</td>
+<td style="text-align: left;">Production reliability.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="9-references-the-55-rule">9. References (The 5+5 Rule)<a class="headerlink" href="#9-references-the-55-rule" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Docker Inc. (2024). <em>Docker CLI reference manual</em>. <a href="https://docs.docker.com/engine/reference/commandline/cli/">https://docs.docker.com/engine/reference/commandline/cli/</a></li>
+<li>Open Container Initiative. (2021). <em>OCI runtime specification</em>. Linux Foundation.</li>
+<li>Kerrisk, M. (2010). <em>The Linux programming interface</em>. No Starch Press.</li>
+<li>Burns, B. (2018). <em>Designing distributed systems</em>. O'Reilly Media.</li>
+<li>Turnbull, J. (2014). <em>The Docker book</em>. James Turnbull.</li>
+<li>Tanenbaum, A. S., &amp; Bos, H. (2015). <em>Modern operating systems</em> (4th ed.). Pearson.</li>
+<li>Mouat, A. (2015). <em>Using Docker</em>. O'Reilly Media.</li>
+<li>Poulton, N. (2023). <em>Docker deep dive</em>. Nigel Poulton.</li>
+<li>IEEE. (2018). <em>POSIX standard operating system interfaces</em>. IEEE.</li>
+<li>NIST. (2017). <em>Application container security guide (NIST SP 800-190)</em>. NIST.</li>
+</ol>
+<hr />
+<h2 id="10-universal-finops-hardware-cost-governance">10. Universal FinOps &amp; Hardware Cost Governance<a class="headerlink" href="#10-universal-finops-hardware-cost-governance" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Optimization Strategy</th>
+<th style="text-align: left;">Operational Mechanism</th>
+<th style="text-align: left;">FinOps Cloud ROI</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong><code>docker stats</code> Monitoring</strong></td>
+<td style="text-align: left;">Identifies idle overprovisioned containers</td>
+<td style="text-align: left;">Slashes over-allocated vCPU waste by 50%</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>--rm</code> Ephemeral Cleanup</strong></td>
+<td style="text-align: left;">Prevents zombie disk layer accumulation</td>
+<td style="text-align: left;">Eliminates AWS EBS storage leakage charges</td>
+</tr>
+</tbody>
+</table>
+              
+            </div>
+          </div><footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+    
+  </span>
+</div>
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = ".";</script>
+    <script src="js/theme_extra.js"></script>
+    <script src="js/theme.js"></script>
+      <script src="search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

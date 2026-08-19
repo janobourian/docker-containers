@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="img/favicon.ico" />
+    <title>Module neg01: Container Storage Architecture — Named Volumes, Bind Mounts &amp; tmpfs - Docker Containers</title>
+    <link rel="stylesheet" href="css/theme.css" />
+    <link rel="stylesheet" href="css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Module neg01: Container Storage Architecture \u2014 Named Volumes, Bind Mounts \u0026amp; tmpfs";
+        var mkdocs_page_input_path = "neg01_container_storage_bind_mounts_and_named_volumes.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/yaml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/bash.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/dockerfile.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="index.html" class="icon icon-home"> Docker Containers
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="./search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="index.html">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="getting-started.md">Getting Started</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-engine.md">Docker Engine</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="working-with-images.md">Working with Images</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="working-with-containers.md">Working with Containers</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="containerizing_an_app.md">Containerizing an Application</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="multi-container-apps.md">Multi-container apps with Compose</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-and-wasm.md">Docker and Wasm</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-swarm.md">Docker Swarm</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-networking.md">Docker Networking</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-volumes.md">Docker Volumes</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-security.md">Docker Security</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-docs.md">Docker Docs</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-cheatsheet.md">Docker CheatSheet</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="apache-kafka-introduction.md">Apache Kafka</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Docker Containers</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html" class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Module neg01: Container Storage Architecture — Named Volumes, Bind Mounts &amp; tmpfs</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="module-neg01-container-storage-architecture-named-volumes-bind-mounts-tmpfs">Module neg01: Container Storage Architecture — Named Volumes, Bind Mounts &amp; tmpfs<a class="headerlink" href="#module-neg01-container-storage-architecture-named-volumes-bind-mounts-tmpfs" title="Permanent link">&para;</a></h1>
+<p><strong>Standard Identifier:</strong> <code>DOC-STD-UNIVERSAL-2026-DOCKER</code>
+<strong>Track:</strong> Enterprise Container Architecture, OCI Runtimes &amp; Cloud Native Infrastructure
+<strong>Category:</strong> Storage Architecture &amp; Persistence
+<strong>Status:</strong> ✅ Completed</p>
+<hr />
+<h2 id="table-of-contents">📑 Table of Contents<a class="headerlink" href="#table-of-contents" title="Permanent link">&para;</a></h2>
+<ol>
+<li>
+<p><a href="#1-high-level-overview--executive-summary">High-Level Overview &amp; Executive Summary</a></p>
+</li>
+<li>
+<p><a href="#2-ephemeral-container-layers-vs-persistent-storage">Ephemeral Container Layers vs Persistent Storage</a></p>
+</li>
+<li>
+<p><a href="#3-the-three-mount-types-named-volumes-bind-mounts-and-tmpfs">The Three Mount Types: Named Volumes, Bind Mounts, and tmpfs</a></p>
+</li>
+<li>
+<p><a href="#4-modern---mount-syntax-vs-legacy--v">Modern <code>--mount</code> Syntax vs Legacy <code>-v</code></a></p>
+</li>
+<li>
+<p><a href="#5-volume-lifecycle--backup-runbooks">Volume Lifecycle &amp; Backup Runbooks</a></p>
+</li>
+<li>
+<p><a href="#6-architectural-visual-topology">Architectural Visual Topology</a></p>
+</li>
+<li>
+<p><a href="#7-step-by-step-production-lab-zero-loss-database-persistence">Step-by-Step Production Lab: Zero-Loss Database Persistence</a></p>
+</li>
+<li>
+<p><a href="#8-certification--engineering-standards-cheat-sheet">Certification &amp; Engineering Standards Cheat Sheet</a></p>
+</li>
+<li>
+<p><a href="#9-references-the-55-rule">References (The 5+5 Rule)</a></p>
+</li>
+<li>
+<p><a href="#10-universal-finops--hardware-cost-governance">Universal FinOps &amp; Hardware Cost Governance</a></p>
+</li>
+</ol>
+<hr />
+<h2 id="1-high-level-overview-executive-summary">1. High-Level Overview &amp; Executive Summary<a class="headerlink" href="#1-high-level-overview-executive-summary" title="Permanent link">&para;</a></h2>
+<p>By default, container filesystems are strictly ephemeral: data written to the container's top writable layer is coupled to the container's lifecycle and destroyed when the container is removed (<code>docker rm</code>) (Turnbull, 2014). Persistent enterprise workloads (PostgreSQL, Kafka, Redis) require decoupled storage abstractions.</p>
+<h3 id="executive-summary-for-managers-non-technical-stakeholders">👔 Executive Summary (For Managers &amp; Non-Technical Stakeholders)<a class="headerlink" href="#executive-summary-for-managers-non-technical-stakeholders" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Business Purpose</strong>: Guarantees zero data loss for business-critical database and stateful workloads when containers crash, restart, or undergo rolling upgrades.</li>
+<li><strong>How It Works</strong>: Maps directories outside the container's ephemeral overlay filesystem directly into persistent host storage volumes managed by Docker.</li>
+<li><strong>Key Business Value &amp; ROI</strong>: Decouples application logic from data storage, enabling instant application upgrades with zero database migration downtime.</li>
+</ul>
+<hr />
+<h2 id="2-ephemeral-container-layers-vs-persistent-storage">2. Ephemeral Container Layers vs Persistent Storage<a class="headerlink" href="#2-ephemeral-container-layers-vs-persistent-storage" title="Permanent link">&para;</a></h2>
+<pre><code class="language-mermaid">flowchart TD
+    subgraph Eph[&quot;Ephemeral Container Lifecycle&quot;]
+        C1[&quot;Container A (Writable Layer)&quot;] --&gt;|Destroyed on rm| Lost[&quot;❌ Lost Data&quot;]
+    end
+
+    subgraph Pers[&quot;Decoupled Persistent Architecture&quot;]
+        C2[&quot;Container B (App Process)&quot;] --&gt;|Mounts| Vol[&quot;Docker Named Volume (/var/lib/docker/volumes)&quot;]
+        C3[&quot;Container C (Upgraded Process)&quot;] --&gt;|Mounts| Vol
+        Vol --&gt; Safe[&quot;✅ 100% Persisted Host Storage&quot;]
+    end
+</code></pre>
+<hr />
+<h2 id="3-the-three-mount-types-named-volumes-bind-mounts-and-tmpfs">3. The Three Mount Types: Named Volumes, Bind Mounts, and tmpfs<a class="headerlink" href="#3-the-three-mount-types-named-volumes-bind-mounts-and-tmpfs" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Mount Type</th>
+<th style="text-align: left;">Host Storage Location</th>
+<th style="text-align: left;">Best Use Case</th>
+<th style="text-align: left;">Performance &amp; Security</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Named Volumes</strong></td>
+<td style="text-align: left;"><code>/var/lib/docker/volumes/&lt;name&gt;/_data</code></td>
+<td style="text-align: left;">Production databases, shared state</td>
+<td style="text-align: left;">Managed by Docker daemon; isolated from host user tampering.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Bind Mounts</strong></td>
+<td style="text-align: left;">Arbitrary host path (e.g., <code>/home/app/src</code>)</td>
+<td style="text-align: left;">Local development live-reload</td>
+<td style="text-align: left;">Direct host filesystem access; dependent on host directory structure.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>tmpfs Mounts</strong></td>
+<td style="text-align: left;">Host system RAM</td>
+<td style="text-align: left;">Sensitive secrets, fast scratchpads</td>
+<td style="text-align: left;">Never written to disk; wiped upon container termination.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="4-modern-mount-syntax-vs-legacy-v">4. Modern <code>--mount</code> Syntax vs Legacy <code>-v</code><a class="headerlink" href="#4-modern-mount-syntax-vs-legacy-v" title="Permanent link">&para;</a></h2>
+<p>The modern <code>--mount</code> syntax is explicit, strict, and prevents accidental silent host directory creation:</p>
+<pre><code class="language-bash">
+# ❌ Legacy -v: Silently creates host directory if it does not exist!
+docker run -v my_vol:/var/lib/postgresql/data postgres:16
+
+# ✅ Modern --mount: Explicit, validates source existence, self-documenting
+docker run     --mount type=volume,source=postgres_data,target=/var/lib/postgresql/data,readonly=false     postgres:16
+</code></pre>
+<hr />
+<h2 id="5-volume-lifecycle-backup-runbooks">5. Volume Lifecycle &amp; Backup Runbooks<a class="headerlink" href="#5-volume-lifecycle-backup-runbooks" title="Permanent link">&para;</a></h2>
+<pre><code class="language-bash">
+# 1. Create a dedicated persistent volume with custom labels
+docker volume create --label environment=production db_primary_data
+
+# 2. Inspect physical storage path on host
+docker volume inspect db_primary_data
+
+# 3. Create compressed backup archive via ephemeral sidecar container
+docker run --rm     --mount type=volume,source=db_primary_data,target=/volume_data,readonly     --mount type=bind,source=$(pwd),target=/backup     alpine:latest     tar czf /backup/db_primary_backup_$(date +%F).tar.gz -C /volume_data .
+</code></pre>
+<hr />
+<h2 id="6-architectural-visual-topology">6. Architectural Visual Topology<a class="headerlink" href="#6-architectural-visual-topology" title="Permanent link">&para;</a></h2>
+<pre><code class="language-mermaid">flowchart TD
+    subgraph Host[&quot;Host Linux Operating System&quot;]
+        Vol[&quot;Docker Named Volumes
+(/var/lib/docker/volumes/...)&quot;]
+        Bind[&quot;Host Filesystem Bind Mounts
+(/opt/data/...)&quot;]
+        Ram[&quot;Host Memory tmpfs
+(RAM Virtual Buffer)&quot;]
+    end
+    subgraph Container[&quot;Container Isolation Sandbox&quot;]
+        CVol[&quot;/data/db
+(Persistent)&quot;]
+        CBind[&quot;/app/config
+(Live Host Files)&quot;]
+        CRam[&quot;/run/secrets
+(Zero Disk Traces)&quot;]
+    end
+    Vol --&gt; CVol
+    Bind --&gt; CBind
+    Ram --&gt; CRam
+</code></pre>
+<hr />
+<h2 id="7-step-by-step-production-lab-zero-loss-database-persistence">7. Step-by-Step Production Lab: Zero-Loss Database Persistence<a class="headerlink" href="#7-step-by-step-production-lab-zero-loss-database-persistence" title="Permanent link">&para;</a></h2>
+<pre><code class="language-bash">
+# Step 1: Create dedicated named volume
+docker volume create postgres_persist_vol
+
+# Step 2: Launch PostgreSQL container attached to volume
+docker run -d --name db_master     -e POSTGRES_PASSWORD=SecureProductionSecret2026     --mount type=volume,source=postgres_persist_vol,target=/var/lib/postgresql/data     postgres:16-alpine
+
+# Step 3: Insert stateful record into PostgreSQL
+docker exec -i db_master psql -U postgres -c     &quot;CREATE TABLE clients (id serial PRIMARY KEY, name VARCHAR(50)); INSERT INTO clients (name) VALUES ('Enterprise Customer A');&quot;
+
+# Step 4: Destroy the active database container completely
+docker stop db_master &amp;&amp; docker rm db_master
+
+# Step 5: Launch a completely NEW container attaching the SAME volume
+docker run -d --name db_restored     -e POSTGRES_PASSWORD=SecureProductionSecret2026     --mount type=volume,source=postgres_persist_vol,target=/var/lib/postgresql/data     postgres:16-alpine
+
+# Step 6: Verify 100% data integrity
+docker exec -i db_restored psql -U postgres -c &quot;SELECT * FROM clients;&quot;
+
+# Clean up
+docker stop db_restored &amp;&amp; docker rm db_restored &amp;&amp; docker volume rm postgres_persist_vol
+</code></pre>
+<hr />
+<h2 id="8-certification-engineering-standards-cheat-sheet">8. Certification &amp; Engineering Standards Cheat Sheet<a class="headerlink" href="#8-certification-engineering-standards-cheat-sheet" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Directive</th>
+<th style="text-align: left;">Standard Rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Read-Only Mounts</strong></td>
+<td style="text-align: left;">Add <code>,readonly</code> parameter to prevent container write tampering.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Volume Pruning</strong></td>
+<td style="text-align: left;"><code>docker volume prune</code> removes unattached orphan volumes.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>DCA / CKS Exam</strong></td>
+<td style="text-align: left;">Master <code>--mount type=volume</code> and <code>--mount type=bind,readonly</code>.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="9-references-the-55-rule">9. References (The 5+5 Rule)<a class="headerlink" href="#9-references-the-55-rule" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Docker Inc. (2024). <em>Manage data in Docker: Volumes and bind mounts</em>. <a href="https://docs.docker.com/storage/">https://docs.docker.com/storage/</a></li>
+<li>Open Container Initiative. (2021). <em>OCI runtime specification</em>.</li>
+<li>Kerrisk, M. (2010). <em>The Linux programming interface</em>. No Starch Press.</li>
+<li>Turnbull, J. (2014). <em>The Docker book</em>.</li>
+<li>Burns, B. (2018). <em>Designing distributed systems</em>. O'Reilly Media.</li>
+<li>Tanenbaum, A. S., &amp; Bos, H. (2015). <em>Modern operating systems</em>.</li>
+<li>Poulton, N. (2023). <em>Docker deep dive</em>.</li>
+<li>Mouat, A. (2015). <em>Using Docker</em>.</li>
+<li>IEEE. (2018). <em>POSIX standard operating system interfaces</em>.</li>
+<li>NIST. (2017). <em>Application container security guide</em>.</li>
+</ol>
+<hr />
+<h2 id="10-universal-finops-hardware-cost-governance">10. Universal FinOps &amp; Hardware Cost Governance<a class="headerlink" href="#10-universal-finops-hardware-cost-governance" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Storage Optimization</th>
+<th style="text-align: left;">Operational Vector</th>
+<th style="text-align: left;">FinOps Cloud Impact</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Named Volumes over OverlayFS</strong></td>
+<td style="text-align: left;">Bypasses Copy-on-Write storage driver overhead</td>
+<td style="text-align: left;">Slashes disk IOPS consumption by 40% on AWS EBS</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Orphan Volume Pruning</strong></td>
+<td style="text-align: left;">Automated CI sweep of unused volumes</td>
+<td style="text-align: left;">Recovers up to 500GB of wasted cloud block storage monthly</td>
+</tr>
+</tbody>
+</table>
+              
+            </div>
+          </div><footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+    
+  </span>
+</div>
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = ".";</script>
+    <script src="js/theme_extra.js"></script>
+    <script src="js/theme.js"></script>
+      <script src="search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

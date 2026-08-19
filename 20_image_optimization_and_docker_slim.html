@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="img/favicon.ico" />
+    <title>Module 20: Image Optimization — DockerSlim, Distroless &amp; Minimal Root Filesystems - Docker Containers</title>
+    <link rel="stylesheet" href="css/theme.css" />
+    <link rel="stylesheet" href="css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Module 20: Image Optimization \u2014 DockerSlim, Distroless \u0026amp; Minimal Root Filesystems";
+        var mkdocs_page_input_path = "20_image_optimization_and_docker_slim.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/yaml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/bash.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/dockerfile.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="index.html" class="icon icon-home"> Docker Containers
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="./search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="index.html">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="getting-started.md">Getting Started</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-engine.md">Docker Engine</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="working-with-images.md">Working with Images</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="working-with-containers.md">Working with Containers</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="containerizing_an_app.md">Containerizing an Application</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="multi-container-apps.md">Multi-container apps with Compose</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-and-wasm.md">Docker and Wasm</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-swarm.md">Docker Swarm</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-networking.md">Docker Networking</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-volumes.md">Docker Volumes</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-security.md">Docker Security</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-docs.md">Docker Docs</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-cheatsheet.md">Docker CheatSheet</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="apache-kafka-introduction.md">Apache Kafka</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Docker Containers</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html" class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Module 20: Image Optimization — DockerSlim, Distroless &amp; Minimal Root Filesystems</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="module-20-image-optimization-dockerslim-distroless-minimal-root-filesystems">Module 20: Image Optimization — DockerSlim, Distroless &amp; Minimal Root Filesystems<a class="headerlink" href="#module-20-image-optimization-dockerslim-distroless-minimal-root-filesystems" title="Permanent link">&para;</a></h1>
+<p><strong>Standard Identifier:</strong> <code>DOC-STD-UNIVERSAL-2026-DOCKER</code>
+<strong>Track:</strong> Enterprise Container Architecture, OCI Runtimes &amp; Cloud Native Infrastructure
+<strong>Category:</strong> Container Minification &amp; Attack Surface Reduction
+<strong>Status:</strong> ✅ Completed</p>
+<hr />
+<h2 id="table-of-contents">📑 Table of Contents<a class="headerlink" href="#table-of-contents" title="Permanent link">&para;</a></h2>
+<ol>
+<li>
+<p><a href="#1-high-level-overview--executive-summary">High-Level Overview &amp; Executive Summary</a></p>
+</li>
+<li>
+<p><a href="#2-the-attack-surface-of-bloated-container-images">The Attack Surface of Bloated Container Images</a></p>
+</li>
+<li>
+<p><a href="#3-google-distroless-images--scratch-base-images">Google Distroless Images &amp; Scratch Base Images</a></p>
+</li>
+<li>
+<p><a href="#4-dockerslim--slimtoolkit-dynamic-minification-architecture">DockerSlim / SlimToolkit Dynamic Minification Architecture</a></p>
+</li>
+<li>
+<p><a href="#5-architectural-visual-topology">Architectural Visual Topology</a></p>
+</li>
+<li>
+<p><a href="#6-step-by-step-production-lab-minifying-a-12gb-image-to-18mb">Step-by-Step Production Lab: Minifying a 1.2GB Image to 18MB</a></p>
+</li>
+<li>
+<p><a href="#7-certification--engineering-standards-cheat-sheet">Certification &amp; Engineering Standards Cheat Sheet</a></p>
+</li>
+<li>
+<p><a href="#8-references-the-55-rule">References (The 5+5 Rule)</a></p>
+</li>
+<li>
+<p><a href="#9-universal-finops--hardware-cost-governance">Universal FinOps &amp; Hardware Cost Governance</a></p>
+</li>
+</ol>
+<hr />
+<h2 id="1-high-level-overview-executive-summary">1. High-Level Overview &amp; Executive Summary<a class="headerlink" href="#1-high-level-overview-executive-summary" title="Permanent link">&para;</a></h2>
+<p>Standard application container images often bundle full operating system toolchains (package managers, shells, debuggers, compilers) resulting in multi-gigabyte image sizes and thousands of unpatched CVE vulnerabilities. Image optimization architectures employ <strong>Google Distroless</strong> and <strong>DockerSlim</strong> to strip away all unnecessary binaries, producing ultra-compact, hardened production containers (SlimToolkit Community, 2024).</p>
+<h3 id="executive-summary-for-managers-non-technical-stakeholders">👔 Executive Summary (For Managers &amp; Non-Technical Stakeholders)<a class="headerlink" href="#executive-summary-for-managers-non-technical-stakeholders" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Business Purpose</strong>: Shrinks container image footprint by up to 98% and eliminates 90%+ of static security vulnerabilities.</li>
+<li><strong>How It Works</strong>: Dynamically analyzes the container at runtime to discover the exact binaries and system libraries needed, discarding everything else (including shells and package managers).</li>
+<li><strong>Key Business Value &amp; ROI</strong>: Slashes container image download times during auto-scaling events from 45 seconds to 1 second, preventing website downtime during traffic spikes.</li>
+</ul>
+<hr />
+<h2 id="2-the-attack-surface-of-bloated-container-images">2. The Attack Surface of Bloated Container Images<a class="headerlink" href="#2-the-attack-surface-of-bloated-container-images" title="Permanent link">&para;</a></h2>
+<pre><code class="language-mermaid">flowchart TD
+    Bloated[&quot;Bloated Ubuntu Image (1.2 GB)
+- 1,200 Packages
+- 45 Known CVEs
+- Shell (bash/sh)
+- Package Manager (apt)&quot;]
+    Minified[&quot;Distroless / Slim Image (18 MB)
+- 0 Package Managers
+- 0 Shells
+- 0 Known CVEs
+- Only compiled binary &amp; libc&quot;]
+</code></pre>
+<hr />
+<h2 id="3-google-distroless-images-scratch-base-images">3. Google Distroless Images &amp; Scratch Base Images<a class="headerlink" href="#3-google-distroless-images-scratch-base-images" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong><code>scratch</code></strong>: An empty, zero-byte base image for pure statically compiled binaries (Go, Rust, C).</li>
+<li><strong><code>gcr.io/distroless/static</code></strong>: Contains only CA certificates, <code>/etc/passwd</code> for non-root users, and timezone data.</li>
+<li><strong><code>gcr.io/distroless/nodejs</code></strong>: Minimal Node.js runtime without bash or npm.</li>
+</ul>
+<hr />
+<h2 id="4-dockerslim-slimtoolkit-dynamic-minification-architecture">4. DockerSlim / SlimToolkit Dynamic Minification Architecture<a class="headerlink" href="#4-dockerslim-slimtoolkit-dynamic-minification-architecture" title="Permanent link">&para;</a></h2>
+<p>DockerSlim performs static Dockerfile inspection followed by dynamic execution tracing using <code>ptrace</code> and Fanotify to log every file, library, and syscall touched during runtime.</p>
+<hr />
+<h2 id="5-architectural-visual-topology">5. Architectural Visual Topology<a class="headerlink" href="#5-architectural-visual-topology" title="Permanent link">&para;</a></h2>
+<pre><code class="language-mermaid">sequenceDiagram
+    participant Builder as Build Pipeline
+    participant Slim as SlimToolkit Engine
+    participant Target as Minified OCI Image
+
+    Builder-&gt;&gt;Slim: slim build --target bloated_image:latest
+    Slim-&gt;&gt;Slim: Spawn temporary container &amp; run probe tests
+    Slim-&gt;&gt;Slim: ptrace sensor tracks exact file accesses
+    Slim-&gt;&gt;Target: Package only accessed files into new rootfs
+    Slim--&gt;&gt;Builder: Output minified image (98% smaller)
+</code></pre>
+<hr />
+<h2 id="6-step-by-step-production-lab-minifying-a-12gb-image-to-18mb">6. Step-by-Step Production Lab: Minifying a 1.2GB Image to 18MB<a class="headerlink" href="#6-step-by-step-production-lab-minifying-a-12gb-image-to-18mb" title="Permanent link">&para;</a></h2>
+<pre><code class="language-bash">
+# Step 1: Inspect image footprint
+docker pull golang:1.22-alpine
+
+# Step 2: Build ultra-minimal Go binary on scratch
+mkdir -p /tmp/scratch_lab &amp;&amp; cd /tmp/scratch_lab
+cat &lt;&lt; 'EOF' &gt; main.go
+package main
+import (
+    &quot;fmt&quot;
+    &quot;net/http&quot;
+)
+func main() {
+    http.HandleFunc(&quot;/&quot;, func(w http.ResponseWriter, r *http.Request) {
+        fmt.Fprintf(w, &quot;🚀 Ultra-Slim Container Active!&quot;)
+    })
+    http.ListenAndServe(&quot;:8080&quot;, nil)
+}
+EOF
+
+cat &lt;&lt; 'EOF' &gt; Dockerfile
+FROM golang:1.22-alpine AS builder
+WORKDIR /src
+COPY main.go .
+RUN CGO_ENABLED=0 go build -ldflags=&quot;-s -w&quot; -o /app/server main.go
+
+FROM scratch
+COPY --from=builder /app/server /server
+EXPOSE 8080
+ENTRYPOINT [&quot;/server&quot;]
+EOF
+
+# Step 3: Build image and inspect size (&lt; 10MB!)
+docker build -t micro-go:latest .
+docker image ls micro-go:latest
+</code></pre>
+<hr />
+<h2 id="7-certification-engineering-standards-cheat-sheet">7. Certification &amp; Engineering Standards Cheat Sheet<a class="headerlink" href="#7-certification-engineering-standards-cheat-sheet" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Optimization Standard</th>
+<th style="text-align: left;">Best Practice Rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>No Shell in Prod</strong></td>
+<td style="text-align: left;">Prevents reverse shell execution if attacker achieves remote code execution.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>-ldflags="-s -w"</code></strong></td>
+<td style="text-align: left;">Strips debug symbols and DWARF tables from Go/C binaries.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="8-references-the-55-rule">8. References (The 5+5 Rule)<a class="headerlink" href="#8-references-the-55-rule" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Google LLC. (2024). <em>Distroless container images</em>. <a href="https://github.com/GoogleContainerTools/distroless">https://github.com/GoogleContainerTools/distroless</a></li>
+<li>SlimToolkit Community. (2024). <em>SlimToolkit documentation</em>. <a href="https://github.com/slimtoolkit/slim">https://github.com/slimtoolkit/slim</a></li>
+<li>Open Container Initiative. (2021). <em>OCI image specification</em>.</li>
+<li>NIST. (2017). <em>Application container security guide</em>.</li>
+<li>CNCF. (2023). <em>Cloud native security whitepaper</em>.</li>
+<li>Turnbull, J. (2014). <em>The Docker book</em>.</li>
+<li>Poulton, N. (2023). <em>Docker deep dive</em>.</li>
+<li>Kerrisk, M. (2010). <em>The Linux programming interface</em>.</li>
+<li>Tanenbaum, A. S., &amp; Bos, H. (2015). <em>Modern operating systems</em>.</li>
+<li>Burns, B. (2018). <em>Designing distributed systems</em>.</li>
+</ol>
+<hr />
+<h2 id="9-universal-finops-hardware-cost-governance">9. Universal FinOps &amp; Hardware Cost Governance<a class="headerlink" href="#9-universal-finops-hardware-cost-governance" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Optimization Strategy</th>
+<th style="text-align: left;">Operational Mechanism</th>
+<th style="text-align: left;">FinOps Cloud Impact</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Distroless Minification</strong></td>
+<td style="text-align: left;">Shrinks images from 1GB to 20MB</td>
+<td style="text-align: left;">Slashes cloud container registry storage bills by 95%</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Instant Pod Pulls</strong></td>
+<td style="text-align: left;">Download 20MB layers in 0.5 seconds</td>
+<td style="text-align: left;">Enables instant autoscaling with zero over-provisioned standby nodes</td>
+</tr>
+</tbody>
+</table>
+              
+            </div>
+          </div><footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+    
+  </span>
+</div>
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = ".";</script>
+    <script src="js/theme_extra.js"></script>
+    <script src="js/theme.js"></script>
+      <script src="search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

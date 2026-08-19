@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="img/favicon.ico" />
+    <title>Module 19: Container Profiling — Linux perf, eBPF Tracing &amp; cAdvisor Metrics - Docker Containers</title>
+    <link rel="stylesheet" href="css/theme.css" />
+    <link rel="stylesheet" href="css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Module 19: Container Profiling \u2014 Linux perf, eBPF Tracing \u0026amp; cAdvisor Metrics";
+        var mkdocs_page_input_path = "19_container_profiling_perf_ebpf_and_cadvisor.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/yaml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/bash.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/dockerfile.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="index.html" class="icon icon-home"> Docker Containers
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="./search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="index.html">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="getting-started.md">Getting Started</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-engine.md">Docker Engine</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="working-with-images.md">Working with Images</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="working-with-containers.md">Working with Containers</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="containerizing_an_app.md">Containerizing an Application</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="multi-container-apps.md">Multi-container apps with Compose</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-and-wasm.md">Docker and Wasm</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-swarm.md">Docker Swarm</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-networking.md">Docker Networking</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-volumes.md">Docker Volumes</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-security.md">Docker Security</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-docs.md">Docker Docs</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-cheatsheet.md">Docker CheatSheet</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="apache-kafka-introduction.md">Apache Kafka</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Docker Containers</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html" class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Module 19: Container Profiling — Linux perf, eBPF Tracing &amp; cAdvisor Metrics</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="module-19-container-profiling-linux-perf-ebpf-tracing-cadvisor-metrics">Module 19: Container Profiling — Linux perf, eBPF Tracing &amp; cAdvisor Metrics<a class="headerlink" href="#module-19-container-profiling-linux-perf-ebpf-tracing-cadvisor-metrics" title="Permanent link">&para;</a></h1>
+<p><strong>Standard Identifier:</strong> <code>DOC-STD-UNIVERSAL-2026-DOCKER</code>
+<strong>Track:</strong> Enterprise Container Architecture, OCI Runtimes &amp; Cloud Native Infrastructure
+<strong>Category:</strong> Observability, Profiling &amp; Kernel Tracing
+<strong>Status:</strong> ✅ Completed</p>
+<hr />
+<h2 id="table-of-contents">📑 Table of Contents<a class="headerlink" href="#table-of-contents" title="Permanent link">&para;</a></h2>
+<ol>
+<li>
+<p><a href="#1-high-level-overview--executive-summary">High-Level Overview &amp; Executive Summary</a></p>
+</li>
+<li>
+<p><a href="#2-kernel-cgroup-metrics--cadvisor-architecture">Kernel Cgroup Metrics &amp; cAdvisor Architecture</a></p>
+</li>
+<li>
+<p><a href="#3-detecting-cpu-throttling-in-cfs-quota-buffers">Detecting CPU Throttling in CFS Quota Buffers</a></p>
+</li>
+<li>
+<p><a href="#4-profiling-container-syscalls-with-ebpf-and-bpftrace">Profiling Container Syscalls with eBPF and bpftrace</a></p>
+</li>
+<li>
+<p><a href="#5-architectural-visual-topology">Architectural Visual Topology</a></p>
+</li>
+<li>
+<p><a href="#6-step-by-step-production-lab-cadvisor-real-time-prometheus-pipeline">Step-by-Step Production Lab: cAdvisor Real-Time Prometheus Pipeline</a></p>
+</li>
+<li>
+<p><a href="#7-certification--engineering-standards-cheat-sheet">Certification &amp; Engineering Standards Cheat Sheet</a></p>
+</li>
+<li>
+<p><a href="#8-references-the-55-rule">References (The 5+5 Rule)</a></p>
+</li>
+<li>
+<p><a href="#9-universal-finops--hardware-cost-governance">Universal FinOps &amp; Hardware Cost Governance</a></p>
+</li>
+</ol>
+<hr />
+<h2 id="1-high-level-overview-executive-summary">1. High-Level Overview &amp; Executive Summary<a class="headerlink" href="#1-high-level-overview-executive-summary" title="Permanent link">&para;</a></h2>
+<p>Profiling containerized microservices requires measuring hardware counter metrics (cycles, instructions, cache misses) and kernel subsystem activity across distinct cgroup hierarchies without injecting intrusive instrumentation into the application container (Gregg, 2020).</p>
+<h3 id="executive-summary-for-managers-non-technical-stakeholders">👔 Executive Summary (For Managers &amp; Non-Technical Stakeholders)<a class="headerlink" href="#executive-summary-for-managers-non-technical-stakeholders" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Business Purpose</strong>: Uncovers hidden performance bottlenecks, CPU throttling slowdowns, and memory leaks across thousands of production containers.</li>
+<li><strong>How It Works</strong>: Leverages modern Linux <strong>eBPF</strong> kernel hooks and <strong>cAdvisor</strong> telemetry collectors to capture microsecond-level performance data non-intrusively.</li>
+<li><strong>Key Business Value &amp; ROI</strong>: Eliminates silent CPU throttling that causes 500ms API latency spikes, ensuring 99.99% enterprise SLA compliance.</li>
+</ul>
+<hr />
+<h2 id="2-kernel-cgroup-metrics-cadvisor-architecture">2. Kernel Cgroup Metrics &amp; cAdvisor Architecture<a class="headerlink" href="#2-kernel-cgroup-metrics-cadvisor-architecture" title="Permanent link">&para;</a></h2>
+<pre><code class="language-mermaid">flowchart TD
+    Kernel[&quot;Linux Kernel Cgroup Subsystems (/sys/fs/cgroup)&quot;] --&gt; cAdvisor[&quot;cAdvisor Daemon (Container Metrics Collector)&quot;]
+    cAdvisor --&gt; Prom[&quot;Prometheus Time-Series Database&quot;]
+    Prom --&gt; Grafana[&quot;Grafana Enterprise Dashboards &amp; SRE Alerts&quot;]
+</code></pre>
+<hr />
+<h2 id="3-detecting-cpu-throttling-in-cfs-quota-buffers">3. Detecting CPU Throttling in CFS Quota Buffers<a class="headerlink" href="#3-detecting-cpu-throttling-in-cfs-quota-buffers" title="Permanent link">&para;</a></h2>
+<p>When a container exhausts its allocated <code>cpu.max</code> quota in a 100ms CFS period, the kernel freezes its threads until the next period, causing dramatic latency spikes.</p>
+<hr />
+<h2 id="4-profiling-container-syscalls-with-ebpf-and-bpftrace">4. Profiling Container Syscalls with eBPF and bpftrace<a class="headerlink" href="#4-profiling-container-syscalls-with-ebpf-and-bpftrace" title="Permanent link">&para;</a></h2>
+<pre><code class="language-bash">
+# Trace container filesystem read latency via eBPF
+sudo bpftrace -e 'kprobe:vfs_read { @start[tid] = nsecs; } kretprobe:vfs_read /@start[tid]/ { @latency = hist(nsecs - @start[tid]); delete(@start[tid]); }'
+</code></pre>
+<hr />
+<h2 id="5-architectural-visual-topology">5. Architectural Visual Topology<a class="headerlink" href="#5-architectural-visual-topology" title="Permanent link">&para;</a></h2>
+<pre><code class="language-mermaid">sequenceDiagram
+    participant Ctr as App Container
+    participant Kernel as Linux Kernel (CFS Scheduler)
+    participant eBPF as eBPF Hook Probe
+    participant SRE as SRE Grafana Dashboard
+
+    Ctr-&gt;&gt;Kernel: Request CPU execution
+    Kernel-&gt;&gt;Kernel: Check cgroup cpu.stat quota
+    opt Quota Exceeded
+        Kernel-&gt;&gt;Kernel: Throttle container (nr_throttled++)
+        eBPF-&gt;&gt;eBPF: Record throttling event timestamp
+    end
+    eBPF--&gt;&gt;SRE: Alert: High P99 latency caused by CPU throttling
+</code></pre>
+<hr />
+<h2 id="6-step-by-step-production-lab-cadvisor-real-time-prometheus-pipeline">6. Step-by-Step Production Lab: cAdvisor Real-Time Prometheus Pipeline<a class="headerlink" href="#6-step-by-step-production-lab-cadvisor-real-time-prometheus-pipeline" title="Permanent link">&para;</a></h2>
+<pre><code class="language-bash">
+# Step 1: Run Google cAdvisor container
+docker run -d     --name=cadvisor     --privileged     --device=/dev/kmsg     --volume=/:/rootfs:ro     --volume=/var/run:/var/run:ro     --volume=/sys:/sys:ro     --volume=/var/lib/docker/:/var/lib/docker:ro     --volume=/dev/disk/:/dev/disk:ro     --publish=8085:8080     gcr.io/cadvisor/cadvisor:v0.47.2
+
+# Step 2: Query cAdvisor Prometheus metrics endpoint
+curl -s http://localhost:8085/metrics | grep &quot;container_cpu_usage_seconds_total&quot; | head -n 5
+
+# Step 3: Clean up
+docker stop cadvisor &amp;&amp; docker rm cadvisor
+</code></pre>
+<hr />
+<h2 id="7-certification-engineering-standards-cheat-sheet">7. Certification &amp; Engineering Standards Cheat Sheet<a class="headerlink" href="#7-certification-engineering-standards-cheat-sheet" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Metric</th>
+<th style="text-align: left;">Meaning</th>
+<th style="text-align: left;">Alert Threshold</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>container_cpu_cfs_throttled_periods_total</code></td>
+<td style="text-align: left;">Number of times process was paused</td>
+<td style="text-align: left;">&gt; 5% of total periods</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_memory_working_set_bytes</code></td>
+<td style="text-align: left;">Real memory usage (triggers OOM-killer)</td>
+<td style="text-align: left;">&gt; 85% of memory limit</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="8-references-the-55-rule">8. References (The 5+5 Rule)<a class="headerlink" href="#8-references-the-55-rule" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Gregg, B. (2020). <em>Systems performance: Enterprise and the cloud</em> (2nd ed.). Addison-Wesley.</li>
+<li>Gregg, B. (2019). <em>BPF performance tools: Linux system and application observability</em>. Addison-Wesley.</li>
+<li>Google LLC. (2024). <em>cAdvisor: Container Advisor reference</em>. <a href="https://github.com/google/cadvisor">https://github.com/google/cadvisor</a></li>
+<li>Prometheus Authors. (2024). <em>Prometheus monitoring guide</em>. CNCF.</li>
+<li>Kerrisk, M. (2010). <em>The Linux programming interface</em>.</li>
+<li>Turnbull, J. (2014). <em>The Docker book</em>.</li>
+<li>Poulton, N. (2023). <em>Docker deep dive</em>.</li>
+<li>Tanenbaum, A. S., &amp; Bos, H. (2015). <em>Modern operating systems</em>.</li>
+<li>Burns, B. (2018). <em>Designing distributed systems</em>.</li>
+<li>Mouat, A. (2015). <em>Using Docker</em>.</li>
+</ol>
+<hr />
+<h2 id="9-universal-finops-hardware-cost-governance">9. Universal FinOps &amp; Hardware Cost Governance<a class="headerlink" href="#9-universal-finops-hardware-cost-governance" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Optimization Technique</th>
+<th style="text-align: left;">Mechanism</th>
+<th style="text-align: left;">FinOps Impact</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Right-Sizing Memory Limits</strong></td>
+<td style="text-align: left;">Measure <code>container_memory_working_set_bytes</code></td>
+<td style="text-align: left;">Reduces RAM over-provisioning by 40% across clusters</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>CFS Quota Tuning</strong></td>
+<td style="text-align: left;">Optimize CPU quota periods (100ms -&gt; 20ms)</td>
+<td style="text-align: left;">Lowers tail latency without paying for additional vCPU cores</td>
+</tr>
+</tbody>
+</table>
+              
+            </div>
+          </div><footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+    
+  </span>
+</div>
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = ".";</script>
+    <script src="js/theme_extra.js"></script>
+    <script src="js/theme.js"></script>
+      <script src="search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

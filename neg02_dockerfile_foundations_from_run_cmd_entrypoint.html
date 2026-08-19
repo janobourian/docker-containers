@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="img/favicon.ico" />
+    <title>Module neg02: Dockerfile Foundations — Instructions, Layer Caching &amp; CMD vs ENTRYPOINT - Docker Containers</title>
+    <link rel="stylesheet" href="css/theme.css" />
+    <link rel="stylesheet" href="css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Module neg02: Dockerfile Foundations \u2014 Instructions, Layer Caching \u0026amp; CMD vs ENTRYPOINT";
+        var mkdocs_page_input_path = "neg02_dockerfile_foundations_from_run_cmd_entrypoint.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/yaml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/bash.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/dockerfile.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="index.html" class="icon icon-home"> Docker Containers
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="./search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="index.html">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="getting-started.md">Getting Started</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-engine.md">Docker Engine</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="working-with-images.md">Working with Images</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="working-with-containers.md">Working with Containers</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="containerizing_an_app.md">Containerizing an Application</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="multi-container-apps.md">Multi-container apps with Compose</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-and-wasm.md">Docker and Wasm</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-swarm.md">Docker Swarm</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-networking.md">Docker Networking</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-volumes.md">Docker Volumes</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-security.md">Docker Security</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-docs.md">Docker Docs</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-cheatsheet.md">Docker CheatSheet</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="apache-kafka-introduction.md">Apache Kafka</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Docker Containers</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html" class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Module neg02: Dockerfile Foundations — Instructions, Layer Caching &amp; CMD vs ENTRYPOINT</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="module-neg02-dockerfile-foundations-instructions-layer-caching-cmd-vs-entrypoint">Module neg02: Dockerfile Foundations — Instructions, Layer Caching &amp; CMD vs ENTRYPOINT<a class="headerlink" href="#module-neg02-dockerfile-foundations-instructions-layer-caching-cmd-vs-entrypoint" title="Permanent link">&para;</a></h1>
+<p><strong>Standard Identifier:</strong> <code>DOC-STD-UNIVERSAL-2026-DOCKER</code>
+<strong>Track:</strong> Enterprise Container Architecture, OCI Runtimes &amp; Cloud Native Infrastructure
+<strong>Category:</strong> Container Build Foundations
+<strong>Status:</strong> ✅ Completed</p>
+<hr />
+<h2 id="table-of-contents">📑 Table of Contents<a class="headerlink" href="#table-of-contents" title="Permanent link">&para;</a></h2>
+<ol>
+<li>
+<p><a href="#1-high-level-overview--executive-summary">High-Level Overview &amp; Executive Summary</a></p>
+</li>
+<li>
+<p><a href="#2-the-anatomy-of-a-dockerfile-core-instructions">The Anatomy of a Dockerfile: Core Instructions</a></p>
+</li>
+<li>
+<p><a href="#3-the-layer-caching-algorithm--build-invalidation">The Layer Caching Algorithm &amp; Build Invalidation</a></p>
+</li>
+<li>
+<p><a href="#4-cmd-vs-entrypoint-execution-semantics--matrix">CMD vs ENTRYPOINT: Execution Semantics &amp; Matrix</a></p>
+</li>
+<li>
+<p><a href="#5-copy-vs-add-safe-file-ingestion">COPY vs ADD: Safe File Ingestion</a></p>
+</li>
+<li>
+<p><a href="#6-architectural-visual-topology">Architectural Visual Topology</a></p>
+</li>
+<li>
+<p><a href="#7-step-by-step-production-lab-hardened-production-dockerfile">Step-by-Step Production Lab: Hardened Production Dockerfile</a></p>
+</li>
+<li>
+<p><a href="#8-certification--engineering-standards-cheat-sheet">Certification &amp; Engineering Standards Cheat Sheet</a></p>
+</li>
+<li>
+<p><a href="#9-references-the-55-rule">References (The 5+5 Rule)</a></p>
+</li>
+<li>
+<p><a href="#10-universal-finops--hardware-cost-governance">Universal FinOps &amp; Hardware Cost Governance</a></p>
+</li>
+</ol>
+<hr />
+<h2 id="1-high-level-overview-executive-summary">1. High-Level Overview &amp; Executive Summary<a class="headerlink" href="#1-high-level-overview-executive-summary" title="Permanent link">&para;</a></h2>
+<p>A <strong>Dockerfile</strong> is a declarative domain-specific script containing ordered instructions that the Docker Engine or BuildKit compiler interprets to assemble an immutable, layered OCI container image (Mouat, 2015).</p>
+<h3 id="executive-summary-for-managers-non-technical-stakeholders">👔 Executive Summary (For Managers &amp; Non-Technical Stakeholders)<a class="headerlink" href="#executive-summary-for-managers-non-technical-stakeholders" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Business Purpose</strong>: Serves as the single blueprint for building reproducible software release artifacts across all deployment environments.</li>
+<li><strong>How It Works</strong>: Each instruction (<code>FROM</code>, <code>RUN</code>, <code>COPY</code>) generates an immutable filesystem delta layer. Layers are cached, meaning only modified sections are rebuilt.</li>
+<li><strong>Key Business Value &amp; ROI</strong>: Decreases CI/CD compilation and build times from 20 minutes to under 30 seconds via intelligent layer caching, reducing CI runner compute billing.</li>
+</ul>
+<hr />
+<h2 id="2-the-anatomy-of-a-dockerfile-core-instructions">2. The Anatomy of a Dockerfile: Core Instructions<a class="headerlink" href="#2-the-anatomy-of-a-dockerfile-core-instructions" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Instruction</th>
+<th style="text-align: left;">Purpose</th>
+<th style="text-align: left;">Best Practice Invariant</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>FROM</code></td>
+<td style="text-align: left;">Initializes build stage and sets base image</td>
+<td style="text-align: left;">Always pin specific version tags (<code>node:20.11-alpine</code>), never use <code>:latest</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>WORKDIR</code></td>
+<td style="text-align: left;">Sets current working directory for subsequent steps</td>
+<td style="text-align: left;">Always use absolute paths; creates directory automatically if absent.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>COPY</code></td>
+<td style="text-align: left;">Copies files from host context to container rootfs</td>
+<td style="text-align: left;">Copy dependency manifests (<code>package.json</code>) before application code.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>RUN</code></td>
+<td style="text-align: left;">Executes command and commits a new layer</td>
+<td style="text-align: left;">Chain commands with <code>&amp;&amp;</code> and cleanup caches (<code>rm -rf /var/cache/apk/*</code>).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>ENV</code></td>
+<td style="text-align: left;">Sets persistent environment variables</td>
+<td style="text-align: left;">Use for runtime configuration defaults.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>EXPOSE</code></td>
+<td style="text-align: left;">Documents intended listening ports</td>
+<td style="text-align: left;">Informational metadata; does not publish ports by itself.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>USER</code></td>
+<td style="text-align: left;">Switches execution UID/GID</td>
+<td style="text-align: left;">Never run as <code>root</code> (UID 0); switch to unprivileged user (<code>node</code>, <code>nobody</code>).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>CMD</code> / <code>ENTRYPOINT</code></td>
+<td style="text-align: left;">Defines runtime execution binary and arguments</td>
+<td style="text-align: left;">Prefer Exec format (<code>["executable", "param"]</code>) over Shell format.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="3-the-layer-caching-algorithm-build-invalidation">3. The Layer Caching Algorithm &amp; Build Invalidation<a class="headerlink" href="#3-the-layer-caching-algorithm-build-invalidation" title="Permanent link">&para;</a></h2>
+<pre><code class="language-mermaid">flowchart TD
+    Step1[&quot;FROM alpine:3.19 (Cached)&quot;] --&gt; Step2[&quot;WORKDIR /app (Cached)&quot;]
+    Step2 --&gt; Step3[&quot;COPY package*.json ./ (Cached if unchanged)&quot;]
+    Step3 --&gt; Step4[&quot;RUN npm install (Cached if dependencies unchanged)&quot;]
+    Step4 --&gt; Step5[&quot;COPY . . (Invalidated on source code edit)&quot;]
+    Step5 --&gt; Step6[&quot;CMD ['node', 'server.js'] (Re-evaluated)&quot;]
+</code></pre>
+<blockquote>
+<p><strong>💡 Key Insight</strong>: Order instructions from <strong>least frequently changing</strong> to <strong>most frequently changing</strong>. Placing <code>COPY . .</code> before <code>RUN npm install</code> invalidates the package installation cache on every code change, destroying build performance.</p>
+</blockquote>
+<hr />
+<h2 id="4-cmd-vs-entrypoint-execution-semantics-matrix">4. CMD vs ENTRYPOINT: Execution Semantics &amp; Matrix<a class="headerlink" href="#4-cmd-vs-entrypoint-execution-semantics-matrix" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong><code>ENTRYPOINT</code></strong>: Sets the immutable executable process (the "command").</li>
+<li><strong><code>CMD</code></strong>: Sets default arguments that can be overridden by parameters passed to <code>docker run</code>.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Dockerfile Definition</th>
+<th style="text-align: left;">Command Executed</th>
+<th style="text-align: left;">Effective Process Executed</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>ENTRYPOINT ["top", "-b"]</code></td>
+<td style="text-align: left;"><code>docker run my_image</code></td>
+<td style="text-align: left;"><code>top -b</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>ENTRYPOINT ["top", "-b"]</code> + <code>CMD ["-d", "2"]</code></td>
+<td style="text-align: left;"><code>docker run my_image</code></td>
+<td style="text-align: left;"><code>top -b -d 2</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>ENTRYPOINT ["top", "-b"]</code> + <code>CMD ["-d", "2"]</code></td>
+<td style="text-align: left;"><code>docker run my_image -d 5</code></td>
+<td style="text-align: left;"><code>top -b -d 5</code> (CMD overridden!)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="5-copy-vs-add-safe-file-ingestion">5. COPY vs ADD: Safe File Ingestion<a class="headerlink" href="#5-copy-vs-add-safe-file-ingestion" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong><code>COPY</code></strong>: Standard, deterministic file copy from build context into container rootfs.</li>
+<li><strong><code>ADD</code></strong>: Has magical side-effects: auto-extracts <code>.tar.gz</code> archives and downloads remote HTTP URLs (security vulnerability risk).</li>
+<li><strong>Rule</strong>: Always use <code>COPY</code> unless you explicitly require local tar archive auto-extraction.</li>
+</ul>
+<hr />
+<h2 id="6-architectural-visual-topology">6. Architectural Visual Topology<a class="headerlink" href="#6-architectural-visual-topology" title="Permanent link">&para;</a></h2>
+<pre><code class="language-mermaid">sequenceDiagram
+    participant BuildKit as BuildKit Compiler
+    participant Cache as Local Layer Cache Store
+    participant Target as Generated OCI Image
+
+    BuildKit-&gt;&gt;Cache: Evaluate SHA256 of instruction + context
+    alt Cache Match
+        Cache--&gt;&gt;BuildKit: Reuse existing Layer ID
+    else Cache Miss
+        BuildKit-&gt;&gt;BuildKit: Execute RUN / COPY in snapshotter
+        BuildKit-&gt;&gt;Target: Commit new immutable Diff Layer
+    end
+    BuildKit-&gt;&gt;Target: Generate Manifest &amp; Config Descriptor
+</code></pre>
+<hr />
+<h2 id="7-step-by-step-production-lab-hardened-production-dockerfile">7. Step-by-Step Production Lab: Hardened Production Dockerfile<a class="headerlink" href="#7-step-by-step-production-lab-hardened-production-dockerfile" title="Permanent link">&para;</a></h2>
+<pre><code class="language-dockerfile">
+# syntax=docker/dockerfile:1.4
+
+# Multi-stage hardened production Node.js service
+
+# STAGE 1: Build &amp; Dependencies
+FROM node:20-alpine AS builder
+WORKDIR /usr/src/app
+
+COPY package*.json ./
+RUN npm ci --only=production &amp;&amp; npm cache clean --force
+
+COPY . .
+
+# STAGE 2: Hardened Runtime
+FROM node:20-alpine
+WORKDIR /usr/src/app
+
+# Enforce non-root execution (UID 1000)
+USER node
+
+# Copy production artifacts from builder
+COPY --chown=node:node --from=builder /usr/src/app/node_modules ./node_modules
+COPY --chown=node:node --from=builder /usr/src/app/src ./src
+
+ENV NODE_ENV=production     PORT=3000
+
+EXPOSE 3000
+
+# Strict exec format entrypoint
+ENTRYPOINT [&quot;node&quot;, &quot;src/server.js&quot;]
+</code></pre>
+<hr />
+<h2 id="8-certification-engineering-standards-cheat-sheet">8. Certification &amp; Engineering Standards Cheat Sheet<a class="headerlink" href="#8-certification-engineering-standards-cheat-sheet" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Directive</th>
+<th style="text-align: left;">Security &amp; Quality Rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong><code>USER non-root</code></strong></td>
+<td style="text-align: left;">CIS Docker Benchmark 4.1: Create unprivileged user.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>.dockerignore</code></strong></td>
+<td style="text-align: left;">Exclude <code>.git</code>, <code>node_modules</code>, <code>.env</code> to prevent credential leakage.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>HEALTHCHECK</code></strong></td>
+<td style="text-align: left;">Ensure container health status is verifiable by orchestrators.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="9-references-the-55-rule">9. References (The 5+5 Rule)<a class="headerlink" href="#9-references-the-55-rule" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Docker Inc. (2024). <em>Dockerfile best practices guide</em>. <a href="https://docs.docker.com/develop/develop-images/dockerfile_best-practices/">https://docs.docker.com/develop/develop-images/dockerfile_best-practices/</a></li>
+<li>Open Container Initiative. (2021). <em>OCI image format specification (v1.0.1)</em>.</li>
+<li>Center for Internet Security. (2023). <em>CIS Docker benchmark (v1.6.0)</em>.</li>
+<li>NIST. (2017). <em>Application container security guide (SP 800-190)</em>.</li>
+<li>Mouat, A. (2015). <em>Using Docker: Developing and deploying software with containers</em>. O'Reilly Media.</li>
+<li>Turnbull, J. (2014). <em>The Docker book</em>.</li>
+<li>Poulton, N. (2023). <em>Docker deep dive</em>.</li>
+<li>Kerrisk, M. (2010). <em>The Linux programming interface</em>.</li>
+<li>Burns, B. (2018). <em>Designing distributed systems</em>.</li>
+<li>Tanenbaum, A. S., &amp; Bos, H. (2015). <em>Modern operating systems</em>.</li>
+</ol>
+<hr />
+<h2 id="10-universal-finops-hardware-cost-governance">10. Universal FinOps &amp; Hardware Cost Governance<a class="headerlink" href="#10-universal-finops-hardware-cost-governance" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Optimization Technique</th>
+<th style="text-align: left;">Mechanism</th>
+<th style="text-align: left;">FinOps Impact</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Optimal Layer Caching</strong></td>
+<td style="text-align: left;">Isolate dependency manifests</td>
+<td style="text-align: left;">Cuts CI/CD runner execution time by 80%</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Multi-Stage Build</strong></td>
+<td style="text-align: left;">Strip build tools (compilers, git) from image</td>
+<td style="text-align: left;">Reduces image size from 1.2GB to 45MB</td>
+</tr>
+</tbody>
+</table>
+              
+            </div>
+          </div><footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+    
+  </span>
+</div>
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = ".";</script>
+    <script src="js/theme_extra.js"></script>
+    <script src="js/theme.js"></script>
+      <script src="search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

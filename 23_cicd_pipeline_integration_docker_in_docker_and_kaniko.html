@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="img/favicon.ico" />
+    <title>Module 23: CI/CD Pipeline Integration — Docker-in-Docker (DinD), DooD &amp; Kaniko - Docker Containers</title>
+    <link rel="stylesheet" href="css/theme.css" />
+    <link rel="stylesheet" href="css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Module 23: CI/CD Pipeline Integration \u2014 Docker-in-Docker (DinD), DooD \u0026amp; Kaniko";
+        var mkdocs_page_input_path = "23_cicd_pipeline_integration_docker_in_docker_and_kaniko.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/yaml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/bash.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/dockerfile.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="index.html" class="icon icon-home"> Docker Containers
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="./search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="index.html">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="getting-started.md">Getting Started</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-engine.md">Docker Engine</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="working-with-images.md">Working with Images</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="working-with-containers.md">Working with Containers</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="containerizing_an_app.md">Containerizing an Application</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="multi-container-apps.md">Multi-container apps with Compose</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-and-wasm.md">Docker and Wasm</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-swarm.md">Docker Swarm</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-networking.md">Docker Networking</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-volumes.md">Docker Volumes</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-security.md">Docker Security</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-docs.md">Docker Docs</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-cheatsheet.md">Docker CheatSheet</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="apache-kafka-introduction.md">Apache Kafka</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Docker Containers</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html" class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Module 23: CI/CD Pipeline Integration — Docker-in-Docker (DinD), DooD &amp; Kaniko</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="module-23-cicd-pipeline-integration-docker-in-docker-dind-dood-kaniko">Module 23: CI/CD Pipeline Integration — Docker-in-Docker (DinD), DooD &amp; Kaniko<a class="headerlink" href="#module-23-cicd-pipeline-integration-docker-in-docker-dind-dood-kaniko" title="Permanent link">&para;</a></h1>
+<p><strong>Standard Identifier:</strong> <code>DOC-STD-UNIVERSAL-2026-DOCKER</code>
+<strong>Track:</strong> Enterprise Container Architecture, OCI Runtimes &amp; Cloud Native Infrastructure
+<strong>Category:</strong> CI/CD Integration &amp; Daemonless Image Compilation
+<strong>Status:</strong> ✅ Completed</p>
+<hr />
+<h2 id="table-of-contents">📑 Table of Contents<a class="headerlink" href="#table-of-contents" title="Permanent link">&para;</a></h2>
+<ol>
+<li>
+<p><a href="#1-high-level-overview--executive-summary">High-Level Overview &amp; Executive Summary</a></p>
+</li>
+<li>
+<p><a href="#2-the-cicd-container-build-problem">The CI/CD Container Build Problem</a></p>
+</li>
+<li>
+<p><a href="#3-docker-out-of-docker-dood-socket-mounting--security-risks">Docker-out-of-Docker (DooD): Socket Mounting &amp; Security Risks</a></p>
+</li>
+<li>
+<p><a href="#4-docker-in-docker-dind-nested-daemons--privilege-requirements">Docker-in-Docker (DinD): Nested Daemons &amp; Privilege Requirements</a></p>
+</li>
+<li>
+<p><a href="#5-google-kaniko-daemonless-unprivileged-builds-in-kubernetes">Google Kaniko: Daemonless, Unprivileged Builds in Kubernetes</a></p>
+</li>
+<li>
+<p><a href="#6-architectural-visual-topology">Architectural Visual Topology</a></p>
+</li>
+<li>
+<p><a href="#7-step-by-step-production-lab-rootless-kaniko-build-in-kubernetes">Step-by-Step Production Lab: Rootless Kaniko Build in Kubernetes</a></p>
+</li>
+<li>
+<p><a href="#8-certification--engineering-standards-cheat-sheet">Certification &amp; Engineering Standards Cheat Sheet</a></p>
+</li>
+<li>
+<p><a href="#9-references-the-55-rule">References (The 5+5 Rule)</a></p>
+</li>
+<li>
+<p><a href="#10-universal-finops--hardware-cost-governance">Universal FinOps &amp; Hardware Cost Governance</a></p>
+</li>
+</ol>
+<hr />
+<h2 id="1-high-level-overview-executive-summary">1. High-Level Overview &amp; Executive Summary<a class="headerlink" href="#1-high-level-overview-executive-summary" title="Permanent link">&para;</a></h2>
+<p>Building container images inside containerized CI/CD pipelines presents unique isolation challenges. Traditional approaches like <strong>Docker-out-of-Docker (DooD)</strong> and <strong>Docker-in-Docker (DinD)</strong> require dangerous root privileges. <strong>Google Kaniko</strong> solves this by compiling OCI images in user space without requiring Docker daemon access or elevated Linux privileges (Google LLC, 2024).</p>
+<h3 id="executive-summary-for-managers-non-technical-stakeholders">👔 Executive Summary (For Managers &amp; Non-Technical Stakeholders)<a class="headerlink" href="#executive-summary-for-managers-non-technical-stakeholders" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Business Purpose</strong>: Enables secure, scalable automated container image building inside multi-tenant CI/CD pipelines.</li>
+<li><strong>How It Works</strong>: Executes Dockerfile instructions entirely in user-space snapshot memory without needing a Docker daemon or privileged host access.</li>
+<li><strong>Key Business Value &amp; ROI</strong>: Eliminates privileged security holes in CI worker nodes while cutting runner autoscaling latency by 60%.</li>
+</ul>
+<hr />
+<h2 id="2-the-cicd-container-build-problem">2. The CI/CD Container Build Problem<a class="headerlink" href="#2-the-cicd-container-build-problem" title="Permanent link">&para;</a></h2>
+<pre><code class="language-mermaid">flowchart TD
+    subgraph DooD[&quot;Docker-out-of-Docker (DooD)&quot;]
+        CI1[&quot;CI Runner&quot;] --&gt;|Mounts /var/run/docker.sock| HostDaemon[&quot;Host Docker Daemon (Full Root Access!)&quot;]
+    end
+
+    subgraph DinD[&quot;Docker-in-Docker (DinD)&quot;]
+        CI2[&quot;CI Runner&quot;] --&gt;|--privileged| NestedDaemon[&quot;Nested dockerd (Complex storage layering)&quot;]
+    end
+
+    subgraph Kaniko[&quot;Google Kaniko (Daemonless)&quot;]
+        CI3[&quot;CI Runner (Unprivileged Pod)&quot;] --&gt;|User-space snapshotter| Reg[&quot;Direct OCI Registry Push&quot;]
+    end
+</code></pre>
+<hr />
+<h2 id="3-docker-out-of-docker-dood-socket-mounting-security-risks">3. Docker-out-of-Docker (DooD): Socket Mounting &amp; Security Risks<a class="headerlink" href="#3-docker-out-of-docker-dood-socket-mounting-security-risks" title="Permanent link">&para;</a></h2>
+<p>Mounting <code>/var/run/docker.sock</code> gives the CI container complete control over the host operating system, effectively granting root access.</p>
+<hr />
+<h2 id="4-docker-in-docker-dind-nested-daemons-privilege-requirements">4. Docker-in-Docker (DinD): Nested Daemons &amp; Privilege Requirements<a class="headerlink" href="#4-docker-in-docker-dind-nested-daemons-privilege-requirements" title="Permanent link">&para;</a></h2>
+<p>DinD runs an independent <code>dockerd</code> inside a container, requiring <code>--privileged</code> mode and causing severe storage driver conflicts (OverlayFS over OverlayFS).</p>
+<hr />
+<h2 id="5-google-kaniko-daemonless-unprivileged-builds-in-kubernetes">5. Google Kaniko: Daemonless, Unprivileged Builds in Kubernetes<a class="headerlink" href="#5-google-kaniko-daemonless-unprivileged-builds-in-kubernetes" title="Permanent link">&para;</a></h2>
+<p>Kaniko runs as an unprivileged Kubernetes pod, extracts base images to <code>/</code>, takes user-space snapshots between Dockerfile steps, and pushes layers directly to the OCI registry.</p>
+<hr />
+<h2 id="6-architectural-visual-topology">6. Architectural Visual Topology<a class="headerlink" href="#6-architectural-visual-topology" title="Permanent link">&para;</a></h2>
+<pre><code class="language-mermaid">sequenceDiagram
+    participant K8s as Kubernetes CI Runner
+    participant Kaniko as Kaniko Executor (Unprivileged)
+    participant Registry as OCI Container Registry
+
+    K8s-&gt;&gt;Kaniko: Launch Pod with context &amp; Dockerfile
+    Kaniko-&gt;&gt;Registry: Pull base image layers
+    Kaniko-&gt;&gt;Kaniko: Execute RUN/COPY in user-space snapshotter
+    Kaniko-&gt;&gt;Kaniko: Diff snapshot to create layer tarball
+    Kaniko-&gt;&gt;Registry: Push layer tarball &amp; manifest directly
+    Kaniko--&gt;&gt;K8s: Exit 0 (Success)
+</code></pre>
+<hr />
+<h2 id="7-step-by-step-production-lab-rootless-kaniko-build-in-kubernetes">7. Step-by-Step Production Lab: Rootless Kaniko Build in Kubernetes<a class="headerlink" href="#7-step-by-step-production-lab-rootless-kaniko-build-in-kubernetes" title="Permanent link">&para;</a></h2>
+<pre><code class="language-yaml">
+# kaniko-build-job.yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: kaniko-build-job
+spec:
+  template:
+    spec:
+      containers:
+      - name: kaniko
+        image: gcr.io/kaniko-project/executor:v1.20.0
+        args:
+        - &quot;--context=git://github.com/myorg/myapp.git#refs/heads/main&quot;
+        - &quot;--destination=myregistry.io/myorg/myapp:v1.0.0&quot;
+        - &quot;--cache=true&quot;
+        resources:
+          limits:
+            cpu: &quot;2&quot;
+            memory: &quot;4Gi&quot;
+      restartPolicy: Never
+</code></pre>
+<hr />
+<h2 id="8-certification-engineering-standards-cheat-sheet">8. Certification &amp; Engineering Standards Cheat Sheet<a class="headerlink" href="#8-certification-engineering-standards-cheat-sheet" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Build Strategy</th>
+<th style="text-align: left;">Privilege Required</th>
+<th style="text-align: left;">Security Rating</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>DooD (Socket mount)</strong></td>
+<td style="text-align: left;">Root equivalent</td>
+<td style="text-align: left;">❌ Critical Risk</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>DinD (Nested daemon)</strong></td>
+<td style="text-align: left;"><code>--privileged</code></td>
+<td style="text-align: left;">⚠️ High Risk</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Kaniko / Buildah</strong></td>
+<td style="text-align: left;">Unprivileged</td>
+<td style="text-align: left;">✅ Zero-Trust Standard</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="9-references-the-55-rule">9. References (The 5+5 Rule)<a class="headerlink" href="#9-references-the-55-rule" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Google LLC. (2024). <em>Kaniko: Build container images in Kubernetes</em>. <a href="https://github.com/GoogleContainerTools/kaniko">https://github.com/GoogleContainerTools/kaniko</a></li>
+<li>GitLab Inc. (2024). <em>Building Docker images with GitLab CI/CD</em>. <a href="https://docs.gitlab.com/ee/ci/docker/">https://docs.gitlab.com/ee/ci/docker/</a></li>
+<li>Open Container Initiative. (2021). <em>OCI image specification</em>.</li>
+<li>CNCF. (2023). <em>Cloud native CI/CD best practices</em>.</li>
+<li>NIST. (2017). <em>Application container security guide</em>.</li>
+<li>Turnbull, J. (2014). <em>The Docker book</em>.</li>
+<li>Poulton, N. (2023). <em>Docker deep dive</em>.</li>
+<li>Kerrisk, M. (2010). <em>The Linux programming interface</em>.</li>
+<li>Burns, B. (2018). <em>Designing distributed systems</em>.</li>
+<li>Tanenbaum, A. S., &amp; Bos, H. (2015). <em>Modern operating systems</em>.</li>
+</ol>
+<hr />
+<h2 id="10-universal-finops-hardware-cost-governance">10. Universal FinOps &amp; Hardware Cost Governance<a class="headerlink" href="#10-universal-finops-hardware-cost-governance" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Optimization Strategy</th>
+<th style="text-align: left;">Mechanism</th>
+<th style="text-align: left;">FinOps Cloud Impact</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Kaniko Remote Caching</strong></td>
+<td style="text-align: left;">Cache layer tarballs in cloud bucket/registry</td>
+<td style="text-align: left;">Reduces CI build duration by 65%, dropping runner costs</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Unprivileged CI Nodes</strong></td>
+<td style="text-align: left;">Run builds on shared spot instances</td>
+<td style="text-align: left;">Cuts dedicated CI Kubernetes node pool expenses by 70%</td>
+</tr>
+</tbody>
+</table>
+              
+            </div>
+          </div><footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+    
+  </span>
+</div>
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = ".";</script>
+    <script src="js/theme_extra.js"></script>
+    <script src="js/theme.js"></script>
+      <script src="search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

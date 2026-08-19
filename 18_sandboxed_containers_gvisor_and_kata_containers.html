@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="img/favicon.ico" />
+    <title>Module 18: Sandboxed Containers — gVisor (runsc), Kata Containers &amp; MicroVM Isolation - Docker Containers</title>
+    <link rel="stylesheet" href="css/theme.css" />
+    <link rel="stylesheet" href="css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Module 18: Sandboxed Containers \u2014 gVisor (runsc), Kata Containers \u0026amp; MicroVM Isolation";
+        var mkdocs_page_input_path = "18_sandboxed_containers_gvisor_and_kata_containers.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/yaml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/bash.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/dockerfile.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="index.html" class="icon icon-home"> Docker Containers
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="./search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="index.html">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="getting-started.md">Getting Started</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-engine.md">Docker Engine</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="working-with-images.md">Working with Images</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="working-with-containers.md">Working with Containers</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="containerizing_an_app.md">Containerizing an Application</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="multi-container-apps.md">Multi-container apps with Compose</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-and-wasm.md">Docker and Wasm</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-swarm.md">Docker Swarm</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-networking.md">Docker Networking</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-volumes.md">Docker Volumes</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-security.md">Docker Security</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-docs.md">Docker Docs</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-cheatsheet.md">Docker CheatSheet</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="apache-kafka-introduction.md">Apache Kafka</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Docker Containers</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html" class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Module 18: Sandboxed Containers — gVisor (runsc), Kata Containers &amp; MicroVM Isolation</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="module-18-sandboxed-containers-gvisor-runsc-kata-containers-microvm-isolation">Module 18: Sandboxed Containers — gVisor (runsc), Kata Containers &amp; MicroVM Isolation<a class="headerlink" href="#module-18-sandboxed-containers-gvisor-runsc-kata-containers-microvm-isolation" title="Permanent link">&para;</a></h1>
+<p><strong>Standard Identifier:</strong> <code>DOC-STD-UNIVERSAL-2026-DOCKER</code>
+<strong>Track:</strong> Enterprise Container Architecture, OCI Runtimes &amp; Cloud Native Infrastructure
+<strong>Category:</strong> Hardened Sandboxing &amp; MicroVM Hypervisors
+<strong>Status:</strong> ✅ Completed</p>
+<hr />
+<h2 id="table-of-contents">📑 Table of Contents<a class="headerlink" href="#table-of-contents" title="Permanent link">&para;</a></h2>
+<ol>
+<li>
+<p><a href="#1-high-level-overview--executive-summary">High-Level Overview &amp; Executive Summary</a></p>
+</li>
+<li>
+<p><a href="#2-the-shared-kernel-threat-model--container-escapes">The Shared Kernel Threat Model &amp; Container Escapes</a></p>
+</li>
+<li>
+<p><a href="#3-gvisor-runsc-architecture-user-space-kernel-interception">gVisor (runsc) Architecture: User-Space Kernel Interception</a></p>
+</li>
+<li>
+<p><a href="#4-kata-containers-architecture-hardware-assisted-microvms">Kata Containers Architecture: Hardware-Assisted MicroVMs</a></p>
+</li>
+<li>
+<p><a href="#5-architectural-visual-topology">Architectural Visual Topology</a></p>
+</li>
+<li>
+<p><a href="#6-step-by-step-production-lab-running-sandboxed-workloads-with-gvisor">Step-by-Step Production Lab: Running Sandboxed Workloads with gVisor</a></p>
+</li>
+<li>
+<p><a href="#7-certification--engineering-standards-cheat-sheet">Certification &amp; Engineering Standards Cheat Sheet</a></p>
+</li>
+<li>
+<p><a href="#8-references-the-55-rule">References (The 5+5 Rule)</a></p>
+</li>
+<li>
+<p><a href="#9-universal-finops--hardware-cost-governance">Universal FinOps &amp; Hardware Cost Governance</a></p>
+</li>
+</ol>
+<hr />
+<h2 id="1-high-level-overview-executive-summary">1. High-Level Overview &amp; Executive Summary<a class="headerlink" href="#1-high-level-overview-executive-summary" title="Permanent link">&para;</a></h2>
+<p>Standard OCI containers (<code>runc</code>) share the host Linux kernel directly. If a vulnerability exists in the Linux kernel syscall interface (Dirty COW, Dirty Pipe), malicious code inside a container can compromise the host. <strong>Sandboxed Runtimes</strong> eliminate this risk: <strong>gVisor (<code>runsc</code>)</strong> intercepts and reimplements Linux syscalls in user space, while <strong>Kata Containers</strong> encapsulates each container in a lightweight hardware-isolated MicroVM (Google LLC, 2024).</p>
+<h3 id="executive-summary-for-managers-non-technical-stakeholders">👔 Executive Summary (For Managers &amp; Non-Technical Stakeholders)<a class="headerlink" href="#executive-summary-for-managers-non-technical-stakeholders" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Business Purpose</strong>: Guarantees airtight isolation for untrusted third-party code execution, multi-tenant SaaS platforms, and AI code generation sandboxes.</li>
+<li><strong>How It Works</strong>: Places a security boundary between containerized processes and the host operating system, preventing container breakout attacks.</li>
+<li><strong>Key Business Value &amp; ROI</strong>: Allows multi-tenant workloads to safely share the same physical server hardware without fear of cross-tenant data leaks.</li>
+</ul>
+<hr />
+<h2 id="2-the-shared-kernel-threat-model-container-escapes">2. The Shared Kernel Threat Model &amp; Container Escapes<a class="headerlink" href="#2-the-shared-kernel-threat-model-container-escapes" title="Permanent link">&para;</a></h2>
+<pre><code class="language-mermaid">flowchart TD
+    subgraph Standard[&quot;Standard runc (Shared Kernel Risk)&quot;]
+        App1[&quot;Untrusted Code&quot;] --&gt;|Direct Syscalls| HostKernel1[&quot;Host Linux Kernel (Vulnerable to 0-days)&quot;]
+    end
+
+    subgraph gVisor[&quot;gVisor runsc (User-Space Kernel)&quot;]
+        App2[&quot;Untrusted Code&quot;] --&gt;|Syscalls| Sentry[&quot;Sentry (Go-based Kernel)&quot;]
+        Sentry --&gt;|Filtered Syscalls| HostKernel2[&quot;Host Linux Kernel (Protected)&quot;]
+    end
+
+    subgraph Kata[&quot;Kata Containers (MicroVM)&quot;]
+        App3[&quot;Untrusted Code&quot;] --&gt; GuestKernel[&quot;Guest Linux Kernel&quot;]
+        GuestKernel --&gt; QEMU[&quot;MicroVM (QEMU / Cloud-Hypervisor)&quot;]
+        QEMU --&gt; HostKernel3[&quot;Host Kernel &amp; KVM&quot;]
+    end
+</code></pre>
+<hr />
+<h2 id="3-gvisor-runsc-architecture-user-space-kernel-interception">3. gVisor (runsc) Architecture: User-Space Kernel Interception<a class="headerlink" href="#3-gvisor-runsc-architecture-user-space-kernel-interception" title="Permanent link">&para;</a></h2>
+<p>gVisor consists of <strong>Sentry</strong> (an application kernel written in memory-safe Go that implements the Linux syscall table) and <strong>Gofer</strong> (a secure file proxy).</p>
+<hr />
+<h2 id="4-kata-containers-architecture-hardware-assisted-microvms">4. Kata Containers Architecture: Hardware-Assisted MicroVMs<a class="headerlink" href="#4-kata-containers-architecture-hardware-assisted-microvms" title="Permanent link">&para;</a></h2>
+<p>Kata Containers uses hardware virtualization extensions (Intel VT-x, AMD-V) to boot an ultra-minimal Linux kernel in less than 100 milliseconds.</p>
+<hr />
+<h2 id="5-architectural-visual-topology">5. Architectural Visual Topology<a class="headerlink" href="#5-architectural-visual-topology" title="Permanent link">&para;</a></h2>
+<pre><code class="language-mermaid">sequenceDiagram
+    participant App as Untrusted Container
+    participant Sentry as gVisor Sentry (runsc)
+    participant Host as Host Linux Kernel
+
+    App-&gt;&gt;Sentry: socket() / fork() / open()
+    Sentry-&gt;&gt;Sentry: Validate and execute in memory-safe Go sandbox
+    opt Safe Hardware Action
+        Sentry-&gt;&gt;Host: Restricted, sanitized host syscall
+    end
+    Sentry--&gt;&gt;App: Return simulated syscall result
+</code></pre>
+<hr />
+<h2 id="6-step-by-step-production-lab-running-sandboxed-workloads-with-gvisor">6. Step-by-Step Production Lab: Running Sandboxed Workloads with gVisor<a class="headerlink" href="#6-step-by-step-production-lab-running-sandboxed-workloads-with-gvisor" title="Permanent link">&para;</a></h2>
+<pre><code class="language-bash">
+# Step 1: Configure Docker daemon to register runsc runtime
+
+# In /etc/docker/daemon.json:
+
+# {&quot;runtimes&quot;: {&quot;runsc&quot;: {&quot;path&quot;: &quot;/usr/local/bin/runsc&quot;}}}
+
+# Step 2: Run untrusted workload with gVisor runtime
+docker run --rm --runtime=runsc alpine:latest dmesg
+</code></pre>
+<hr />
+<h2 id="7-certification-engineering-standards-cheat-sheet">7. Certification &amp; Engineering Standards Cheat Sheet<a class="headerlink" href="#7-certification-engineering-standards-cheat-sheet" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Runtime</th>
+<th style="text-align: left;">Isolation Level</th>
+<th style="text-align: left;">Latency Overhead</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong><code>runc</code></strong></td>
+<td style="text-align: left;">Namespace / cgroup</td>
+<td style="text-align: left;">Near-zero (Native)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>runsc</code> (gVisor)</strong></td>
+<td style="text-align: left;">User-space kernel</td>
+<td style="text-align: left;">Low-medium (Syscall interception)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>kata</code></strong></td>
+<td style="text-align: left;">Hardware MicroVM</td>
+<td style="text-align: left;">Medium (KVM Hypervisor)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="8-references-the-55-rule">8. References (The 5+5 Rule)<a class="headerlink" href="#8-references-the-55-rule" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Google LLC. (2024). <em>gVisor architecture and security model</em>. <a href="https://gvisor.dev/docs/">https://gvisor.dev/docs/</a></li>
+<li>OpenStack Foundation. (2024). <em>Kata Containers: Fast, simple, secure container runtime</em>. <a href="https://katacontainers.io/">https://katacontainers.io/</a></li>
+<li>Open Container Initiative. (2021). <em>OCI runtime specification</em>.</li>
+<li>NIST. (2017). <em>Application container security guide (NIST SP 800-190)</em>.</li>
+<li>CNCF. (2023). <em>Cloud native security whitepaper</em>.</li>
+<li>Turnbull, J. (2014). <em>The Docker book</em>.</li>
+<li>Kerrisk, M. (2010). <em>The Linux programming interface</em>.</li>
+<li>Poulton, N. (2023). <em>Docker deep dive</em>.</li>
+<li>Tanenbaum, A. S., &amp; Bos, H. (2015). <em>Modern operating systems</em>.</li>
+<li>Burns, B. (2018). <em>Designing distributed systems</em>.</li>
+</ol>
+<hr />
+<h2 id="9-universal-finops-hardware-cost-governance">9. Universal FinOps &amp; Hardware Cost Governance<a class="headerlink" href="#9-universal-finops-hardware-cost-governance" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Optimization Strategy</th>
+<th style="text-align: left;">Mechanism</th>
+<th style="text-align: left;">FinOps Cloud Impact</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>gVisor Multi-Tenancy</strong></td>
+<td style="text-align: left;">Runs untrusted client code on shared clusters</td>
+<td style="text-align: left;">Slashes dedicated EC2 VM provisioning costs by 70%</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>MicroVM Fast Boot</strong></td>
+<td style="text-align: left;">Sub-100ms cold boot vs 2-minute VM boot</td>
+<td style="text-align: left;">Enables on-demand Serverless Functions with zero idle billing</td>
+</tr>
+</tbody>
+</table>
+              
+            </div>
+          </div><footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+    
+  </span>
+</div>
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = ".";</script>
+    <script src="js/theme_extra.js"></script>
+    <script src="js/theme.js"></script>
+      <script src="search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

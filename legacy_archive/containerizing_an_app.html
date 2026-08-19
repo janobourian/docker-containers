@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Module 05: Containerizing Applications &amp; Production Operational Readiness - Docker Containers</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Module 05: Containerizing Applications \u0026amp; Production Operational Readiness";
+        var mkdocs_page_input_path = "legacy_archive/containerizing_an_app.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/yaml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/bash.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/dockerfile.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../index.html" class="icon icon-home"> Docker Containers
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../index.html">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="../getting-started.md">Getting Started</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="../docker-engine.md">Docker Engine</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="../working-with-images.md">Working with Images</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="../working-with-containers.md">Working with Containers</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="../containerizing_an_app.md">Containerizing an Application</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="../multi-container-apps.md">Multi-container apps with Compose</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="../docker-and-wasm.md">Docker and Wasm</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="../docker-swarm.md">Docker Swarm</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="../docker-networking.md">Docker Networking</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="../docker-volumes.md">Docker Volumes</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="../docker-security.md">Docker Security</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="../docker-docs.md">Docker Docs</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="../docker-cheatsheet.md">Docker CheatSheet</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="../apache-kafka-introduction.md">Apache Kafka</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Docker Containers</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html" class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Module 05: Containerizing Applications &amp; Production Operational Readiness</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="module-05-containerizing-applications-production-operational-readiness">Module 05: Containerizing Applications &amp; Production Operational Readiness<a class="headerlink" href="#module-05-containerizing-applications-production-operational-readiness" title="Permanent link">&para;</a></h1>
+<p><strong>Track:</strong> Docker Container Systems &amp; Virtualization Architecture
+<strong>Category:</strong> Application Packaging, Twelve-Factor Containers &amp; Production Hardening
+<strong>Standard Identifier:</strong> <code>DOC-STD-UNIVERSAL-2026</code>
+<strong>Status:</strong> ✅ Completed</p>
+<hr />
+<h2 id="table-of-contents">📑 Table of Contents<a class="headerlink" href="#table-of-contents" title="Permanent link">&para;</a></h2>
+<ol>
+<li><a href="#1-high-level-overview--executive-summary">High-Level Overview &amp; Executive Summary</a></li>
+<li><a href="#2-the-twelve-factor-containerization-blueprint">The Twelve-Factor Containerization Blueprint</a></li>
+<li><a href="#3-multi-target-build-pipelines-development-testing--production">Multi-Target Build Pipelines: Development, Testing &amp; Production</a></li>
+<li><a href="#4-container-security-hardening-non-root-read-only--capabilities">Container Security Hardening: Non-Root, Read-Only &amp; Capabilities</a></li>
+<li><a href="#5-certification--exam-essentials-cheat-sheet">Certification &amp; Exam Essentials (Cheat Sheet)</a></li>
+<li><a href="#6-comparative-analysis-matrix-application-packaging-strategies">Comparative Analysis Matrix: Application Packaging Strategies</a></li>
+<li><a href="#7-performance--resource-optimization">Performance &amp; Resource Optimization</a></li>
+<li><a href="#8-in-depth-engineering-perspectives">In-Depth Engineering Perspectives</a></li>
+<li><a href="#9-well-architected-framework-alignment">Well-Architected Framework Alignment</a></li>
+<li><a href="#10-step-by-step-hands-on-production-walkthrough">Step-by-Step Hands-On Production Walkthrough</a></li>
+<li><a href="#11-pure-cli--command-interface">Pure CLI / Command Interface</a></li>
+<li><a href="#12-advanced-architecture--edge-case-failure-modes">Advanced Architecture &amp; Edge-Case Failure Modes</a></li>
+<li><a href="#13-detailed-sub-components--subsystems">Detailed Sub-Components &amp; Subsystems</a></li>
+<li><a href="#14-references-the-55-rule">References (The 5+5 Rule)</a></li>
+<li><a href="#15-universal-finops--resource-cost-governance">Universal FinOps &amp; Resource Cost Governance</a></li>
+</ol>
+<hr />
+<h2 id="1-high-level-overview-executive-summary">1. High-Level Overview &amp; Executive Summary<a class="headerlink" href="#1-high-level-overview-executive-summary" title="Permanent link">&para;</a></h2>
+<p>Containerizing an enterprise application transforms raw source code and runtime configurations into an immutable, secure, production-ready OCI image. Adhering to the <strong>Twelve-Factor App</strong> methodology, production containerization requires: strict separation of configuration from code via environment variables, logging all diagnostic streams directly to <code>stdout</code>/<code>stderr</code>, trapping <code>SIGTERM</code> signals for graceful connection draining, executing as a dedicated unprivileged user (<code>USER 10001:10001</code>), and configuring deterministic container healthcheck probes.</p>
+<pre><code class="language-text">┌────────────────────────────────────────────────────────────────────────────────┐
+│               ENTERPRISE CONTAINERIZATION ARCHITECTURE PIPELINE                │
+├────────────────────────────────────────────────────────────────────────────────┤
+│ 1. CODE &amp; DEPENDENCIES  ──► Multi-Stage Compilation (Zero build tools in prod) │
+│         │                                                                      │
+│         ▼                                                                      │
+│ 2. CONFIGURATION        ──► Dynamic ENV Variables / Secrets (Zero hardcoded)   │
+│         │                                                                      │
+│         ▼                                                                      │
+│ 3. SECURITY HARDENING   ──► Non-Root User + Dropped Linux Capabilities         │
+│         │                                                                      │
+│         ▼                                                                      │
+│ 4. OBSERVABILITY        ──► Unbuffered JSON Logging to stdout/stderr           │
+│         │                                                                      │
+│         ▼                                                                      │
+│ 5. LIFECYCLE MANAGEMENT ──► SIGTERM Graceful Connection Drain + Healthcheck    │
+└────────────────────────────────────────────────────────────────────────────────┘
+</code></pre>
+<h3 id="executive-summary-for-managers-non-technical-stakeholders">👔 Executive Summary (For Managers &amp; Non-Technical Stakeholders)<a class="headerlink" href="#executive-summary-for-managers-non-technical-stakeholders" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Business Purpose</strong>: Converts raw software applications into standardized, self-contained cloud modules that deploy automatically across any cloud or data center without manual installation steps.</li>
+<li><strong>How It Works</strong>: Packages software code, security certificates, and health monitoring probes into a single hardened container. The software boots in milliseconds, configures itself from cloud environment settings, and reports its health to orchestration platforms.</li>
+<li><strong>Key Business Value &amp; ROI</strong>: Eliminates human deployment errors, cuts developer onboarding time from weeks to minutes, and guarantees zero-downtime rolling updates in production.</li>
+</ul>
+<hr />
+<h2 id="2-the-twelve-factor-containerization-blueprint">2. The Twelve-Factor Containerization Blueprint<a class="headerlink" href="#2-the-twelve-factor-containerization-blueprint" title="Permanent link">&para;</a></h2>
+<pre><code class="language-text">┌────────────────────────────────────────────────────────────────────────────────┐
+│                   THE TWELVE-FACTOR CONTAINER CHECKLIST                        │
+├───────────────────┬──────────────────────────────────┬─────────────────────────┤
+│ Factor            │ Container Implementation Rule    │ Anti-Pattern to Avoid   │
+├───────────────────┼──────────────────────────────────┼─────────────────────────┤
+│ **I. Codebase**   │ 1 Dockerfile per repository      │ Multiple apps in 1 image│
+├───────────────────┼──────────────────────────────────┼─────────────────────────┤
+│ **III. Config**   │ Inject via `ENV` &amp; `--env-file`  │ Hardcoded configs in img│
+├───────────────────┼──────────────────────────────────┼─────────────────────────┤
+│ **VI. Processes** │ Stateless processes (Store state │ Writing uploads to local│
+│                   │ in Redis / S3 / Postgres)        │ container disk layer    │
+├───────────────────┼──────────────────────────────────┼─────────────────────────┤
+│ **IX. Disposability| Handle `SIGTERM` within 10s grace│ Crashing on `SIGKILL`   │
+├───────────────────┼──────────────────────────────────┼─────────────────────────┤
+│ **XI. Logs**      │ Stream raw JSON to stdout/stderr │ Writing logs to local file│
+└───────────────────┴──────────────────────────────────┴─────────────────────────┘
+</code></pre>
+<hr />
+<h2 id="3-multi-target-build-pipelines-development-testing-production">3. Multi-Target Build Pipelines: Development, Testing &amp; Production<a class="headerlink" href="#3-multi-target-build-pipelines-development-testing-production" title="Permanent link">&para;</a></h2>
+<p>Using BuildKit multi-target Dockerfiles allows a single <code>Dockerfile</code> to produce development images (with hot-reloading and debuggers), CI test images (with linters and unit tests), and hardened production images:</p>
+<pre><code class="language-dockerfile"># syntax=docker/dockerfile:1.4
+FROM node:20-alpine AS base
+WORKDIR /app
+COPY package*.json ./
+
+# TARGET: Dependencies
+FROM base AS dependencies
+RUN npm ci
+
+# TARGET: Development (Hot Reloading)
+FROM dependencies AS dev
+ENV NODE_ENV=development
+COPY . .
+CMD [&quot;npm&quot;, &quot;run&quot;, &quot;dev&quot;]
+
+# TARGET: Builder
+FROM dependencies AS builder
+COPY . .
+RUN npm run build &amp;&amp; npm prune --production
+
+# TARGET: Production (Hardened Distroless)
+FROM gcr.io/distroless/nodejs20-debian12:nonroot AS prod
+WORKDIR /app
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/node_modules ./node_modules
+USER nonroot:nonroot
+EXPOSE 3000
+CMD [&quot;dist/main.js&quot;]
+</code></pre>
+<p>To build a specific target:</p>
+<pre><code class="language-bash">docker build --target dev -t myapp:dev .
+docker build --target prod -t myapp:prod .
+</code></pre>
+<hr />
+<h2 id="4-container-security-hardening-non-root-read-only-capabilities">4. Container Security Hardening: Non-Root, Read-Only &amp; Capabilities<a class="headerlink" href="#4-container-security-hardening-non-root-read-only-capabilities" title="Permanent link">&para;</a></h2>
+<pre><code class="language-text">┌────────────────────────────────────────────────────────────────────────────────┐
+│                     CONTAINER RUNTIME HARDENING FLAGS                          │
+├────────────────────────────────────────────────────────────────────────────────┤
+│ 1. `--read-only`: Makes the container root filesystem immutable.               │
+│ 2. `--tmpfs /tmp:rw,noexec,nosuid`: Provides ephemeral RAM-backed writeable dir│
+│ 3. `--cap-drop ALL`: Drops all 38 default Linux kernel capabilities.           │
+│ 4. `--cap-add NET_BIND_SERVICE`: Adds back ONLY the capability to bind port &lt;1024│
+│ 5. `--security-opt no-new-privileges:true`: Prevents privilege escalation (`setuid`)│
+│ 6. `--user 10001:10001`: Forces execution as non-root user.                    │
+└────────────────────────────────────────────────────────────────────────────────┘
+</code></pre>
+<hr />
+<h2 id="5-certification-exam-essentials-cheat-sheet">5. Certification &amp; Exam Essentials (Cheat Sheet)<a class="headerlink" href="#5-certification-exam-essentials-cheat-sheet" title="Permanent link">&para;</a></h2>
+<ul>
+<li>⚠️ <strong><code>ADD</code> vs <code>COPY</code> Directives</strong>:</li>
+<li><code>COPY</code>: Simple, predictable file copying from host build context into image. (Recommended for 99% of use cases).</li>
+<li><code>ADD</code>: Has magical behavior—automatically extracts local <code>.tar.gz</code> archives and downloads remote HTTP URLs. Avoid <code>ADD</code> for remote URLs (it invalidates layer caching).</li>
+<li>🔒 <strong>Non-Root UID Specification</strong>: Always specify numeric UIDs (<code>USER 10001:10001</code>) rather than string usernames (<code>USER appuser</code>) so that Kubernetes security contexts can validate <code>runAsNonRoot</code> without inspecting <code>/etc/passwd</code>.</li>
+<li>⚙️ <strong>The <code>WORKDIR</code> Instruction</strong>: Always use <code>WORKDIR /path</code> to set the working directory. Never execute <code>RUN cd /path &amp;&amp; ...</code> because <code>cd</code> does <strong>not</strong> persist across subsequent Dockerfile instructions!</li>
+<li>⚠️ <strong>Healthcheck Flapping Defense</strong>: Set <code>--health-start-period=30s</code> on applications (e.g. Spring Boot / Java JVM) that require 15–20 seconds to warm up and bind ports, preventing the daemon from killing the container prematurely during startup.</li>
+</ul>
+<hr />
+<h2 id="6-comparative-analysis-matrix-application-packaging-strategies">6. Comparative Analysis Matrix: Application Packaging Strategies<a class="headerlink" href="#6-comparative-analysis-matrix-application-packaging-strategies" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Strategy</th>
+<th style="text-align: left;">Image Size</th>
+<th style="text-align: left;">Build Speed</th>
+<th style="text-align: left;">Security &amp; CVE Profile</th>
+<th style="text-align: left;">Maintenance Overhead</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Monolithic Debian</strong></td>
+<td style="text-align: left;">800 MB – 1.5 GB</td>
+<td style="text-align: left;">Slow</td>
+<td style="text-align: left;">High (hundreds of OS CVEs)</td>
+<td style="text-align: left;">High patching burden</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Alpine Linux</strong></td>
+<td style="text-align: left;">50 MB – 150 MB</td>
+<td style="text-align: left;">Fast</td>
+<td style="text-align: left;">Low (minimal packages)</td>
+<td style="text-align: left;">Moderate (musl libc)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Multi-Stage Distroless</strong></td>
+<td style="text-align: left;"><strong>15 MB – 50 MB</strong></td>
+<td style="text-align: left;"><strong>Ultra-Fast</strong></td>
+<td style="text-align: left;"><strong>Extremely Low (No shell/tools)</strong></td>
+<td style="text-align: left;"><strong>Minimal</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Single-Stage Scratch</strong></td>
+<td style="text-align: left;"><strong>&lt; 15 MB</strong></td>
+<td style="text-align: left;"><strong>Instant</strong></td>
+<td style="text-align: left;"><strong>Zero Base CVEs</strong></td>
+<td style="text-align: left;">Lowest</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="7-performance-resource-optimization">7. Performance &amp; Resource Optimization<a class="headerlink" href="#7-performance-resource-optimization" title="Permanent link">&para;</a></h2>
+<pre><code class="language-text">┌────────────────────────────────────────────────────────────────────────────────┐
+│                   APPLICATION CONTAINERIZATION TUNING MAP                      │
+├────────────────────────────────────────────────────────────────────────────────┤
+│ 1. Set `NODE_ENV=production` or `PYTHONUNBUFFERED=1` in image metadata.        │
+│ 2. Use `npm ci --only=production` instead of `npm install` for reproducible deps│
+│ 3. Compile Golang/Rust with `-ldflags=&quot;-s -w&quot;` to strip debug symbol tables.   │
+│ 4. Exclude test suites, coverage reports, and git logs via `.dockerignore`.    │
+│ 5. Keep layer count $\le 10$ by combining related `RUN` shell commands.       │
+└────────────────────────────────────────────────────────────────────────────────┘
+</code></pre>
+<hr />
+<h2 id="8-in-depth-engineering-perspectives">8. In-Depth Engineering Perspectives<a class="headerlink" href="#8-in-depth-engineering-perspectives" title="Permanent link">&para;</a></h2>
+<h3 id="security-perspective">Security Perspective<a class="headerlink" href="#security-perspective" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Software Bill of Materials (SBOM)</strong>: Modern supply chain security requires generating an SBOM during build. Use <code>docker buildx build --sbom=true --provenance=true ...</code> to embed cryptographic provenance and package manifests directly into the OCI image index.</li>
+</ul>
+<h3 id="high-availability-perspective">High Availability Perspective<a class="headerlink" href="#high-availability-perspective" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Deterministic Graceful Connection Draining</strong>: When updating backend microservices, register OS signal hooks in application frameworks (Express, FastAPI, Gin) that cease accepting new connections while completing active transactions within 15 seconds.</li>
+</ul>
+<h3 id="resilience-fault-tolerance-perspective">Resilience &amp; Fault Tolerance Perspective<a class="headerlink" href="#resilience-fault-tolerance-perspective" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Containerized Database Healthchecks</strong>: When packaging database migration sidecars, write healthcheck scripts that verify actual database TCP responsiveness (<code>pg_isready -h localhost -p 5432</code>) rather than merely checking if the process PID exists.</li>
+</ul>
+<h3 id="cost-efficiency-perspective">Cost &amp; Efficiency Perspective<a class="headerlink" href="#cost-efficiency-perspective" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Base Layer Deduplication</strong>: Standardizing all company microservices on a single shared base image (e.g. <code>internal-registry.corp/base-node20:latest</code>) ensures that when 50 microservices run on a node, the host stores the 120MB base layer <strong>exactly once in RAM and disk</strong>, saving 6GB of host storage.</li>
+</ul>
+<hr />
+<h2 id="9-step-by-step-hands-on-production-walkthrough">9. Step-by-Step Hands-On Production Walkthrough<a class="headerlink" href="#9-step-by-step-hands-on-production-walkthrough" title="Permanent link">&para;</a></h2>
+<h3 id="step-1-initialize-production-fastapi-application">Step 1: Initialize Production FastAPI Application<a class="headerlink" href="#step-1-initialize-production-fastapi-application" title="Permanent link">&para;</a></h3>
+<pre><code class="language-python"># /Users/frgonzal/Documents/vit/docker-containers/app/main.py
+import os
+import signal
+import sys
+from fastapi import FastAPI, Response, status
+
+app = FastAPI(title=&quot;Enterprise Telemetry Gateway&quot;)
+is_shutting_down = False
+
+def sigterm_handler(signum, frame):
+    global is_shutting_down
+    print(&quot;Received SIGTERM. Draining active connections...&quot;, flush=True)
+    is_shutting_down = True
+    sys.exit(0)
+
+signal.signal(signal.SIGTERM, sigterm_handler)
+
+@app.get(&quot;/&quot;)
+def read_root():
+    return {&quot;status&quot;: &quot;ONLINE&quot;, &quot;version&quot;: &quot;1.0.0&quot;, &quot;tenant&quot;: os.getenv(&quot;TENANT_ID&quot;, &quot;DEFAULT&quot;)}
+
+@app.get(&quot;/health&quot;)
+def health_check(response: Response):
+    if is_shutting_down:
+        response.status_code = status.HTTP_503_SERVICE_UNAVAILABLE
+        return {&quot;status&quot;: &quot;DRAINING&quot;}
+    return {&quot;status&quot;: &quot;HEALTHY&quot;}
+</code></pre>
+<hr />
+<h3 id="step-2-write-production-multi-stage-python-dockerfile">Step 2: Write Production Multi-Stage Python Dockerfile<a class="headerlink" href="#step-2-write-production-multi-stage-python-dockerfile" title="Permanent link">&para;</a></h3>
+<pre><code class="language-dockerfile"># /Users/frgonzal/Documents/vit/docker-containers/Dockerfile.python
+# syntax=docker/dockerfile:1.4
+
+# STAGE 1: Dependency Builder
+FROM python:3.12-slim-bookworm AS builder
+WORKDIR /app
+
+RUN apt-get update &amp;&amp; apt-get install -y --no-install-recommends \
+    gcc \
+    libpq-dev \
+    &amp;&amp; rm -rf /var/lib/apt/lists/*
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir --user -r requirements.txt
+
+# STAGE 2: Hardened Production Runtime
+FROM python:3.12-slim-bookworm AS runtime
+WORKDIR /app
+
+# Copy only installed python packages from builder:
+COPY --from=builder /root/.local /root/.local
+COPY app/ /app/
+
+ENV PATH=/root/.local/bin:$PATH \
+    PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PORT=8000
+
+# Create unprivileged application user:
+RUN groupadd -g 10001 appgroup &amp;&amp; \
+    useradd -u 10001 -g appgroup -s /sbin/nologin appuser &amp;&amp; \
+    chown -R appuser:appgroup /app
+
+USER 10001:10001
+EXPOSE 8000
+
+HEALTHCHECK --interval=10s --timeout=3s --start-period=5s --retries=3 \
+    CMD python -c &quot;import urllib.request; urllib.request.urlopen('http://localhost:8000/health')&quot; || exit 1
+
+ENTRYPOINT [&quot;uvicorn&quot;, &quot;main:app&quot;, &quot;--host&quot;, &quot;0.0.0.0&quot;, &quot;--port&quot;, &quot;8000&quot;, &quot;--workers&quot;, &quot;2&quot;]
+</code></pre>
+<hr />
+<h3 id="step-3-build-and-run-with-runtime-hardening">Step 3: Build and Run with Runtime Hardening<a class="headerlink" href="#step-3-build-and-run-with-runtime-hardening" title="Permanent link">&para;</a></h3>
+<pre><code class="language-bash"># 1. Build Production Image
+docker build \
+    --file Dockerfile.python \
+    --tag enterprise/telemetry-api:1.0.0 .
+
+# 2. Run Container with Maximum Security Flags
+docker run \
+    --detach \
+    --name telemetry-api-01 \
+    --publish 8000:8000 \
+    --memory 256m \
+    --cpus 0.5 \
+    --pids-limit 50 \
+    --cap-drop ALL \
+    --security-opt no-new-privileges:true \
+    --env &quot;TENANT_ID=FINTECH_CORP_100&quot; \
+    --restart unless-stopped \
+    enterprise/telemetry-api:1.0.0
+
+# 3. Verify Healthcheck Status
+docker inspect --format '{{.State.Health.Status}}' telemetry-api-01
+</code></pre>
+<hr />
+<h2 id="10-pure-cli-command-interface">10. Pure CLI / Command Interface<a class="headerlink" href="#10-pure-cli-command-interface" title="Permanent link">&para;</a></h2>
+<h3 id="1-build-and-tag-multi-stage-image-target">1. Build and Tag Multi-Stage Image Target<a class="headerlink" href="#1-build-and-tag-multi-stage-image-target" title="Permanent link">&para;</a></h3>
+<p>Compile specifically the production target:</p>
+<pre><code class="language-bash">docker build \
+    --target runtime \
+    --tag enterprise/telemetry-api:production \
+    --file Dockerfile.python .
+</code></pre>
+<h3 id="2-inspect-environment-variables-and-port-mappings">2. Inspect Environment Variables and Port Mappings<a class="headerlink" href="#2-inspect-environment-variables-and-port-mappings" title="Permanent link">&para;</a></h3>
+<p>Verify runtime environment variables inside running container:</p>
+<pre><code class="language-bash">docker inspect \
+    --format 'Env: {{json .Config.Env}} | Ports: {{json .NetworkSettings.Ports}}' \
+    telemetry-api-01
+</code></pre>
+<h3 id="3-generate-image-sbom-and-vulnerability-report">3. Generate Image SBOM and Vulnerability Report<a class="headerlink" href="#3-generate-image-sbom-and-vulnerability-report" title="Permanent link">&para;</a></h3>
+<p>Generate Software Bill of Materials using Docker Scout:</p>
+<pre><code class="language-bash">docker scout sbom enterprise/telemetry-api:1.0.0
+</code></pre>
+<hr />
+<h2 id="11-advanced-architecture-edge-case-failure-modes">11. Advanced Architecture &amp; Edge-Case Failure Modes<a class="headerlink" href="#11-advanced-architecture-edge-case-failure-modes" title="Permanent link">&para;</a></h2>
+<pre><code class="language-text">┌────────────────────────────────────────────────────────────────────────────────┐
+│                  CONTAINERIZATION FAILURE RECOVERY MATRIX                      │
+├──────────────────────┬────────────────────────┬────────────────────────────────┤
+│ Failure Scenario     │ Underlying Root Cause  │ Production Mitigation Runbook  │
+├──────────────────────┼────────────────────────┼────────────────────────────────┤
+│ **Permission Denied**│ Container writes to    │ Mount `--tmpfs /tmp` or change │
+│ **on Read-Only Disk**│ root in `--read-only`. │ app temp dir to `/tmp`.        │
+├──────────────────────┼────────────────────────┼────────────────────────────────┤
+│ **Python Buffered**  │ Logs not appearing in  │ Set `ENV PYTHONUNBUFFERED=1`   │
+│ **Log Delay**        │ `docker logs` stream.  │ in image Dockerfile.           │
+├──────────────────────┼────────────────────────┼────────────────────────────────┤
+│ **Privilege Dropped**│ App needs port 80/443  │ Add `--cap-add NET_BIND_SERVICE`│
+│ **Port Binding Fail**│ but runs as non-root.  │ or bind port $&gt; 1024$.         │
+├──────────────────────┼────────────────────────┼────────────────────────────────┤
+│ **Slow JVM Health**  │ Healthcheck runs before│ Configure `--health-start-     │
+│ **Flap Kill**        │ JVM warms up.          │ period=30s` in Dockerfile.     │
+└──────────────────────┴────────────────────────┴────────────────────────────────┘
+</code></pre>
+<hr />
+<h2 id="12-detailed-sub-components-subsystems">12. Detailed Sub-Components &amp; Subsystems<a class="headerlink" href="#12-detailed-sub-components-subsystems" title="Permanent link">&para;</a></h2>
+<h3 id="1-dockerfile-ast-lexer-parser">1. Dockerfile AST Lexer &amp; Parser<a class="headerlink" href="#1-dockerfile-ast-lexer-parser" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Key Concepts</strong>: Compiles Dockerfile instructions into BuildKit Low-Level Builder (LLB) directed acyclic graph operations.</li>
+<li><strong>CLI / Tool Snippet</strong>:</li>
+</ul>
+<pre><code class="language-bash">docker build --help
+</code></pre>
+<h3 id="2-linux-capabilities-bitmask-subsystem">2. Linux Capabilities Bitmask Subsystem<a class="headerlink" href="#2-linux-capabilities-bitmask-subsystem" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Key Concepts</strong>: Divides traditional root superuser privileges into 38 distinct POSIX capabilities (<code>CAP_NET_BIND_SERVICE</code>, <code>CAP_SYS_ADMIN</code>, <code>CAP_CHOWN</code>).</li>
+<li><strong>CLI / Tool Snippet</strong>:</li>
+</ul>
+<pre><code class="language-bash">capsh --print
+</code></pre>
+<h3 id="3-container-healthcheck-poller">3. Container Healthcheck Poller<a class="headerlink" href="#3-container-healthcheck-poller" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Key Concepts</strong>: Engine background timer executing probe commands in container namespaces, tracking consecutive failure thresholds.</li>
+<li><strong>CLI / Tool Snippet</strong>:</li>
+</ul>
+<pre><code class="language-bash">docker inspect --format '{{range .State.Health.Log}}{{.Output}}{{end}}' telemetry-api-01
+</code></pre>
+<h3 id="4-build-context-tarball-streamer">4. Build Context Tarball Streamer<a class="headerlink" href="#4-build-context-tarball-streamer" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Key Concepts</strong>: Packages directory tree honoring <code>.dockerignore</code> rules, streaming tar stream over UNIX socket to BuildKit daemon.</li>
+<li><strong>CLI / Tool Snippet</strong>:</li>
+</ul>
+<pre><code class="language-bash">tar -tf /dev/stdin &lt; &lt;(docker build --help) 2&gt;/dev/null || true
+</code></pre>
+<hr />
+<h2 id="13-references-the-55-rule">13. References (The 5+5 Rule)<a class="headerlink" href="#13-references-the-55-rule" title="Permanent link">&para;</a></h2>
+<h3 id="official-documentation-enterprise-standards">Official Documentation &amp; Enterprise Standards<a class="headerlink" href="#official-documentation-enterprise-standards" title="Permanent link">&para;</a></h3>
+<ol>
+<li><a href="https://12factor.net/">The Twelve-Factor App Methodology (Adam Wiggins)</a></li>
+<li><a href="https://docs.docker.com/develop/develop-images/dockerfile_best-practices/">Docker Official Documentation: Best Practices for Writing Dockerfiles</a></li>
+<li><a href="https://opencontainers.org/specs/image/">Open Container Initiative (OCI): Image Configuration Specification</a></li>
+<li><a href="https://csrc.nist.gov/publications/detail/sp/800-190/final">NIST SP 800-190: Application Container Security Guide</a></li>
+<li><a href="https://www.cisecurity.org/benchmark/docker">Center for Internet Security (CIS): Docker Benchmark v1.6.0</a></li>
+</ol>
+<h3 id="authoritative-engineering-blogs-architecture-deep-dives">Authoritative Engineering Blogs &amp; Architecture Deep Dives<a class="headerlink" href="#authoritative-engineering-blogs-architecture-deep-dives" title="Permanent link">&para;</a></h3>
+<ol start="6">
+<li><a href="https://martinfowler.com/">Martin Fowler: Twelve-Factor Application Packaging with Containers</a></li>
+<li><a href="https://www.lizrice.com/">Liz Rice: Principles of Container Hardening &amp; Capability Dropping</a></li>
+<li><a href="https://jvns.ca/">Julia Evans: Understanding Linux Capabilities and Non-Root Containers</a></li>
+<li><a href="https://www.brendangregg.com/">Brendan Gregg: Application Performance Profiling in Container Environments</a></li>
+<li><a href="https://www.kernel.org/">High-Performance Linux Systems: Python and Node.js Signal Traps in Containers</a></li>
+</ol>
+<hr />
+<h2 id="14-universal-finops-resource-cost-governance">14. Universal FinOps &amp; Resource Cost Governance<a class="headerlink" href="#14-universal-finops-resource-cost-governance" title="Permanent link">&para;</a></h2>
+<pre><code class="language-text">┌────────────────────────────────────────────────────────────────────────────────┐
+│                 CONTAINERIZATION FINOPS SAVINGS MATRIX                         │
+├──────────────────────────┬──────────────────────────┬──────────────────────────┤
+│ Optimization Strategy    │ Technical Mechanism      │ Measurable FinOps ROI    │
+├──────────────────────────┼──────────────────────────┼──────────────────────────┤
+│ **Alpine/Distroless**    │ Strips OS package manager│ Reduces cloud image      │
+│                          │ and unused binaries      │ registry storage by 80%  │
+├──────────────────────────┼──────────────────────────┼──────────────────────────┤
+│ **Layer Ordering**       │ Caches dependency installs│ Cuts CI build compute    │
+│                          │ across daily commits     │ time from 10m to 30s     │
+├──────────────────────────┼──────────────────────────┼──────────────────────────┤
+│ **Non-Root Hardening**   │ Prevents container host  │ Eliminates multi-million │
+│                          │ breakout vulnerabilities │ dollar breach liability  │
+├──────────────────────────┼──────────────────────────┼──────────────────────────┤
+│ **Fast Startup Timing**  │ Lightweight containers   │ Reduces auto-scaler warm-│
+│                          │ boot in &lt; 500ms          │ up instance provisioning │
+└──────────────────────────┴──────────────────────────┴──────────────────────────┘
+</code></pre>
+<h3 id="1-developer-build-velocity-ci-minute-savings">1. Developer Build Velocity &amp; CI Minute Savings<a class="headerlink" href="#1-developer-build-velocity-ci-minute-savings" title="Permanent link">&para;</a></h3>
+<p>In an engineering team of 50 developers executing 200 builds daily:</p>
+<ul>
+<li>Poorly structured Dockerfiles without layer caching take 8 minutes per build ($200 \times 8 = 1,600\text{ build minutes daily}$).</li>
+<li>Reordering Dockerfile instructions to copy dependency files (<code>package.json</code> / <code>requirements.txt</code>) prior to code drops rebuild times to <strong>35 seconds</strong>.</li>
+<li>Total daily build time drops from 1,600 minutes to <strong>116 minutes</strong> (a 92% reduction).</li>
+<li><strong>FinOps ROI</strong>: Saves <strong>\$3,500/year in CI runner fees</strong> and reclaims <strong>1,200 hours of developer waiting time annually</strong>.</li>
+</ul>
+<h3 id="2-auto-scaling-compute-headroom-optimization">2. Auto-Scaling Compute Headroom Optimization<a class="headerlink" href="#2-auto-scaling-compute-headroom-optimization" title="Permanent link">&para;</a></h3>
+<p>When cloud auto-scalers (Kubernetes HPA / AWS ECS) scale up backend containers during traffic spikes:</p>
+<ul>
+<li>A heavy 1.5GB container requires 45 seconds to pull, unpack, and initialize on a new node, forcing operations to maintain 30% idle buffer capacity to handle surges ($~\$1,200/\text{month}$).</li>
+<li>A lightweight 25MB container pulls and starts in <strong>1.4 seconds</strong>, enabling just-in-time scaling.</li>
+<li>Idle buffer compute headroom drops from 30% to <strong>5%</strong>, saving <strong>\$12,000/year in idle cloud compute spend</strong>.</li>
+</ul>
+              
+            </div>
+          </div><footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

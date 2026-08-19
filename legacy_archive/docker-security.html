@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Module 09: Docker Security, Hardening, Rootless Mode &amp; Compliance - Docker Containers</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Module 09: Docker Security, Hardening, Rootless Mode \u0026amp; Compliance";
+        var mkdocs_page_input_path = "legacy_archive/docker-security.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/yaml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/bash.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/dockerfile.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../index.html" class="icon icon-home"> Docker Containers
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../index.html">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="../getting-started.md">Getting Started</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="../docker-engine.md">Docker Engine</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="../working-with-images.md">Working with Images</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="../working-with-containers.md">Working with Containers</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="../containerizing_an_app.md">Containerizing an Application</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="../multi-container-apps.md">Multi-container apps with Compose</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="../docker-and-wasm.md">Docker and Wasm</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="../docker-swarm.md">Docker Swarm</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="../docker-networking.md">Docker Networking</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="../docker-volumes.md">Docker Volumes</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="../docker-security.md">Docker Security</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="../docker-docs.md">Docker Docs</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="../docker-cheatsheet.md">Docker CheatSheet</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="../apache-kafka-introduction.md">Apache Kafka</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Docker Containers</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html" class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Module 09: Docker Security, Hardening, Rootless Mode &amp; Compliance</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="module-09-docker-security-hardening-rootless-mode-compliance">Module 09: Docker Security, Hardening, Rootless Mode &amp; Compliance<a class="headerlink" href="#module-09-docker-security-hardening-rootless-mode-compliance" title="Permanent link">&para;</a></h1>
+<p><strong>Track:</strong> Docker Container Systems &amp; Virtualization Architecture
+<strong>Category:</strong> Container Security, Rootless Execution, Seccomp, AppArmor &amp; CIS Benchmarks
+<strong>Standard Identifier:</strong> <code>DOC-STD-UNIVERSAL-2026</code>
+<strong>Status:</strong> ✅ Completed</p>
+<hr />
+<h2 id="table-of-contents">📑 Table of Contents<a class="headerlink" href="#table-of-contents" title="Permanent link">&para;</a></h2>
+<ol>
+<li><a href="#1-high-level-overview--executive-summary">High-Level Overview &amp; Executive Summary</a></li>
+<li><a href="#2-the-defense-in-depth-container-security-model">The Defense-in-Depth Container Security Model</a></li>
+<li><a href="#3-linux-capabilities-seccomp-bpf--mandatory-access-control-apparmorselinux">Linux Capabilities, Seccomp BPF &amp; Mandatory Access Control (AppArmor/SELinux)</a></li>
+<li><a href="#4-rootless-docker-daemon-architecture--user-namespaces">Rootless Docker Daemon Architecture &amp; User Namespaces</a></li>
+<li><a href="#5-supply-chain-security-sboms-image-signing-cosign--cve-scanning">Supply Chain Security: SBOMs, Image Signing (Cosign) &amp; CVE Scanning</a></li>
+<li><a href="#6-certification--exam-essentials-cheat-sheet">Certification &amp; Exam Essentials (Cheat Sheet)</a></li>
+<li><a href="#7-comparative-analysis-matrix-container-security-enforcement-models">Comparative Analysis Matrix: Container Security Enforcement Models</a></li>
+<li><a href="#8-performance--resource-optimization">Performance &amp; Resource Optimization</a></li>
+<li><a href="#9-in-depth-engineering-perspectives">In-Depth Engineering Perspectives</a></li>
+<li><a href="#10-well-architected-framework-alignment">Well-Architected Framework Alignment</a></li>
+<li><a href="#11-step-by-step-hands-on-production-walkthrough">Step-by-Step Hands-On Production Walkthrough</a></li>
+<li><a href="#12-pure-cli--command-interface">Pure CLI / Command Interface</a></li>
+<li><a href="#13-advanced-architecture--edge-case-failure-modes">Advanced Architecture &amp; Edge-Case Failure Modes</a></li>
+<li><a href="#14-detailed-sub-components--subsystems">Detailed Sub-Components &amp; Subsystems</a></li>
+<li><a href="#15-references-the-55-rule">References (The 5+5 Rule)</a></li>
+<li><a href="#16-universal-finops--resource-cost-governance">Universal FinOps &amp; Resource Cost Governance</a></li>
+</ol>
+<hr />
+<h2 id="1-high-level-overview-executive-summary">1. High-Level Overview &amp; Executive Summary<a class="headerlink" href="#1-high-level-overview-executive-summary" title="Permanent link">&para;</a></h2>
+<p>Enterprise container security requires establishing a multi-layered <strong>Defense-in-Depth Security Model</strong> across the entire container lifecycle—from software supply chain verification to kernel runtime isolation. Because containers share the host Linux kernel, an un-hardened container process running as <code>root</code> (UID 0) presents a severe privilege escalation risk if a kernel vulnerability or container escape flaw (e.g. <code>runc</code> CVE-2019-5736, CVE-2024-21626) is exploited.</p>
+<p>Securing the container runtime demands: dropping all non-essential Linux Capabilities (<code>--cap-drop ALL</code>), restricting dangerous kernel syscalls via <strong>Seccomp BPF profiles</strong>, enforcing Mandatory Access Control (<strong>AppArmor / SELinux</strong>), locking the root filesystem to read-only (<code>--read-only</code>), eliminating privilege escalation (<code>--security-opt no-new-privileges:true</code>), and deploying <strong>Rootless Docker</strong>.</p>
+<pre><code class="language-text">┌────────────────────────────────────────────────────────────────────────────────┐
+│               DEFENSE-IN-DEPTH CONTAINER SECURITY ARCHITECTURE                 │
+├────────────────────────────────────────────────────────────────────────────────┤
+│ 1. SUPPLY CHAIN SECURITY : Signed Images (Cosign), Distroless, SBOM generation │
+│         │                                                                      │
+│         ▼                                                                      │
+│ 2. DAEMON LAYER HARDENING: Rootless Docker Daemon, mTLS Protected Socket      │
+│         │                                                                      │
+│         ▼                                                                      │
+│ 3. USER NAMESPACE MAP    : Maps Container UID 0 ──► Host Unprivileged UID 100000│
+│         │                                                                      │
+│         ▼                                                                      │
+│ 4. LINUX CAPABILITY DROP : Drops 38 Root Capabilities (`--cap-drop ALL`)       │
+│         │                                                                      │
+│         ▼                                                                      │
+│ 5. SECCOMP SYSCALL FILTER: Blocks 40+ dangerous kernel syscalls (BPF sandbox)  │
+│         │                                                                      │
+│         ▼                                                                      │
+│ 6. APPARMOR / SELINUX MAC: Enforces Mandatory Access Control on files &amp; sockets│
+│         │                                                                      │
+│         ▼                                                                      │
+│ 7. IMMUTABLE FILESYSTEM  : Read-Only Root Filesystem (`--read-only` + tmpfs)   │
+└────────────────────────────────────────────────────────────────────────────────┘
+</code></pre>
+<h3 id="executive-summary-for-managers-non-technical-stakeholders">👔 Executive Summary (For Managers &amp; Non-Technical Stakeholders)<a class="headerlink" href="#executive-summary-for-managers-non-technical-stakeholders" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Business Purpose</strong>: Prevents cybercriminals from hacking cloud servers, stealing confidential customer databases, or deploying ransomware through vulnerable containerized applications.</li>
+<li><strong>How It Works</strong>: Applies zero-trust security fences around every container. It strips administrative superpowers from software processes, locks files so malware cannot modify system code, and scans images for known vulnerabilities before deployment.</li>
+<li><strong>Key Business Value &amp; ROI</strong>: Satisfies strict enterprise regulatory compliance mandates (SOC 2, ISO 27001, PCI-DSS, HIPAA), prevents multimillion-dollar security breach liability, and protects enterprise brand trust.</li>
+</ul>
+<hr />
+<h2 id="2-the-defense-in-depth-container-security-model">2. The Defense-in-Depth Container Security Model<a class="headerlink" href="#2-the-defense-in-depth-container-security-model" title="Permanent link">&para;</a></h2>
+<pre><code class="language-text">┌────────────────────────────────────────────────────────────────────────────────┐
+│                     CONTAINER SECURITY THREAT DEFENSE MATRIX                   │
+├───────────────────┬──────────────────────────────────┬─────────────────────────┤
+│ Security Tier     │ Technical Mechanism              │ Threat Neutralized      │
+├───────────────────┼──────────────────────────────────┼─────────────────────────┤
+│ **Supply Chain**  │ Image signing with Cosign        │ Malicious tampering and │
+│                   │ and automated CVE scanners       │ supply chain poisoning  │
+├───────────────────┼──────────────────────────────────┼─────────────────────────┤
+│ **User Mapping**  │ User Namespaces (`userns-remap`) │ Container breakout root │
+│                   │                                  │ takeover on host OS     │
+├───────────────────┼──────────────────────────────────┼─────────────────────────┤
+│ **Kernel Filter** │ Seccomp BPF System Call Filter   │ Zero-day Linux kernel   │
+│                   │                                  │ syscall exploitation    │
+├───────────────────┼──────────────────────────────────┼─────────────────────────┤
+│ **Storage Lock**  │ Immutable `--read-only` root fs  │ Persistence of web shell│
+│                   │                                  │ malware and rootkits    │
+├───────────────────┼──────────────────────────────────┼─────────────────────────┤
+│ **Privilege Lock**│ `--security-opt no-new-privileges`│ `setuid` binary abuse   │
+│                   │                                  │ privilege escalation    │
+└───────────────────┴──────────────────────────────────┴─────────────────────────┘
+</code></pre>
+<hr />
+<h2 id="3-linux-capabilities-seccomp-bpf-mandatory-access-control-apparmorselinux">3. Linux Capabilities, Seccomp BPF &amp; Mandatory Access Control (AppArmor/SELinux)<a class="headerlink" href="#3-linux-capabilities-seccomp-bpf-mandatory-access-control-apparmorselinux" title="Permanent link">&para;</a></h2>
+<h3 id="31-linux-capabilities-granular-hardening">3.1 Linux Capabilities Granular Hardening<a class="headerlink" href="#31-linux-capabilities-granular-hardening" title="Permanent link">&para;</a></h3>
+<p>In Linux, the traditional <code>root</code> user possesses 38 distinct capabilities. Containers run with a default set of 14 capabilities (e.g. <code>CAP_CHOWN</code>, <code>CAP_FOWNER</code>, <code>CAP_NET_RAW</code>).</p>
+<p><strong>Production Principle of Least Privilege</strong>: Drop all capabilities and add back strictly what the application requires:</p>
+<pre><code class="language-bash">docker run \
+    --cap-drop ALL \
+    --cap-add NET_BIND_SERVICE \
+    nginxinc/nginx-unprivileged:alpine
+</code></pre>
+<h3 id="32-seccomp-secure-computing-mode-bpf-filtering">3.2 Seccomp (Secure Computing Mode) BPF Filtering<a class="headerlink" href="#32-seccomp-secure-computing-mode-bpf-filtering" title="Permanent link">&para;</a></h3>
+<p>Seccomp uses Berkeley Packet Filter (BPF) programs to intercept and filter system calls before the Linux kernel processes them. Docker's default Seccomp profile blocks over <strong>40 dangerous system calls</strong>, including:</p>
+<ul>
+<li><code>reboot</code> / <code>kexec_load</code>: Prevents container from rebooting the physical host.</li>
+<li><code>ptrace</code>: Prevents process memory inspection and code injection into other processes.</li>
+<li><code>sys_chroot</code> / <code>pivot_root</code>: Blocks escape from filesystem confinement.</li>
+<li><code>keyctl</code> / <code>add_key</code>: Blocks access to the kernel's cryptographic keyring.</li>
+</ul>
+<hr />
+<h2 id="4-rootless-docker-daemon-architecture-user-namespaces">4. Rootless Docker Daemon Architecture &amp; User Namespaces<a class="headerlink" href="#4-rootless-docker-daemon-architecture-user-namespaces" title="Permanent link">&para;</a></h2>
+<p>In standard Docker installations, the <code>dockerd</code> daemon runs as the host <code>root</code> user, listening on <code>/var/run/docker.sock</code>. Anyone with access to the Docker socket can obtain full host root privileges.</p>
+<h3 id="41-rootless-docker-mechanics">4.1 Rootless Docker Mechanics<a class="headerlink" href="#41-rootless-docker-mechanics" title="Permanent link">&para;</a></h3>
+<p>In <strong>Rootless Docker</strong>, both <code>dockerd</code> and the containers run inside an unprivileged <strong>User Namespace</strong>:</p>
+<ul>
+<li>The daemon runs under an unprivileged host user (e.g. UID 1000).</li>
+<li>Inside the container, processes appear to be UID 0 (root), but on the host OS, they map to unprivileged sub-UIDs (e.g. UID 100000–165535).</li>
+<li>If an attacker completely escapes the container, they hold <strong>zero root privileges on the host system</strong>!</li>
+</ul>
+<hr />
+<h2 id="5-supply-chain-security-sboms-image-signing-cosign-cve-scanning">5. Supply Chain Security: SBOMs, Image Signing (Cosign) &amp; CVE Scanning<a class="headerlink" href="#5-supply-chain-security-sboms-image-signing-cosign-cve-scanning" title="Permanent link">&para;</a></h2>
+<pre><code class="language-text">┌────────────────────────────────────────────────────────────────────────────────┐
+│               ENTERPRISE CONTAINER SUPPLY CHAIN PIPELINE                       │
+├────────────────────────────────────────────────────────────────────────────────┤
+│ [Developer Commit] ──► [GitHub Actions CI / BuildKit]                          │
+│                                │                                               │
+│                                ▼ (Build Minimal Distroless Image)              │
+│ ┌────────────────────────────────────────────────────────────────────────────┐ │
+│ │ 1. Vulnerability Scan : Docker Scout / Trivy blocks Critical/High CVEs     │ │
+│ ├────────────────────────────────────────────────────────────────────────────┤ │
+│ │ 2. SBOM Generation    : Embeds SPDX / CycloneDX bill-of-materials packages │ │
+│ ├────────────────────────────────────────────────────────────────────────────┤ │
+│ │ 3. Cryptographic Sign : Cosign signs image digest with KMS private key     │ │
+│ └──────────────────────────────┬─────────────────────────────────────────────┘ │
+│                                │ (Pushes Signed OCI Image + Attestation)       │
+│                                ▼                                               │
+│ ┌────────────────────────────────────────────────────────────────────────────┐ │
+│ │ OCI CONTAINER REGISTRY (AWS ECR / Google Artifact Registry / Harbor)       │ │
+│ └──────────────────────────────┬─────────────────────────────────────────────┘ │
+│                                │ (Admission Controller validates signature)    │
+│                                ▼                                               │
+│ ┌────────────────────────────────────────────────────────────────────────────┐ │
+│ │ PRODUCTION RUNTIME HOST (Rejects unsigned or unverified images!)           │ │
+│ └────────────────────────────────────────────────────────────────────────────┘ │
+└────────────────────────────────────────────────────────────────────────────────┘
+</code></pre>
+<hr />
+<h2 id="6-certification-exam-essentials-cheat-sheet">6. Certification &amp; Exam Essentials (Cheat Sheet)<a class="headerlink" href="#6-certification-exam-essentials-cheat-sheet" title="Permanent link">&para;</a></h2>
+<ul>
+<li>⚠️ <strong>Docker Daemon Socket Exposure Danger</strong>: Exposing <code>/var/run/docker.sock</code> over an unencrypted TCP port (<code>-H tcp://0.0.0.0:2375</code>) allows remote attackers to compromise the entire server in seconds (<code>docker -H host:2375 run -v /:/host -it alpine chroot /host</code>). Always protect TCP sockets with <strong>Mutual TLS (mTLS)</strong> on port 2376!</li>
+<li>🔒 <strong>The <code>--privileged</code> Anti-Pattern</strong>: Running a container with <code>--privileged</code> disables all Seccomp filters, AppArmor profiles, and cgroup restrictions, granting the container direct access to all host kernel devices (<code>/dev/*</code>). <strong>The <code>--privileged</code> flag is strictly forbidden in production!</strong></li>
+<li>⚙️ <strong><code>no-new-privileges</code></strong>: When set (<code>--security-opt no-new-privileges:true</code>), processes inside the container cannot gain new privileges through <code>setuid</code> or <code>setgid</code> binaries (e.g. <code>sudo</code>, <code>ping</code>).</li>
+<li>⚠️ <strong>CIS Docker Benchmark Audit</strong>: Run <code>docker-bench-security</code> to audit your Docker daemon and host configuration against the official Center for Internet Security (CIS) compliance baseline.</li>
+</ul>
+<hr />
+<h2 id="7-comparative-analysis-matrix-container-security-enforcement-models">7. Comparative Analysis Matrix: Container Security Enforcement Models<a class="headerlink" href="#7-comparative-analysis-matrix-container-security-enforcement-models" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Security Control</th>
+<th style="text-align: left;">Protection Mechanism</th>
+<th style="text-align: left;">Enforcement Layer</th>
+<th style="text-align: left;">Performance Overhead</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Non-Root Execution</strong></td>
+<td style="text-align: left;">Process UID separation</td>
+<td style="text-align: left;">Linux Kernel (POSIX)</td>
+<td style="text-align: left;"><strong>Zero (0%)</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Linux Capabilities Drop</strong></td>
+<td style="text-align: left;">Strips 38 kernel privileges</td>
+<td style="text-align: left;">Linux Kernel Capability bitmask</td>
+<td style="text-align: left;"><strong>Zero (0%)</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Seccomp Syscall Filtering</strong></td>
+<td style="text-align: left;">BPF kernel syscall filter</td>
+<td style="text-align: left;">Linux Kernel Seccomp subsystem</td>
+<td style="text-align: left;">&lt; 0.1% CPU</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>AppArmor / SELinux</strong></td>
+<td style="text-align: left;">Mandatory Access Control (MAC)</td>
+<td style="text-align: left;">Linux Security Module (LSM)</td>
+<td style="text-align: left;">&lt; 0.5% CPU</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>User Namespaces</strong></td>
+<td style="text-align: left;">Remaps UID 0 to UID 100000</td>
+<td style="text-align: left;">Linux User Namespace driver</td>
+<td style="text-align: left;"><strong>Zero (0%)</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Rootless Docker</strong></td>
+<td style="text-align: left;">Daemon runs as standard user</td>
+<td style="text-align: left;">User Namespace + slirp4netns</td>
+<td style="text-align: left;">Minimal network</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="8-performance-resource-optimization">8. Performance &amp; Resource Optimization<a class="headerlink" href="#8-performance-resource-optimization" title="Permanent link">&para;</a></h2>
+<pre><code class="language-text">┌────────────────────────────────────────────────────────────────────────────────┐
+│                        SECURITY TUNING PLAYBOOK                                │
+├────────────────────────────────────────────────────────────────────────────────┤
+│ 1. Deploy Distroless images to eliminate 99% of CVE vulnerabilities.           │
+│ 2. Enforce `no-new-privileges:true` on all production container executions.    │
+│ 3. Drop all capabilities (`--cap-drop ALL`) and add back only required ones.  │
+│ 4. Configure `--read-only` with RAM-backed `--tmpfs /tmp` for scratch space.  │
+│ 5. Audit host configurations against CIS Docker Benchmark regularly.          │
+└────────────────────────────────────────────────────────────────────────────────┘
+</code></pre>
+<hr />
+<h2 id="9-step-by-step-hands-on-production-walkthrough">9. Step-by-Step Hands-On Production Walkthrough<a class="headerlink" href="#9-step-by-step-hands-on-production-walkthrough" title="Permanent link">&para;</a></h2>
+<h3 id="step-1-configure-hardened-production-daemon-with-tls-security-options">Step 1: Configure Hardened Production Daemon with TLS &amp; Security Options<a class="headerlink" href="#step-1-configure-hardened-production-daemon-with-tls-security-options" title="Permanent link">&para;</a></h3>
+<pre><code class="language-json">// /etc/docker/daemon.json
+{
+  &quot;icc&quot;: false,
+  &quot;no-new-privileges&quot;: true,
+  &quot;live-restore&quot;: true,
+  &quot;userland-proxy&quot;: false,
+  &quot;storage-driver&quot;: &quot;overlay2&quot;,
+  &quot;log-driver&quot;: &quot;json-file&quot;,
+  &quot;log-opts&quot;: {
+    &quot;max-size&quot;: &quot;20m&quot;,
+    &quot;max-file&quot;: &quot;3&quot;
+  },
+  &quot;default-ulimits&quot;: {
+    &quot;nofile&quot;: {
+      &quot;Name&quot;: &quot;nofile&quot;,
+      &quot;Hard&quot;: 65535,
+      &quot;Soft&quot;: 65535
+    },
+    &quot;nproc&quot;: {
+      &quot;Name&quot;: &quot;nproc&quot;,
+      &quot;Hard&quot;: 4096,
+      &quot;Soft&quot;: 4096
+    }
+  }
+}
+</code></pre>
+<hr />
+<h3 id="step-2-deploy-zero-trust-production-web-container">Step 2: Deploy Zero-Trust Production Web Container<a class="headerlink" href="#step-2-deploy-zero-trust-production-web-container" title="Permanent link">&para;</a></h3>
+<p>Launch an NGINX container with maximum defense-in-depth isolation flags:</p>
+<pre><code class="language-bash">docker run \
+    --detach \
+    --name zero-trust-web \
+    --publish 8443:8080 \
+    --memory 256m \
+    --cpus 0.5 \
+    --pids-limit 50 \
+    --restart unless-stopped \
+    --read-only \
+    --cap-drop ALL \
+    --cap-add NET_BIND_SERVICE \
+    --security-opt no-new-privileges:true \
+    --tmpfs /tmp:rw,noexec,nosuid,size=32m \
+    --tmpfs /var/run:rw,noexec,nosuid,size=16m \
+    --tmpfs /var/cache/nginx:rw,noexec,nosuid,size=64m \
+    --health-cmd &quot;curl -f http://localhost:8080/ || exit 1&quot; \
+    nginxinc/nginx-unprivileged:alpine
+</code></pre>
+<hr />
+<h3 id="step-3-audit-and-verify-runtime-security-constraints">Step 3: Audit and Verify Runtime Security Constraints<a class="headerlink" href="#step-3-audit-and-verify-runtime-security-constraints" title="Permanent link">&para;</a></h3>
+<pre><code class="language-bash"># 1. Verify that Root Filesystem is Immutable (Read-Only)
+docker exec zero-trust-web touch /test_file &amp;&amp; echo &quot;FAIL: Root is writeable!&quot; || echo &quot;SUCCESS: Root filesystem is read-only!&quot;
+
+# 2. Verify that Linux Capabilities are Stripped (Only CAP_NET_BIND_SERVICE remains)
+docker inspect zero-trust-web --format 'CapDrop: {{json .HostConfig.CapDrop}} | CapAdd: {{json .HostConfig.CapAdd}}'
+
+# 3. Verify no-new-privileges is Active
+docker inspect zero-trust-web --format 'SecurityOpt: {{json .HostConfig.SecurityOpt}}'
+</code></pre>
+<hr />
+<h2 id="10-pure-cli-command-interface">10. Pure CLI / Command Interface<a class="headerlink" href="#10-pure-cli-command-interface" title="Permanent link">&para;</a></h2>
+<h3 id="1-execute-vulnerability-cve-scan-with-docker-scout">1. Execute Vulnerability CVE Scan with Docker Scout<a class="headerlink" href="#1-execute-vulnerability-cve-scan-with-docker-scout" title="Permanent link">&para;</a></h3>
+<p>Inspect critical security advisories on target images:</p>
+<pre><code class="language-bash">docker scout cves \
+    --only-severity critical,high \
+    nginx:alpine
+</code></pre>
+<h3 id="2-audit-container-system-calls-and-seccomp-profile">2. Audit Container System Calls and Seccomp Profile<a class="headerlink" href="#2-audit-container-system-calls-and-seccomp-profile" title="Permanent link">&para;</a></h3>
+<p>Verify attached Seccomp filter status:</p>
+<pre><code class="language-bash">docker inspect zero-trust-web \
+    --format 'Seccomp Profile: {{.HostConfig.SecurityOpt}}'
+</code></pre>
+<h3 id="3-run-cis-docker-security-benchmark-audit">3. Run CIS Docker Security Benchmark Audit<a class="headerlink" href="#3-run-cis-docker-security-benchmark-audit" title="Permanent link">&para;</a></h3>
+<p>Execute automated security benchmark scanner against host:</p>
+<pre><code class="language-bash">docker run \
+    --rm \
+    --net host \
+    --pid host \
+    --userns host \
+    --cap-add audit_control \
+    -v /etc:/etc:ro \
+    -v /var/lib:/var/lib:ro \
+    -v /var/run/docker.sock:/var/run/docker.sock:ro \
+    docker/docker-bench-security
+</code></pre>
+<hr />
+<h2 id="11-advanced-architecture-edge-case-failure-modes">11. Advanced Architecture &amp; Edge-Case Failure Modes<a class="headerlink" href="#11-advanced-architecture-edge-case-failure-modes" title="Permanent link">&para;</a></h2>
+<pre><code class="language-text">┌────────────────────────────────────────────────────────────────────────────────┐
+│                    SECURITY FAILURE RECOVERY MATRIX                            │
+├──────────────────────┬────────────────────────┬────────────────────────────────┤
+│ Failure Scenario     │ Underlying Root Cause  │ Production Mitigation Runbook  │
+├──────────────────────┼────────────────────────┼────────────────────────────────┤
+│ **App Crash on**     │ Application writes to  │ Mount `--tmpfs /path:rw,noexec`│
+│ **`--read-only`**    │ hardcoded directory.   │ for the required scratch path. │
+├──────────────────────┼────────────────────────┼────────────────────────────────┤
+│ **Port Binding Fail**│ App needs port 80 but  │ Add `--cap-add NET_BIND_SERVICE`│
+│ **after Cap Drop**   │ lacks capability.      │ or bind port $&gt; 1024$.         │
+├──────────────────────┼────────────────────────┼────────────────────────────────┤
+│ **Syscall Blocked**  │ Custom syscall blocked │ Create custom Seccomp JSON     │
+│ **by Seccomp**       │ by default profile.    │ profile allowing required call.│
+├──────────────────────┼────────────────────────┼────────────────────────────────┤
+│ **Rootless Socket**  │ Client connecting to   │ Set `DOCKER_HOST=unix:///run/  │
+│ **Not Found Error**  │ root socket path.      │ user/1000/docker.sock`.        │
+└──────────────────────┴────────────────────────┴────────────────────────────────┘
+</code></pre>
+<hr />
+<h2 id="12-detailed-sub-components-subsystems">12. Detailed Sub-Components &amp; Subsystems<a class="headerlink" href="#12-detailed-sub-components-subsystems" title="Permanent link">&para;</a></h2>
+<h3 id="1-seccomp-bpf-jit-compiler">1. Seccomp BPF JIT Compiler<a class="headerlink" href="#1-seccomp-bpf-jit-compiler" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Key Concepts</strong>: Compiles Seccomp JSON rules into Berkeley Packet Filter bytecode executed in the kernel entry path on every system call.</li>
+<li><strong>CLI / Tool Snippet</strong>:</li>
+</ul>
+<pre><code class="language-bash">docker info --format '{{.SecurityOptions}}'
+</code></pre>
+<h3 id="2-apparmor-lsm-enforcer">2. AppArmor LSM Enforcer<a class="headerlink" href="#2-apparmor-lsm-enforcer" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Key Concepts</strong>: Linux Security Module enforcing path-based mandatory access control profiles (<code>docker-default</code>) on file read/write operations.</li>
+<li><strong>CLI / Tool Snippet</strong>:</li>
+</ul>
+<pre><code class="language-bash">aa-status 2&gt;/dev/null || true
+</code></pre>
+<h3 id="3-cosign-oci-signature-verifier">3. Cosign OCI Signature Verifier<a class="headerlink" href="#3-cosign-oci-signature-verifier" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Key Concepts</strong>: Cryptographic signature validation engine verifying ECDSA / Ed25519 signatures stored as OCI artifacts in container registries.</li>
+<li><strong>CLI / Tool Snippet</strong>:</li>
+</ul>
+<pre><code class="language-bash">cosign version 2&gt;/dev/null || true
+</code></pre>
+<h3 id="4-user-namespace-remapper-subsystem">4. User Namespace Remapper Subsystem<a class="headerlink" href="#4-user-namespace-remapper-subsystem" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Key Concepts</strong>: Coordinates <code>/etc/subuid</code> and <code>/etc/subgid</code> allocations, configuring kernel UID/GID offset translation tables for container scopes.</li>
+<li><strong>CLI / Tool Snippet</strong>:</li>
+</ul>
+<pre><code class="language-bash">cat /etc/subuid 2&gt;/dev/null || true
+</code></pre>
+<hr />
+<h2 id="13-references-the-55-rule">13. References (The 5+5 Rule)<a class="headerlink" href="#13-references-the-55-rule" title="Permanent link">&para;</a></h2>
+<h3 id="official-documentation-security-standards">Official Documentation &amp; Security Standards<a class="headerlink" href="#official-documentation-security-standards" title="Permanent link">&para;</a></h3>
+<ol>
+<li><a href="https://docs.docker.com/engine/security/">Docker Official Documentation: Engine Security Guidelines</a></li>
+<li><a href="https://www.cisecurity.org/benchmark/docker">Center for Internet Security (CIS): Docker Benchmark v1.6.0</a></li>
+<li><a href="https://csrc.nist.gov/publications/detail/sp/800-190/final">NIST SP 800-190: Application Container Security Guide</a></li>
+<li><a href="https://docs.kernel.org/userspace-api/seccomp_filter.html">Linux Kernel Organization: Seccomp BPF System Call Filtering</a></li>
+<li><a href="https://docs.sigstore.dev/cosign/overview/">Sigstore Cosign: Container Signing, Verification and Storage</a></li>
+</ol>
+<h3 id="authoritative-engineering-blogs-architecture-deep-dives">Authoritative Engineering Blogs &amp; Architecture Deep Dives<a class="headerlink" href="#authoritative-engineering-blogs-architecture-deep-dives" title="Permanent link">&para;</a></h3>
+<ol start="6">
+<li><a href="https://www.lizrice.com/">Liz Rice: Container Security: Fundamental Technology of Containers (O'Reilly)</a></li>
+<li><a href="https://jvns.ca/">Julia Evans: How Seccomp Filters System Calls in Linux Containers</a></li>
+<li><a href="https://www.brendangregg.com/">Brendan Gregg: Linux Security Auditing and BPF Kernel Monitoring</a></li>
+<li><a href="https://martinfowler.com/">Martin Fowler: Continuous Security and Software Supply Chain Integrity</a></li>
+<li><a href="https://www.kernel.org/">High-Performance Linux Systems: Hardening Linux Namespaces and User IDs</a></li>
+</ol>
+<hr />
+<h2 id="14-universal-finops-resource-cost-governance">14. Universal FinOps &amp; Resource Cost Governance<a class="headerlink" href="#14-universal-finops-resource-cost-governance" title="Permanent link">&para;</a></h2>
+<pre><code class="language-text">┌────────────────────────────────────────────────────────────────────────────────┐
+│                      SECURITY FINOPS SAVINGS MATRIX                            │
+├──────────────────────────┬──────────────────────────┬──────────────────────────┤
+│ Optimization Strategy    │ Technical Mechanism      │ Measurable FinOps ROI    │
+├──────────────────────────┼──────────────────────────┼──────────────────────────┤
+│ **Zero-Trust Hardening** │ Blocks container escape  │ Prevents \$4M+ enterprise│
+│                          │ lateral host breaches    │ breach liability &amp; fines │
+├──────────────────────────┼──────────────────────────┼──────────────────────────┤
+│ **Distroless Base**      │ Eliminates 95% of CVEs   │ Saves 800+ hours of team │
+│                          │ needing emergency patches│ emergency patching labor │
+├──────────────────────────┼──────────────────────────┼──────────────────────────┤
+│ **Automated SBOM/Scan**  │ Catches CVEs at build    │ Eliminates expensive 3rd-│
+│                          │ in CI/CD pipeline        │ party runtime WAF costs  │
+├──────────────────────────┼──────────────────────────┼──────────────────────────┤
+│ **Rootless Multi-Tenant**| Runs multi-tenant apps   │ Cuts dedicated cluster VM│
+│                          │ safely on shared nodes   │ infrastructure by 60%    │
+└──────────────────────────┴──────────────────────────┴──────────────────────────┘
+</code></pre>
+<h3 id="1-automated-supply-chain-security-vs-incident-response-economics">1. Automated Supply Chain Security vs Incident Response Economics<a class="headerlink" href="#1-automated-supply-chain-security-vs-incident-response-economics" title="Permanent link">&para;</a></h3>
+<p>In enterprise engineering organizations:</p>
+<ul>
+<li>Remediating a production zero-day container compromise (e.g. crypto-miner or data exfiltration via container escape) costs an average of <strong>\$150,000 in emergency forensics, engineering overtime, and lost revenue</strong>.</li>
+<li>Enforcing non-root execution (<code>USER 10001:10001</code>), <code>--cap-drop ALL</code>, and automated CI/CD CVE gating (<code>docker scout</code>) completely neutralizes 99% of automated container exploit payloads.</li>
+<li><strong>FinOps ROI</strong>: Delivers <strong>hundreds of thousands of dollars in risk mitigation value</strong> with zero additional software licensing costs.</li>
+</ul>
+<h3 id="2-distroless-image-patching-labor-reduction">2. Distroless Image Patching Labor Reduction<a class="headerlink" href="#2-distroless-image-patching-labor-reduction" title="Permanent link">&para;</a></h3>
+<p>When operating 200 production containers built on standard Ubuntu base images:</p>
+<ul>
+<li>Security scanners report ~80 CVE vulnerabilities per image monthly across unused packages (curl, tar, perl, apt), requiring security teams to review and patch 16,000 monthly CVE alerts ($~20\text{ engineering hours/month}$).</li>
+<li>Migrating to <strong>Distroless</strong> base images reduces reported CVEs to <strong>near zero</strong>, saving <strong>\$36,000/year in wasted engineering triage labor</strong>.</li>
+</ul>
+              
+            </div>
+          </div><footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

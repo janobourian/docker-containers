@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="img/favicon.ico" />
+    <title>Module 06: Multi-Container Applications with Docker Compose - Docker Containers</title>
+    <link rel="stylesheet" href="css/theme.css" />
+    <link rel="stylesheet" href="css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Module 06: Multi-Container Applications with Docker Compose";
+        var mkdocs_page_input_path = "05_docker_compose_specification_and_multi_tier_stacks.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/yaml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/bash.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/dockerfile.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="index.html" class="icon icon-home"> Docker Containers
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="./search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="index.html">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="getting-started.md">Getting Started</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-engine.md">Docker Engine</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="working-with-images.md">Working with Images</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="working-with-containers.md">Working with Containers</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="containerizing_an_app.md">Containerizing an Application</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="multi-container-apps.md">Multi-container apps with Compose</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-and-wasm.md">Docker and Wasm</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-swarm.md">Docker Swarm</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-networking.md">Docker Networking</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-volumes.md">Docker Volumes</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-security.md">Docker Security</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-docs.md">Docker Docs</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="docker-cheatsheet.md">Docker CheatSheet</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="apache-kafka-introduction.md">Apache Kafka</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Docker Containers</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html" class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Module 06: Multi-Container Applications with Docker Compose</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="module-06-multi-container-applications-with-docker-compose">Module 06: Multi-Container Applications with Docker Compose<a class="headerlink" href="#module-06-multi-container-applications-with-docker-compose" title="Permanent link">&para;</a></h1>
+<p><strong>Track:</strong> Docker Container Systems &amp; Virtualization Architecture
+<strong>Category:</strong> Multi-Service Orchestration, Compose Specification &amp; Declarative Stacks
+<strong>Standard Identifier:</strong> <code>DOC-STD-UNIVERSAL-2026</code>
+<strong>Status:</strong> ✅ Completed</p>
+<hr />
+<h2 id="table-of-contents">📑 Table of Contents<a class="headerlink" href="#table-of-contents" title="Permanent link">&para;</a></h2>
+<ol>
+<li>
+<p><a href="#1-high-level-overview--executive-summary">High-Level Overview &amp; Executive Summary</a></p>
+</li>
+<li>
+<p><a href="#2-the-compose-specification--multi-tier-topology">The Compose Specification &amp; Multi-Tier Topology</a></p>
+</li>
+<li>
+<p><a href="#3-service-dependencies--health-gated-initialization-depends_on">Service Dependencies &amp; Health-Gated Initialization (<code>depends_on</code>)</a></p>
+</li>
+<li>
+<p><a href="#4-environment-architecture-secrets--profiles">Environment Architecture, Secrets &amp; Profiles</a></p>
+</li>
+<li>
+<p><a href="#5-compose-develop--real-time-watch-mode">Compose Develop &amp; Real-Time Watch Mode</a></p>
+</li>
+<li>
+<p><a href="#6-certification--exam-essentials-cheat-sheet">Certification &amp; Exam Essentials (Cheat Sheet)</a></p>
+</li>
+<li>
+<p><a href="#7-comparative-analysis-matrix-multi-container-orchestrators">Comparative Analysis Matrix: Multi-Container Orchestrators</a></p>
+</li>
+<li>
+<p><a href="#8-performance--resource-optimization">Performance &amp; Resource Optimization</a></p>
+</li>
+<li>
+<p><a href="#9-step-by-step-hands-on-production-walkthrough">Step-by-Step Hands-On Production Walkthrough</a></p>
+</li>
+<li>
+<p><a href="#10-pure-cli--command-interface">Pure CLI / Command Interface</a></p>
+</li>
+<li>
+<p><a href="#11-advanced-architecture--edge-case-failure-modes">Advanced Architecture &amp; Edge-Case Failure Modes</a></p>
+</li>
+<li>
+<p><a href="#12-detailed-sub-components--subsystems">Detailed Sub-Components &amp; Subsystems</a></p>
+</li>
+<li>
+<p><a href="#13-references-the-55-rule">References (The 5+5 Rule)</a></p>
+</li>
+<li>
+<p><a href="#14-universal-finops--resource-cost-governance">Universal FinOps &amp; Resource Cost Governance</a></p>
+</li>
+</ol>
+<hr />
+<h2 id="1-high-level-overview-executive-summary">1. High-Level Overview &amp; Executive Summary<a class="headerlink" href="#1-high-level-overview-executive-summary" title="Permanent link">&para;</a></h2>
+<p>Modern enterprise architectures rarely operate as a single monolithic process; they consist of multiple interacting services—reverse proxies (NGINX), frontend SPAs, API gateways, worker task queues, caching layers (Redis), message brokers (RabbitMQ/Kafka), and relational databases (PostgreSQL). <strong>Docker Compose</strong> is a declarative multi-container orchestration tool that allows engineering teams to define, configure, and manage complete multi-service application stacks inside a single version-controlled <strong><code>compose.yaml</code></strong> specification.</p>
+<p>Compose automatically manages the complete operational lifecycle: creating isolated user-defined bridge networks, provisioning named persistent storage volumes, enforcing health-check gated service dependency startup order (<code>depends_on: condition: service_healthy</code>), injecting environment secrets, and scaling service replicas (<code>--scale api=3</code>).</p>
+<pre><code class="language-text">┌────────────────────────────────────────────────────────────────────────────────┐
+│               ENTERPRISE MULTI-CONTAINER STACK TOPOLOGY                        │
+├────────────────────────────────────────────────────────────────────────────────┤
+│ [External Client Request: Port 80 / 443]                                       │
+│         │                                                                      │
+│         ▼                                                                      │
+│ ┌────────────────────────────────────────────────────────────────────────────┐ │
+│ │ SERVICE: `proxy` (NGINX Reverse Proxy / Load Balancer)                     │ │
+│ │ - Published Ports: 80:80, 443:443                                          │ │
+│ │ - Attached Networks: `frontend-net`                                        │ │
+│ └──────────────────────────────┬─────────────────────────────────────────────┘ │
+│                                │                                               │
+│             ┌──────────────────┴──────────────────┐                            │
+│             ▼ (DNS: `http://api:8000`)            ▼                            │
+│ ┌──────────────────────────────┐        ┌──────────────────────────────┐       │
+│ │ SERVICE: `api` (Replica 1)   │        │ SERVICE: `api` (Replica 2)   │       │
+│ │ - Networks: `frontend-net`,  │        │ - Networks: `frontend-net`,  │       │
+│ │             `backend-net`    │        │             `backend-net`    │       │
+│ └──────────────┬───────────────┘        └──────────────┬───────────────┘       │
+│                │                                       │                       │
+│                └───────────────────┬───────────────────┘                       │
+│                                    │ (DNS: `redis:6379`, `postgres:5432`)      │
+│                                    ▼                                           │
+│ ┌────────────────────────────────────────────────────────────────────────────┐ │
+│ │ ISOLATED BACKEND NETWORK: `backend-net` (Zero external port exposure!)     │ │
+│ │ ┌────────────────────────────┐        ┌──────────────────────────────────┐ │ │
+│ │ │ SERVICE: `cache` (Redis)   │        │ SERVICE: `database` (PostgreSQL) │ │ │
+│ │ │ - Volume: `cache-data`     │        │ - Named Volume: `pg-data`        │ │ │
+│ │ └────────────────────────────┘        └──────────────────────────────────┘ │ │
+│ └────────────────────────────────────────────────────────────────────────────┘ │
+└────────────────────────────────────────────────────────────────────────────────┘
+</code></pre>
+<h3 id="executive-summary-for-managers-non-technical-stakeholders">👔 Executive Summary (For Managers &amp; Non-Technical Stakeholders)<a class="headerlink" href="#executive-summary-for-managers-non-technical-stakeholders" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Business Purpose</strong>: Replaces complex, error-prone 20-step manual software installation procedures with a single automated command (<code>docker compose up</code>) that launches an entire enterprise system on any developer laptop or staging server.</li>
+<li><strong>How It Works</strong>: Uses a human-readable blueprint file (<code>compose.yaml</code>) to coordinate all database, web server, and application containers, connecting them across secure private internal networks and mounting permanent disk storage.</li>
+<li><strong>Key Business Value &amp; ROI</strong>: Slashes new engineer onboarding time from 3 days to under 5 minutes, eliminates staging environment drift, and provides isolated, automated preview environments for every pull request.</li>
+</ul>
+<hr />
+<h2 id="2-the-compose-specification-multi-tier-topology">2. The Compose Specification &amp; Multi-Tier Topology<a class="headerlink" href="#2-the-compose-specification-multi-tier-topology" title="Permanent link">&para;</a></h2>
+<h3 id="21-file-naming-specification-evolution">2.1 File Naming &amp; Specification Evolution<a class="headerlink" href="#21-file-naming-specification-evolution" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Historical</strong>: <code>fig.yml</code> ──► <code>docker-compose.yml</code> (Python tool).</li>
+<li><strong>Modern OCI Compose Standard</strong>: <strong><code>compose.yaml</code></strong> (or <code>compose.yml</code>), executed natively via the Go-based Docker CLI plugin: <strong><code>docker compose</code></strong> (without the hyphen).</li>
+</ul>
+<hr />
+<h2 id="3-service-dependencies-health-gated-initialization-depends_on">3. Service Dependencies &amp; Health-Gated Initialization (<code>depends_on</code>)<a class="headerlink" href="#3-service-dependencies-health-gated-initialization-depends_on" title="Permanent link">&para;</a></h2>
+<p>A classic production failure occurs when an API container starts, attempts to connect to PostgreSQL, and immediately crashes because PostgreSQL is still running startup recovery scripts.</p>
+<h3 id="31-the-healthcheck-gated-dependency-model">3.1 The Healthcheck Gated Dependency Model<a class="headerlink" href="#31-the-healthcheck-gated-dependency-model" title="Permanent link">&para;</a></h3>
+<p>Using <code>depends_on</code> with <code>condition: service_healthy</code> guarantees that dependent services <strong>wait until the upstream database passes its health probe</strong>:</p>
+<pre><code class="language-yaml">services:
+  database:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: enterprise_db
+      POSTGRES_USER: appuser
+      POSTGRES_PASSWORD_FILE: /run/secrets/db_password
+    secrets:
+      - db_password
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: [&quot;CMD-SHELL&quot;, &quot;pg_isready -U appuser -d enterprise_db&quot;]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
+
+  api:
+    build:
+      context: .
+      target: prod
+    depends_on:
+      database:
+        condition: service_healthy # ◄── Waits for pg_isready to succeed!
+</code></pre>
+<hr />
+<h2 id="4-environment-architecture-secrets-profiles">4. Environment Architecture, Secrets &amp; Profiles<a class="headerlink" href="#4-environment-architecture-secrets-profiles" title="Permanent link">&para;</a></h2>
+<h3 id="41-secret-management-vs-environment-variables">4.1 Secret Management vs Environment Variables<a class="headerlink" href="#41-secret-management-vs-environment-variables" title="Permanent link">&para;</a></h3>
+<p>Passing sensitive passwords in <code>environment:</code> leaks credentials into <code>docker inspect</code> JSON outputs. <strong>Docker Compose Secrets</strong> mount credentials into RAM-backed <code>/run/secrets/</code> files inside the container:</p>
+<pre><code class="language-yaml">secrets:
+  db_password:
+    file: ./secrets/db_password.txt
+</code></pre>
+<h3 id="42-selective-component-execution-with-compose-profiles">4.2 Selective Component Execution with Compose Profiles<a class="headerlink" href="#42-selective-component-execution-with-compose-profiles" title="Permanent link">&para;</a></h3>
+<p>Compose Profiles allow defining debug tools, local database admin UIs (pgAdmin), and integration test suites that run <strong>only when explicitly requested</strong>:</p>
+<pre><code class="language-yaml">services:
+  pgadmin:
+    image: dpage/pgadmin4
+    profiles: [&quot;debug&quot;, &quot;admin&quot;] # ◄── Does NOT start during normal `docker compose up`!
+    ports:
+      - &quot;5050:80&quot;
+</code></pre>
+<p>To launch with profile: <code>docker compose --profile admin up -d</code>.</p>
+<hr />
+<h2 id="5-compose-develop-real-time-watch-mode">5. Compose Develop &amp; Real-Time Watch Mode<a class="headerlink" href="#5-compose-develop-real-time-watch-mode" title="Permanent link">&para;</a></h2>
+<p>Modern Docker Compose includes <strong>Watch Mode (<code>docker compose watch</code>)</strong>, which synchronizes local code changes into running containers instantly without rebuilding images:</p>
+<pre><code class="language-yaml">services:
+  web:
+    build: .
+    develop:
+      watch:
+        # Sync frontend source code immediately into container:
+        - action: sync
+          path: ./src
+          target: /app/src
+        # Rebuild container image if package dependencies change:
+        - action: rebuild
+          path: package.json
+</code></pre>
+<hr />
+<h2 id="6-certification-exam-essentials-cheat-sheet">6. Certification &amp; Exam Essentials (Cheat Sheet)<a class="headerlink" href="#6-certification-exam-essentials-cheat-sheet" title="Permanent link">&para;</a></h2>
+<ul>
+<li>⚠️ <strong>Automatic DNS Resolution in User-Defined Networks</strong>: Containers connected to user-defined Compose networks can reach other services using their <strong>service name as the DNS hostname</strong> (e.g. <code>http://database:5432</code>). DNS resolution does <strong>not</strong> work on the default legacy <code>bridge</code> network!</li>
+<li>🔒 <strong>Internal Network Isolation (<code>internal: true</code>)</strong>: To prevent database and caching tiers from accessing the external internet or being accessed externally, declare the backend network with <code>internal: true</code>:</li>
+</ul>
+<p><code>yaml
+  networks:
+    backend-net:
+      internal: true</code>text</p>
+<ul>
+<li>
+<p>⚙️ <strong>The <code>docker compose down -v</code> Volume Trap</strong>: Running <code>docker compose down</code> removes containers and networks while preserving database volumes. Adding the <strong><code>-v</code> / <code>--volumes</code></strong> flag (<code>docker compose down -v</code>) <strong>permanently deletes all named persistent volumes!</strong></p>
+</li>
+<li>
+<p>⚠️ <strong>Port Publishing (<code>ports</code>) vs Exposing (<code>expose</code>)</strong>:</p>
+</li>
+<li><code>ports: ["8080:80"]</code>: Binds container port 80 to host port 8080 (Accessible to host and outside world).</li>
+<li><code>expose: ["8000"]</code>: Documents the port and makes it accessible <strong>only to other containers on the same Docker network</strong> (Zero host port binding).</li>
+</ul>
+<hr />
+<h2 id="7-comparative-analysis-matrix-multi-container-orchestrators">7. Comparative Analysis Matrix: Multi-Container Orchestrators<a class="headerlink" href="#7-comparative-analysis-matrix-multi-container-orchestrators" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Feature</th>
+<th style="text-align: left;">Docker Compose</th>
+<th style="text-align: left;">Docker Swarm</th>
+<th style="text-align: left;">Kubernetes (K8s)</th>
+<th style="text-align: left;">Nomad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Node Scope</strong></td>
+<td style="text-align: left;"><strong>Single Host Node</strong></td>
+<td style="text-align: left;">Multi-Node Cluster</td>
+<td style="text-align: left;">Multi-Node / Multi-Cloud</td>
+<td style="text-align: left;">Multi-Node Cluster</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Configuration Format</strong></td>
+<td style="text-align: left;">YAML (<code>compose.yaml</code>)</td>
+<td style="text-align: left;">Compose / Stack YAML</td>
+<td style="text-align: left;">YAML (Deployments, Pods)</td>
+<td style="text-align: left;">HCL (HashiCorp)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Learning Curve</strong></td>
+<td style="text-align: left;"><strong>Low (Immediate)</strong></td>
+<td style="text-align: left;">Moderate</td>
+<td style="text-align: left;">High (Complex)</td>
+<td style="text-align: left;">Moderate</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Auto-Healing / Scaling</strong></td>
+<td style="text-align: left;">Basic (<code>--scale</code>)</td>
+<td style="text-align: left;">Native Swarm Routing</td>
+<td style="text-align: left;">Advanced HPA / VPA</td>
+<td style="text-align: left;">Native Autoscaling</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Best For</strong></td>
+<td style="text-align: left;">Local Dev &amp; Staging</td>
+<td style="text-align: left;">Simple Multi-Node Prod</td>
+<td style="text-align: left;">Enterprise Large-Scale</td>
+<td style="text-align: left;">Heterogeneous Workloads</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="8-performance-resource-optimization">8. Performance &amp; Resource Optimization<a class="headerlink" href="#8-performance-resource-optimization" title="Permanent link">&para;</a></h2>
+<pre><code class="language-text">┌────────────────────────────────────────────────────────────────────────────────┐
+│                      COMPOSE OPTIMIZATION PLAYBOOK                             │
+├────────────────────────────────────────────────────────────────────────────────┤
+│ 1. Define explicit CPU/RAM limits using `deploy.resources.limits`.             │
+│ 2. Isolate frontend and backend services across separate network bridges.      │
+│ 3. Use `condition: service_healthy` to eliminate startup race condition crashes.│
+│ 4. Leverage `docker compose watch` to avoid slow image rebuild cycles in dev.  │
+│ 5. Use Docker Compose Secrets instead of plaintext environment variables.      │
+└────────────────────────────────────────────────────────────────────────────────┘
+</code></pre>
+<hr />
+<h2 id="9-step-by-step-hands-on-production-walkthrough">9. Step-by-Step Hands-On Production Walkthrough<a class="headerlink" href="#9-step-by-step-hands-on-production-walkthrough" title="Permanent link">&para;</a></h2>
+<h3 id="step-1-create-full-stack-production-composeyaml">Step 1: Create Full-Stack Production <code>compose.yaml</code><a class="headerlink" href="#step-1-create-full-stack-production-composeyaml" title="Permanent link">&para;</a></h3>
+<pre><code class="language-yaml">
+# /Users/frgonzal/Documents/vit/docker-containers/compose.production.yaml
+name: enterprise-fintech-stack
+
+services:
+  proxy:
+    image: nginx:1.25-alpine
+    restart: unless-stopped
+    ports:
+      - &quot;80:80&quot;
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      api:
+        condition: service_healthy
+    networks:
+      - public-net
+
+  api:
+    image: node:20-alpine
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      DATABASE_URL: postgres://appuser:secret123@database:5432/fintech_db
+      REDIS_URL: redis://cache:6379
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M
+    depends_on:
+      database:
+        condition: service_healthy
+      cache:
+        condition: service_started
+    networks:
+      - public-net
+      - private-net
+    healthcheck:
+      test: [&quot;CMD-SHELL&quot;, &quot;wget -q --spider http://localhost:3000/health || exit 1&quot;]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
+    command: &gt;
+      node -e &quot;
+        const http = require('http');
+        const server = http.createServer((req, res) =&gt; {
+          res.writeHead(200, {'Content-Type': 'application/json'});
+          res.end(JSON.stringify({status: 'HEALTHY', node: process.env.HOSTNAME}));
+        });
+        server.listen(3000);
+      &quot;
+
+  cache:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: [&quot;redis-server&quot;, &quot;--appendonly&quot;, &quot;yes&quot;, &quot;--maxmemory&quot;, &quot;128mb&quot;, &quot;--maxmemory-policy&quot;, &quot;allkeys-lru&quot;]
+    volumes:
+      - redis-data:/data
+    networks:
+      - private-net
+
+  database:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: fintech_db
+      POSTGRES_USER: appuser
+      POSTGRES_PASSWORD: secret123
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+    networks:
+      - private-net
+    healthcheck:
+      test: [&quot;CMD-SHELL&quot;, &quot;pg_isready -U appuser -d fintech_db&quot;]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
+
+volumes:
+  pg-data:
+    name: fintech-postgres-volume
+  redis-data:
+    name: fintech-redis-volume
+
+networks:
+  public-net:
+    name: fintech-public-network
+    driver: bridge
+  private-net:
+    name: fintech-private-network
+    driver: bridge
+    internal: true # ◄── Zero Internet or External Host Access!
+</code></pre>
+<hr />
+<h3 id="step-2-launch-and-scale-the-multi-container-stack">Step 2: Launch and Scale the Multi-Container Stack<a class="headerlink" href="#step-2-launch-and-scale-the-multi-container-stack" title="Permanent link">&para;</a></h3>
+<pre><code class="language-bash">
+# 1. Launch Complete Multi-Tier Stack in Detached Mode
+docker compose -f compose.production.yaml up -d
+
+# 2. Scale the API Tier to 3 Load-Balanced Replicas
+docker compose -f compose.production.yaml up -d --scale api=3
+
+# 3. View Unified Aggregated Telemetry Logs Across All Services
+docker compose -f compose.production.yaml logs --tail 20 --timestamps
+</code></pre>
+<hr />
+<h3 id="step-3-inspect-service-topology-resource-metrics">Step 3: Inspect Service Topology &amp; Resource Metrics<a class="headerlink" href="#step-3-inspect-service-topology-resource-metrics" title="Permanent link">&para;</a></h3>
+<pre><code class="language-bash">
+# 1. Display Running Services, State and Port Bindings
+docker compose -f compose.production.yaml ps
+
+# 2. Inspect Real-Time Resource Consumption by Service
+docker compose -f compose.production.yaml top
+</code></pre>
+<hr />
+<h2 id="10-pure-cli-command-interface">10. Pure CLI / Command Interface<a class="headerlink" href="#10-pure-cli-command-interface" title="Permanent link">&para;</a></h2>
+<h3 id="1-validate-and-lint-compose-specification-syntax">1. Validate and Lint Compose Specification Syntax<a class="headerlink" href="#1-validate-and-lint-compose-specification-syntax" title="Permanent link">&para;</a></h3>
+<p>Verify variable interpolation and syntax correctness:</p>
+<pre><code class="language-bash">docker compose -f compose.production.yaml config
+</code></pre>
+<h3 id="2-execute-command-inside-a-running-compose-service">2. Execute Command Inside a Running Compose Service<a class="headerlink" href="#2-execute-command-inside-a-running-compose-service" title="Permanent link">&para;</a></h3>
+<p>Run database client inside the isolated private database container:</p>
+<pre><code class="language-bash">docker compose -f compose.production.yaml exec database psql -U appuser -d fintech_db -c &quot;\dt&quot;
+</code></pre>
+<h3 id="3-gracefully-stop-and-destroy-stack-preserving-storage-volumes">3. Gracefully Stop and Destroy Stack (Preserving Storage Volumes)<a class="headerlink" href="#3-gracefully-stop-and-destroy-stack-preserving-storage-volumes" title="Permanent link">&para;</a></h3>
+<p>Tear down containers and networks without deleting data:</p>
+<pre><code class="language-bash">docker compose -f compose.production.yaml down
+</code></pre>
+<hr />
+<h2 id="11-advanced-architecture-edge-case-failure-modes">11. Advanced Architecture &amp; Edge-Case Failure Modes<a class="headerlink" href="#11-advanced-architecture-edge-case-failure-modes" title="Permanent link">&para;</a></h2>
+<pre><code class="language-text">┌────────────────────────────────────────────────────────────────────────────────┐
+│                    COMPOSE FAILURE RECOVERY MATRIX                             │
+├──────────────────────┬────────────────────────┬────────────────────────────────┤
+│ Failure Scenario     │ Underlying Root Cause  │ Production Mitigation Runbook  │
+├──────────────────────┼────────────────────────┼────────────────────────────────┤
+│ **API Startup Crash**│ Database not ready on  │ Add `depends_on: condition:    │
+│ **Race Condition**   │ initial TCP socket.    │ service_healthy`.              │
+├──────────────────────┼────────────────────────┼────────────────────────────────┤
+│ **Cross-Service DNS**│ Services placed on     │ Ensure services share common   │
+│ **Resolution Failure**│ different bridge nets. │ user-defined network bridge.   │
+├──────────────────────┼────────────────────────┼────────────────────────────────┤
+│ **Volume Data Wipe** │ Running `compose down` │ Never use `-v` in production;  │
+│                      │ with the `-v` flag.    │ backup volumes regularly.      │
+├──────────────────────┼────────────────────────┼────────────────────────────────┤
+│ **Port Conflict Error**│ Host port already in │ Change host port binding (e.g. │
+│                      │ use by local process.  │ `&quot;8081:80&quot;`).                  │
+└──────────────────────┴────────────────────────┴────────────────────────────────┘
+</code></pre>
+<hr />
+<h2 id="12-detailed-sub-components-subsystems">12. Detailed Sub-Components &amp; Subsystems<a class="headerlink" href="#12-detailed-sub-components-subsystems" title="Permanent link">&para;</a></h2>
+<h3 id="1-compose-go-sdk-engine">1. Compose Go SDK Engine<a class="headerlink" href="#1-compose-go-sdk-engine" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Key Concepts</strong>: Compiles <code>compose.yaml</code> AST into Docker Engine REST API payloads, orchestrating dependency graphs and network provisioning.</li>
+<li><strong>CLI / Tool Snippet</strong>:</li>
+</ul>
+<pre><code class="language-bash">docker compose version
+</code></pre>
+<h3 id="2-internal-embedded-dns-server-1270011">2. Internal Embedded DNS Server (<code>127.0.0.11</code>)<a class="headerlink" href="#2-internal-embedded-dns-server-1270011" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Key Concepts</strong>: Engine-level DNS responder running inside container network namespaces, translating service names to ephemeral IP addresses.</li>
+<li><strong>CLI / Tool Snippet</strong>:</li>
+</ul>
+<pre><code class="language-bash">docker compose exec api nslookup database 2&gt;/dev/null || true
+</code></pre>
+<h3 id="3-compose-secret-provider">3. Compose Secret Provider<a class="headerlink" href="#3-compose-secret-provider" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Key Concepts</strong>: In-memory tmpfs secret manager mounting <code>/run/secrets/&lt;secret_name&gt;</code> into target container namespaces without disk persistence.</li>
+<li><strong>CLI / Tool Snippet</strong>:</li>
+</ul>
+<pre><code class="language-bash">docker compose config --secrets
+</code></pre>
+<h3 id="4-service-scaler-load-balancer">4. Service Scaler &amp; Load Balancer<a class="headerlink" href="#4-service-scaler-load-balancer" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Key Concepts</strong>: Provisions multiple identical container instances (<code>&lt;project&gt;-&lt;service&gt;-&lt;N&gt;</code>), updating DNS alias entries with multi-IP round-robin records.</li>
+<li><strong>CLI / Tool Snippet</strong>:</li>
+</ul>
+<pre><code class="language-bash">docker compose ps --filter &quot;service=api&quot;
+</code></pre>
+<hr />
+<h2 id="13-references-the-55-rule">13. References (The 5+5 Rule)<a class="headerlink" href="#13-references-the-55-rule" title="Permanent link">&para;</a></h2>
+<h3 id="official-documentation-oci-specifications">Official Documentation &amp; OCI Specifications<a class="headerlink" href="#official-documentation-oci-specifications" title="Permanent link">&para;</a></h3>
+<ol>
+<li><a href="https://compose-spec.io/">The Compose Specification Official Specification</a></li>
+<li><a href="https://docs.docker.com/reference/compose-file/">Docker Official Documentation: Docker Compose File Reference</a></li>
+<li><a href="https://docs.docker.com/compose/compose-file/05-services/#depends_on">Docker Official Documentation: Service Dependencies and Healthchecks</a></li>
+<li><a href="https://docs.docker.com/compose/file-watch/">Docker Official Documentation: Compose Develop &amp; Watch Mode</a></li>
+<li><a href="https://docs.docker.com/compose/use-secrets/">Docker Official Documentation: Compose Secrets Management</a></li>
+</ol>
+<h3 id="authoritative-engineering-blogs-architecture-deep-dives">Authoritative Engineering Blogs &amp; Architecture Deep Dives<a class="headerlink" href="#authoritative-engineering-blogs-architecture-deep-dives" title="Permanent link">&para;</a></h3>
+<ol>
+<li><a href="https://martinfowler.com/">Martin Fowler: Microservices Application Testing with Docker Compose</a></li>
+<li><a href="https://www.brendangregg.com/">Brendan Gregg: Multi-Container Networking and Epoll Performance</a></li>
+<li><a href="https://www.lizrice.com/">Liz Rice: Understanding Docker Network Bridges and Container DNS</a></li>
+<li><a href="https://jvns.ca/">Julia Evans: How Docker Networking and DNS Works Under the Hood</a></li>
+<li><a href="https://www.kernel.org/">High-Performance Linux Systems: Tuning Redis and Postgres Stacks in Compose</a></li>
+</ol>
+<hr />
+<h2 id="14-universal-finops-resource-cost-governance">14. Universal FinOps &amp; Resource Cost Governance<a class="headerlink" href="#14-universal-finops-resource-cost-governance" title="Permanent link">&para;</a></h2>
+<pre><code class="language-text">┌────────────────────────────────────────────────────────────────────────────────┐
+│                       COMPOSE FINOPS SAVINGS MATRIX                            │
+├──────────────────────────┬──────────────────────────┬──────────────────────────┤
+│ Optimization Strategy    │ Technical Mechanism      │ Measurable FinOps ROI    │
+├──────────────────────────┼──────────────────────────┼──────────────────────────┤
+│ **Ephemeral Staging**    │ 1-command stack tear-    │ Eliminates 24/7 idle     │
+│                          │ down (`compose down`)    │ test server hosting fees │
+├──────────────────────────┼──────────────────────────┼──────────────────────────┤
+│ **Internal Isolation**   │ `internal: true` blocks  │ Prevents unexpected cloud│
+│                          │ outbound internet data   │ data egress bandwidth fee│
+├──────────────────────────┼──────────────────────────┼──────────────────────────┤
+│ **Local Dev Parity**     │ Replaces expensive cloud │ Saves \$150/dev/month on │
+│                          │ sandbox accounts         │ dedicated AWS dev sandboxes│
+├──────────────────────────┼──────────────────────────┼──────────────────────────┤
+│ **Resource Limits**      │ `deploy.resources` caps  │ Prevents memory leaks    │
+│                          │ container memory/CPU     │ from freezing nodes      │
+└──────────────────────────┴──────────────────────────┴──────────────────────────┘
+</code></pre>
+<h3 id="1-cloud-developer-sandbox-elimination-economics">1. Cloud Developer Sandbox Elimination Economics<a class="headerlink" href="#1-cloud-developer-sandbox-elimination-economics" title="Permanent link">&para;</a></h3>
+<p>In an engineering organization with 100 software engineers:</p>
+<ul>
+<li>Providing each developer with a dedicated AWS cloud testing environment (RDS Postgres, ElastiCache Redis, ECS container instances) costs <strong>\$180 per engineer per month (\$18,000/month)</strong>.</li>
+<li>Standardizing local development and testing on <strong>Docker Compose</strong> allows developers to run the exact same multi-tier architecture locally on their workstations with zero cloud dependencies.</li>
+<li><strong>FinOps ROI</strong>: <strong>\$216,000/year in direct AWS cloud sandbox infrastructure cost savings</strong>.</li>
+</ul>
+<h3 id="2-ephemeral-pr-preview-environments">2. Ephemeral PR Preview Environments<a class="headerlink" href="#2-ephemeral-pr-preview-environments" title="Permanent link">&para;</a></h3>
+<p>In continuous integration pipelines testing feature branches:</p>
+<ul>
+<li>Leaving dedicated staging environments running 24/7 costs \$1,500/month.</li>
+<li>Automating Docker Compose stack spinning on pull request creation and executing <code>docker compose down -v</code> upon pull request merge ensures compute resources run only during test execution (averaging 30 minutes per branch).</li>
+<li>Staging infrastructure costs drop from \$1,500 to <strong>\$120/month</strong> (a 92% reduction).</li>
+</ul>
+              
+            </div>
+          </div><footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+    
+  </span>
+</div>
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = ".";</script>
+    <script src="js/theme_extra.js"></script>
+    <script src="js/theme.js"></script>
+      <script src="search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
