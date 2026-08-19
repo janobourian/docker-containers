@@ -1,29 +1,41 @@
 # Module 10: Docker Swarm Mode, Multi-Host Clustering & Ingress Routing Mesh
 
-**Track:** Docker Container Systems & Virtualization Architecture  
-**Category:** Native Container Orchestration, Raft Consensus, Services & Swarm Stacks  
-**Standard Identifier:** `DOC-STD-UNIVERSAL-2026`  
+**Track:** Docker Container Systems & Virtualization Architecture
+**Category:** Native Container Orchestration, Raft Consensus, Services & Swarm Stacks
+**Standard Identifier:** `DOC-STD-UNIVERSAL-2026`
 **Status:** ✅ Completed
 
 ---
 
 ## 📑 Table of Contents
+
 1. [High-Level Overview & Executive Summary](#1-high-level-overview--executive-summary)
+
 2. [Swarm Architecture: Managers, Workers & Raft Consensus](#2-swarm-architecture-managers-workers--raft-consensus)
+
 3. [The Ingress Routing Mesh & IPVS Layer 4 Load Balancing](#3-the-ingress-routing-mesh--ipvs-layer-4-load-balancing)
+
 4. [Swarm Services, Rolling Updates & Zero-Downtime Rollbacks](#4-swarm-services-rolling-updates--zero-downtime-rollbacks)
+
 5. [Swarm Secrets & Encrypted Overlay Networks](#5-swarm-secrets--encrypted-overlay-networks)
+
 6. [Certification & Exam Essentials (Cheat Sheet)](#6-certification--exam-essentials-cheat-sheet)
+
 7. [Comparative Analysis Matrix: Docker Swarm vs Kubernetes](#7-comparative-analysis-matrix-docker-swarm-vs-kubernetes)
+
 8. [Performance & Resource Optimization](#8-performance--resource-optimization)
-9. [In-Depth Engineering Perspectives](#9-in-depth-engineering-perspectives)
-10. [Well-Architected Framework Alignment](#10-well-architected-framework-alignment)
-11. [Step-by-Step Hands-On Production Walkthrough](#11-step-by-step-hands-on-production-walkthrough)
-12. [Pure CLI / Command Interface](#12-pure-cli--command-interface)
-13. [Advanced Architecture & Edge-Case Failure Modes](#13-advanced-architecture--edge-case-failure-modes)
-14. [Detailed Sub-Components & Subsystems](#14-detailed-sub-components--subsystems)
-15. [References (The 5+5 Rule)](#15-references-the-55-rule)
-16. [Universal FinOps & Resource Cost Governance](#16-universal-finops--resource-cost-governance)
+
+9. [Step-by-Step Hands-On Production Walkthrough](#9-step-by-step-hands-on-production-walkthrough)
+
+10. [Pure CLI / Command Interface](#10-pure-cli--command-interface)
+
+11. [Advanced Architecture & Edge-Case Failure Modes](#11-advanced-architecture--edge-case-failure-modes)
+
+12. [Detailed Sub-Components & Subsystems](#12-detailed-sub-components--subsystems)
+
+13. [References (The 5+5 Rule)](#13-references-the-55-rule)
+
+14. [Universal FinOps & Resource Cost Governance](#14-universal-finops--resource-cost-governance)
 
 ---
 
@@ -33,7 +45,7 @@
 
 Swarm delivers enterprise orchestration out-of-the-box: declarative **Services** (`replicated` and `global` modes), automatic **Ingress Routing Mesh** (Layer 4 IPVS routing across all nodes), rolling updates with automated failure rollbacks, cryptographically automated **Mutual TLS (mTLS)** with 90-day key rotation, and **Docker Secrets** encryption at rest in Raft memory logs.
 
-```
+```text
 ┌────────────────────────────────────────────────────────────────────────────────┐
 │               DOCKER SWARM RAFT CONSENSUS & INGRESS MESH TOPOLOGY              │
 ├────────────────────────────────────────────────────────────────────────────────┤
@@ -55,6 +67,7 @@ Swarm delivers enterprise orchestration out-of-the-box: declarative **Services**
 ```
 
 ### 👔 Executive Summary (For Managers & Non-Technical Stakeholders)
+
 * **Business Purpose**: Unifies dozens of individual cloud servers into a single, self-healing supercomputer that keeps web applications and databases running even if physical servers crash.
 * **How It Works**: Operates a democratic consensus network (Raft). If an entire data center node catches fire, Swarm automatically detects the failure in seconds and resurrects missing application containers on healthy servers with zero human intervention.
 * **Key Business Value & ROI**: Delivers enterprise-grade high availability (99.999% uptime) and automated self-healing with 90% less operational complexity than Kubernetes, drastically reducing DevOps engineering salaries and infrastructure overhead.
@@ -64,11 +77,12 @@ Swarm delivers enterprise orchestration out-of-the-box: declarative **Services**
 ## 2. Swarm Architecture: Managers, Workers & Raft Consensus
 
 ### 2.1 The Raft Consensus Quorum Formula
+
 Manager nodes maintain cluster state using the Raft consensus protocol. To survive node failures without split-brain corruption, a cluster requires a **strict majority quorum**:
 
 $$\text{Quorum} = \left\lfloor \frac{N}{2} \right\rfloor + 1$$
 
-```
+```text
 ┌────────────────────────────────────────────────────────────────────────────────┐
 │                   SWARM MANAGER QUORUM & FAULT TOLERANCE                       │
 ├───────────────────────┬──────────────────────────┬─────────────────────────────┤
@@ -80,6 +94,7 @@ $$\text{Quorum} = \left\lfloor \frac{N}{2} \right\rfloor + 1$$
 │ 7                     │ 4                        │ 3 Failures Tolerated        │
 └───────────────────────┴──────────────────────────┴─────────────────────────────┘
 ```
+
 *Always deploy an **odd number** of Manager nodes (3 or 5). Adding an even number of managers (e.g. 4) increases network gossip traffic without increasing fault tolerance.*
 
 ---
@@ -87,6 +102,7 @@ $$\text{Quorum} = \left\lfloor \frac{N}{2} \right\rfloor + 1$$
 ## 3. The Ingress Routing Mesh & IPVS Layer 4 Load Balancing
 
 Swarm implements an **Ingress Routing Mesh**:
+
 1. When a service publishes a port (`-p 8080:80`), **every node in the cluster binds port 8080 on its public network interface**, even nodes not currently running a replica of that service!
 2. When external traffic hits port 8080 on *any* node, the host Linux kernel **IP Virtual Server (IPVS)** module routes the TCP packet over the internal `ingress` VXLAN overlay network directly to a healthy container task on any node via round-robin.
 
@@ -95,10 +111,12 @@ Swarm implements an **Ingress Routing Mesh**:
 ## 4. Swarm Services, Rolling Updates & Zero-Downtime Rollbacks
 
 Swarm manages workloads as **Declarative Services**:
-- **Replicated Mode (Default)**: Runs $N$ identical task replicas across the cluster (`--replicas 5`).
-- **Global Mode**: Runs exactly 1 task replica on **every active node** (ideal for log collectors, Prometheus node-exporters, and security agents).
 
-### Rolling Updates with Automated Rollback:
+* **Replicated Mode (Default)**: Runs $N$ identical task replicas across the cluster (`--replicas 5`).
+* **Global Mode**: Runs exactly 1 task replica on **every active node** (ideal for log collectors, Prometheus node-exporters, and security agents).
+
+### Rolling Updates with Automated Rollback
+
 ```bash
 docker service update \
     --image enterprise-api:2.0.0 \
@@ -109,6 +127,7 @@ docker service update \
     --rollback-delay 5s \
     production-api
 ```
+
 If new containers fail health checks during rollout, Swarm **automatically halts the rollout and rolls back to the previous stable image version**.
 
 ---
@@ -116,12 +135,15 @@ If new containers fail health checks during rollout, Swarm **automatically halts
 ## 5. Swarm Secrets & Encrypted Overlay Networks
 
 ### 5.1 Zero-Trust Mutual TLS (mTLS) PKI
+
 When a Swarm cluster is initialized:
-- The Manager generates an internal **Public Key Infrastructure (PKI) Root CA**.
-- Every node joining the cluster is provisioned an X.509 certificate.
-- Swarm automatically rotates all node TLS certificates every **90 days** without downtime.
+
+* The Manager generates an internal **Public Key Infrastructure (PKI) Root CA**.
+* Every node joining the cluster is provisioned an X.509 certificate.
+* Swarm automatically rotates all node TLS certificates every **90 days** without downtime.
 
 ### 5.2 Encrypted Overlay Networks (IPsec AES-GCM)
+
 Encrypt all inter-container cross-node network traffic at Layer 3 using hardware-accelerated IPsec:
 
 ```bash
@@ -137,14 +159,14 @@ docker network create \
 
 * ⚠️ **Swarm Autolock (`--autolock`)**: By default, Raft encryption keys are stored on disk unencrypted. Enabling Autolock (`docker swarm update --autolock=true`) encrypts the Raft log with a master passphrase. When a manager reboots, an admin must unlock it with `docker swarm unlock`.
 * 🔒 **Node Availability States**:
-  - `active`: Can accept and execute assigned container tasks (Default).
-  - `pause`: Does not receive *new* tasks; existing tasks continue running.
-  - `drain`: Evacuates all existing tasks to other healthy nodes (Used before node maintenance/reboot).
+  * `active`: Can accept and execute assigned container tasks (Default).
+  * `pause`: Does not receive *new* tasks; existing tasks continue running.
+  * `drain`: Evacuates all existing tasks to other healthy nodes (Used before node maintenance/reboot).
 * ⚙️ **Swarm Stack Deployment (`docker stack`)**: Deploy complete multi-service Compose files directly to Swarm using `docker stack deploy -c compose.yaml production-stack`.
 * ⚠️ **Port Firewall Requirements**:
-  - `2377/tcp`: Cluster management / Raft.
-  - `7946/tcp` & `7946/udp`: Control plane gossip.
-  - `4789/udp`: Ingress VXLAN data plane.
+  * `2377/tcp`: Cluster management / Raft.
+  * `7946/tcp` & `7946/udp`: Control plane gossip.
+  * `4789/udp`: Ingress VXLAN data plane.
 
 ---
 
@@ -152,9 +174,9 @@ docker network create \
 
 | Feature | Docker Swarm Mode | Kubernetes (K8s) | HashiCorp Nomad |
 | :--- | :--- | :--- | :--- |
-| **Installation / Setup** | **Built-in (1 command: `init`)**| Complex (kubeadm / cloud)| Single binary agent |
-| **Operational Overhead** | **Near Zero** | High (Dedicated SRE team)| Moderate |
-| **Service Discovery & Mesh**| **Built-in (Ingress IPVS)** | Ingress Controller / Istio| Consul integration |
+| **Installation / Setup** | **Built-in (1 command: `init`)** | Complex (kubeadm / cloud) | Single binary agent |
+| **Operational Overhead** | **Near Zero** | High (Dedicated SRE team) | Moderate |
+| **Service Discovery & Mesh** | **Built-in (Ingress IPVS)** | Ingress Controller / Istio | Consul integration |
 | **Secret Management** | **Native Encrypted Secrets** | Secret objects / Vault | Vault integration |
 | **Max Cluster Size** | ~1,000 Nodes | 5,000+ Nodes | 10,000+ Nodes |
 | **Best Suited For** | Small-to-Mid Enterprises | Massive Hyperscale Cloud | Hybrid Cloud & Batch |
@@ -163,7 +185,7 @@ docker network create \
 
 ## 8. Performance & Resource Optimization
 
-```
+```text
 ┌────────────────────────────────────────────────────────────────────────────────┐
 │                         SWARM TUNING PLAYBOOK                                  │
 ├────────────────────────────────────────────────────────────────────────────────┤
@@ -182,6 +204,7 @@ docker network create \
 ### Step 1: Initialize Swarm Cluster with Autolock & Dedicated Subnet
 
 ```bash
+
 # 1. Initialize Swarm on Primary Manager Node
 docker swarm init \
     --advertise-addr 127.0.0.1 \
@@ -197,6 +220,7 @@ echo "Worker Join Token: ${WORKER_TOKEN}"
 ### Step 2: Create Encrypted Overlay Network and Ingest Secrets
 
 ```bash
+
 # 1. Create Encrypted Multi-Host Overlay Network
 docker network create \
     --driver overlay \
@@ -213,6 +237,7 @@ echo "SuperSecretMasterDbPassword2026!" | docker secret create db_credential_v1 
 ### Step 3: Deploy High-Availability Scaled Swarm Service
 
 ```bash
+
 # Deploy Replicated API Service with Rolling Update Policy and Attached Secret
 docker service create \
     --name enterprise-api-service \
@@ -236,6 +261,7 @@ docker service create \
 ### Step 4: Perform Zero-Downtime Rolling Update & Verification
 
 ```bash
+
 # 1. Inspect Service Task Placement Across Nodes
 docker service ps enterprise-api-service
 
@@ -253,19 +279,25 @@ docker service scale enterprise-api-service=8
 ## 10. Pure CLI / Command Interface
 
 ### 1. Inspect Swarm Cluster Node Quorum and Roles
+
 List all manager and worker nodes with Raft status:
+
 ```bash
 docker node ls
 ```
 
 ### 2. Drain a Node for Maintenance
+
 Evacuate all running container tasks safely to other nodes:
+
 ```bash
 docker node update --availability drain node-worker-02
 ```
 
 ### 3. Deploy Multi-Service Stack via Compose File
+
 Deploy declarative production stack to Swarm:
+
 ```bash
 docker stack deploy \
     --compose-file compose.production.yaml \
@@ -276,7 +308,7 @@ docker stack deploy \
 
 ## 11. Advanced Architecture & Edge-Case Failure Modes
 
-```
+```text
 ┌────────────────────────────────────────────────────────────────────────────────┐
 │                     SWARM FAILURE RECOVERY MATRIX                              │
 ├──────────────────────┬────────────────────────┬────────────────────────────────┤
@@ -301,29 +333,37 @@ docker stack deploy \
 ## 12. Detailed Sub-Components & Subsystems
 
 ### 1. Raft Consensus Controller
+
 * **Key Concepts**: Embedded Raft implementation in Go maintaining replicated state machine log consistency across manager nodes.
 * **CLI / Tool Snippet**:
+
 ```bash
 docker info --format '{{.Swarm.ControlAvailable}}'
 ```
 
 ### 2. Linux IPVS Ingress Dispatcher
+
 * **Key Concepts**: Linux kernel Layer 4 transport load balancer dispatching external incoming TCP/UDP connections across backend service tasks.
 * **CLI / Tool Snippet**:
+
 ```bash
 docker service inspect enterprise-api-service --format '{{json .Endpoint.VirtualIPs}}'
 ```
 
 ### 3. Swarm PKI & Certificate Rotator
+
 * **Key Concepts**: Automatic X.509 Certificate Authority issuing and renewing node identities and mTLS encryption keys every 90 days.
 * **CLI / Tool Snippet**:
+
 ```bash
 docker swarm ca --help
 ```
 
 ### 4. Swarm Secret In-Memory Store
+
 * **Key Concepts**: Encrypted in-memory tmpfs mount providing secret strings to containers at `/run/secrets/<secret_name>` without writing to disk.
 * **CLI / Tool Snippet**:
+
 ```bash
 docker secret ls
 ```
@@ -333,6 +373,7 @@ docker secret ls
 ## 13. References (The 5+5 Rule)
 
 ### Official Documentation & Academic Foundations
+
 1. [Docker Official Documentation: Swarm Mode Overview](https://docs.docker.com/engine/swarm/)
 2. [Docker Official Documentation: How Swarm Works](https://docs.docker.com/engine/swarm/how-swarm-mode-works/nodes/)
 3. [Docker Official Documentation: Ingress Routing Mesh Architecture](https://docs.docker.com/engine/swarm/ingress/)
@@ -340,17 +381,18 @@ docker secret ls
 5. [Linux Virtual Server (IPVS) Kernel Module Specification](http://www.linuxvirtualserver.org/software/ipvs.html)
 
 ### Authoritative Engineering Blogs & Architecture Deep Dives
-6. [Martin Fowler: Microservices Orchestration and High-Availability Clustering](https://martinfowler.com/)
-7. [Brendan Gregg: Linux IPVS and Container Load Balancing Performance](https://www.brendangregg.com/)
-8. [Liz Rice: Understanding Container Orchestration and Raft Consensus](https://www.lizrice.com/)
-9. [Julia Evans: How Docker Swarm Encrypts Multi-Host Overlay Networks](https://jvns.ca/)
-10. [High-Performance Linux Systems: Tuning IPVS and Raft Heartbeats in Swarm](https://www.kernel.org/)
+
+1. [Martin Fowler: Microservices Orchestration and High-Availability Clustering](https://martinfowler.com/)
+2. [Brendan Gregg: Linux IPVS and Container Load Balancing Performance](https://www.brendangregg.com/)
+3. [Liz Rice: Understanding Container Orchestration and Raft Consensus](https://www.lizrice.com/)
+4. [Julia Evans: How Docker Swarm Encrypts Multi-Host Overlay Networks](https://jvns.ca/)
+5. [High-Performance Linux Systems: Tuning IPVS and Raft Heartbeats in Swarm](https://www.kernel.org/)
 
 ---
 
 ## 14. Universal FinOps & Resource Cost Governance
 
-```
+```text
 ┌────────────────────────────────────────────────────────────────────────────────┐
 │                       SWARM FINOPS SAVINGS MATRIX                              │
 ├──────────────────────────┬──────────────────────────┬──────────────────────────┤
@@ -371,19 +413,23 @@ docker secret ls
 ```
 
 ### 1. Managed Kubernetes vs Docker Swarm Control Plane FinOps
+
 In a mid-sized enterprise running 50 microservices across 15 cloud worker nodes:
-- **Managed Kubernetes (EKS / GKE)**:
-  - AWS EKS Control Plane Fee: \$72/month per cluster $\times 3\text{ clusters} = \$216/\text{month}$.
-  - Kubernetes agent memory tax (kubelet, kube-proxy, etcd, coredns, CNI, CSI): **2GB RAM consumed per node** across 15 nodes = 30GB of wasted cluster memory.
-  - Dedicated K8s SRE engineering overhead: $~\$150,000/\text{year}$ salary allocation.
-- **Docker Swarm Mode**:
-  - Control plane license and cloud fee: **\$0/month**.
-  - Swarm memory tax: **under 50MB per node**.
-  - Management overhead: Standard Docker CLI commands without dedicated K8s SRE specialists.
-  - **FinOps ROI**: **\$35,000–\$60,000/year in combined cloud infrastructure and operational labor savings**.
+
+* **Managed Kubernetes (EKS / GKE)**:
+  * AWS EKS Control Plane Fee: \$72/month per cluster $\times 3\text{ clusters} = \$216/\text{month}$.
+  * Kubernetes agent memory tax (kubelet, kube-proxy, etcd, coredns, CNI, CSI): **2GB RAM consumed per node** across 15 nodes = 30GB of wasted cluster memory.
+  * Dedicated K8s SRE engineering overhead: $~\$150,000/\text{year}$ salary allocation.
+* **Docker Swarm Mode**:
+  * Control plane license and cloud fee: **\$0/month**.
+  * Swarm memory tax: **under 50MB per node**.
+  * Management overhead: Standard Docker CLI commands without dedicated K8s SRE specialists.
+  * **FinOps ROI**: **\$35,000–\$60,000/year in combined cloud infrastructure and operational labor savings**.
 
 ### 2. Cloud Load Balancer Elimination via Ingress Routing Mesh
+
 In multi-service cloud architectures where every microservice requires external routing:
-- Provisioning 10 AWS Application Load Balancers (ALBs @ \$25/month each + \$0.008/LCU): **\$350–\$600/month**.
-- Deploying services across Docker Swarm leverages the native built-in **IPVS Ingress Routing Mesh** to distribute traffic across nodes over a single external entry point.
-- **FinOps ROI**: Saves **\$4,200/year in cloud load balancer provisioning fees**.
+
+* Provisioning 10 AWS Application Load Balancers (ALBs @ \$25/month each + \$0.008/LCU): **\$350–\$600/month**.
+* Deploying services across Docker Swarm leverages the native built-in **IPVS Ingress Routing Mesh** to distribute traffic across nodes over a single external entry point.
+* **FinOps ROI**: Saves **\$4,200/year in cloud load balancer provisioning fees**.

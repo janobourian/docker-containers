@@ -1,349 +1,174 @@
-# Module 00: Docker & Container Systems Engineering — Master Curriculum Index
+# Mission-Critical Docker & Container Systems Architecture — Master Curriculum Portal
 
-**Track:** Docker Container Systems & Virtualization Architecture  
-**Category:** Master Curriculum Portal, Enterprise Architecture & Learning Roadmap  
-**Standard Identifier:** `DOC-STD-UNIVERSAL-2026`  
-**Status:** ✅ Completed
+**Track:** Enterprise Container Architecture, OCI Runtimes & Cloud Native Infrastructure
+**Standard Identifier:** `DOC-STD-UNIVERSAL-2026-DOCKER`
+**Repository:** `vit/docker-containers`
+**Target Level:** Zero to Enterprise Container Systems Architect & Cloud Infrastructure Lead
+**Status:** ✅ Complete 32-Module Master Encyclopedia (100% Validated & Standardized)
 
 ---
 
 ## 📑 Table of Contents
-1. [High-Level Overview & Executive Summary](#1-high-level-overview--executive-summary)
-2. [Complete Curriculum Module Taxonomy](#2-complete-curriculum-module-taxonomy)
-3. [Virtualization Evolution: Hypervisors, Containers & WebAssembly](#3-virtualization-evolution-hypervisors-containers--webassembly)
-4. [The Open Container Initiative (OCI) & CNCF Ecosystem](#4-the-open-container-initiative-oci--cncf-ecosystem)
-5. [Certification & Exam Essentials (Cheat Sheet)](#5-certification--exam-essentials-cheat-sheet)
-6. [Comparative Analysis Matrix: Container Learning Tracks](#6-comparative-analysis-matrix-container-learning-tracks)
-7. [Performance & Resource Optimization](#7-performance--resource-optimization)
-8. [In-Depth Engineering Perspectives](#8-in-depth-engineering-perspectives)
-9. [Well-Architected Framework Alignment](#9-well-architected-framework-alignment)
-10. [Step-by-Step Hands-On Production Walkthrough](#10-step-by-step-hands-on-production-walkthrough)
-11. [Pure CLI / Command Interface](#11-pure-cli--command-interface)
-12. [Advanced Architecture & Edge-Case Failure Modes](#12-advanced-architecture--edge-case-failure-modes)
-13. [Detailed Sub-Components & Subsystems](#13-detailed-sub-components--subsystems)
-14. [References (The 5+5 Rule)](#14-references-the-55-rule)
-15. [Universal FinOps & Resource Cost Governance](#15-universal-finops--resource-cost-governance)
+
+1. [Master Curriculum Architecture & Track Taxonomy](#1-master-curriculum-architecture--track-taxonomy)
+
+2. [Complete 32-Module Curriculum Matrix](#2-complete-32-module-curriculum-matrix)
+
+3. [Ecosystem Competency & Certification Roadmap](#3-ecosystem-competency--certification-roadmap)
+
+4. [Universal Engineering Documentation Standards (`DOC-STD-UNIVERSAL-2026`)](#4-universal-engineering-documentation-standards-doc-std-universal-2026)
+
+5. [Enterprise FinOps & Cloud Compute Governance Framework](#5-enterprise-finops--cloud-compute-governance-framework)
 
 ---
 
-## 1. High-Level Overview & Executive Summary
+## 1. Master Curriculum Architecture & Track Taxonomy
 
-The **Docker & Container Systems Engineering Curriculum** is an offline-first, enterprise-grade educational resource and operational reference designed to guide engineers, site reliability engineers (SREs), and cloud architects from fundamental Linux isolation mechanics to distributed multi-node production clustering. 
+This encyclopedia represents the definitive, industrial-grade learning path for **Container Runtime Architecture, OCI Specifications, Linux Kernel Isolation Primitives (Namespaces, cgroups v2, OverlayFS), BuildKit Compilation, Enterprise Security Hardening, and Production Microservices Mesh Orchestration**.
 
-Containerization has fundamentally reshaped global computing infrastructure. By leveraging Linux kernel primitives—including Process, Network, Mount, and User Namespaces, Control Groups v2 (cgroups), OverlayFS union filesystems, Seccomp system call filtering, and the OCI runtime reference (`runc`)—containers execute isolated user-space processes with near-zero hypervisor overhead.
+```mermaid
+flowchart TD
+    subgraph PRE["🟢 PRE-TIER: Absolute Foundations (Modules neg04 – neg00)"]
+        direction LR
+        N4["neg04: Runtime Install\n& Hello World"]
+        N3["neg03: CLI Verbs\n& Observability"]
+        N2["neg02: Dockerfile\n& Layer Caching"]
+        N1["neg01: Storage Mounts\n& Named Volumes"]
+        N0["neg00: Network Bridge\n& DNS Discovery"]
+        N4 --> N3 --> N2 --> N1 --> N0
+    end
 
-```
-┌────────────────────────────────────────────────────────────────────────────────┐
-│               ENTERPRISE CONTAINER CURRICULUM ARCHITECTURE                     │
-├────────────────────────────────────────────────────────────────────────────────┤
-│ ┌────────────────────────────────────────────────────────────────────────────┐ │
-│ │ 01. GETTING STARTED: Fundamentals, Namespaces, Cgroups, Running Containers  │ │
-│ ├────────────────────────────────────────────────────────────────────────────┤ │
-│ │ 02. DOCKER ENGINE: Architecture, dockerd, containerd, runc, Cgroups v2     │ │
-│ ├────────────────────────────────────────────────────────────────────────────┤ │
-│ │ 03. CONTAINER OPERATIONS: Lifecycle, signals, PID 1, exit codes, exec      │ │
-│ ├────────────────────────────────────────────────────────────────────────────┤ │
-│ │ 04. IMAGES & BUILDKIT: Multi-stage, layer caching, Buildx, Distroless      │ │
-│ ├────────────────────────────────────────────────────────────────────────────┤ │
-│ │ 05. APP PACKAGING: 12-Factor, non-root user, health checks, hardening      │ │
-│ ├────────────────────────────────────────────────────────────────────────────┤ │
-│ │ 06. DOCKER COMPOSE: Multi-container declarative YAML stacks, watch mode     │ │
-│ ├────────────────────────────────────────────────────────────────────────────┤ │
-│ │ 07. STORAGE & VOLUMES: Named volumes, bind mounts, tmpfs, CoW bypass       │ │
-│ ├────────────────────────────────────────────────────────────────────────────┤ │
-│ │ 08. DOCKER NETWORKING: Bridge, Host, Overlay, Macvlan, DNS 127.0.0.11      │ │
-│ ├────────────────────────────────────────────────────────────────────────────┤ │
-│ │ 09. SECURITY & HARDENING: Cap-drop, Seccomp BPF, Rootless, AppArmor, CVEs  │ │
-│ ├────────────────────────────────────────────────────────────────────────────┤ │
-│ │ 10. DOCKER SWARM: Raft consensus, IPVS ingress routing mesh, services      │ │
-│ ├────────────────────────────────────────────────────────────────────────────┤ │
-│ │ 11. WEBASSEMBLY (WASM): WASI runtimes, containerd-shim-wasm, edge execution │ │
-│ ├────────────────────────────────────────────────────────────────────────────┤ │
-│ │ 12. DISTRIBUTED KAFKA: KRaft mode, dual listeners, event streaming         │ │
-│ ├────────────────────────────────────────────────────────────────────────────┤ │
-│ │ 13. SRE CHEAT SHEET: Escaped CLI reference commands, diagnostic runbooks   │ │
-│ ├────────────────────────────────────────────────────────────────────────────┤ │
-│ │ 14. CURRICULUM INDEX: Master navigation, DCA certification competencies    │ │
-│ └────────────────────────────────────────────────────────────────────────────┘ │
-└────────────────────────────────────────────────────────────────────────────────┘
-```
+    subgraph T1["🟡 TIER 1: Core Engine & Linux Primitives (Modules 00 – 04)"]
+        direction LR
+        M00["00: Container Foundations\n& Architecture"]
+        M01["01: Engine Internals\n& Kernel Syscalls"]
+        M02["02: Process Model\n& Tini Init"]
+        M03["03: Multi-Stage\n& BuildKit"]
+        M04["04: Polyglot Apps\n& Containerization"]
+        M00 --> M01 --> M02 --> M03 --> M04
+    end
 
-### 👔 Executive Summary (For Managers & Non-Technical Stakeholders)
-* **Business Purpose**: Establishes a standardized, comprehensive enterprise knowledge baseline for developing, deploying, scaling, and securing containerized applications across private data centers and public cloud clouds.
-* **How It Works**: Provides structured engineering guides combining non-technical business executive summaries with rigorous, hands-on Linux system walkthroughs and FinOps cost models.
-* **Key Business Value & ROI**: Slashes developer onboarding time from weeks to hours, eliminates server configuration drift, prevents costly security breaches through defense-in-depth hardening, and cuts cloud compute and storage bills by 40%–70%.
+    subgraph T2["🟠 TIER 2: Orchestration & Distributed Stacks (Modules 05 – 08)"]
+        direction LR
+        M05["05: Docker Compose\nSpecification"]
+        M06["06: Storage OverlayFS\n& Bind Mounts"]
+        M07["07: Advanced Networking\n& iptables NAT"]
+        M08["08: Security Hardening\n& Seccomp"]
+        M05 --> M06 --> M07 --> M08
+    end
 
----
+    subgraph T3["🔴 TIER 3: Clustering & Specialized Runtimes (Modules 09 – 13)"]
+        direction LR
+        M09["09: Swarm Mode\n& Routing Mesh"]
+        M10["10: WebAssembly WASI\n& WasmEdge"]
+        M11["11: Distributed Kafka\nStateful Sets"]
+        M12["12: SRE Runbooks\n& CLI Cheatsheet"]
+        M13["13: OCI Standards\n& Specifications"]
+        M09 --> M10 --> M11 --> M12 --> M13
+    end
 
-## 2. Complete Curriculum Module Taxonomy
+    subgraph T4["⚫ TIER 4: Hardware Acceleration & Modern Ecosystems (Modules 14 – 18)"]
+        direction LR
+        M14["14: NVIDIA CUDA\n& GPU Toolkits"]
+        M15["15: Multi-Arch Buildx\n& QEMU Emulation"]
+        M16["16: Kubernetes CRI\n& containerd"]
+        M17["17: Podman & Skopeo\nDaemonless"]
+        M18["18: gVisor runsc\n& Kata MicroVMs"]
+        M14 --> M15 --> M16 --> M17 --> M18
+    end
 
-```
-┌────────────────────────────────────────────────────────────────────────────────┐
-│                   DOCKER ENGINEERING COMPLETE MODULE INDEX                     │
-├──────┬────────────────────────┬───────────────────────────┬────────────────────┤
-│ Mod# │ Module Title           │ File Path                 │ Status             │
-├──────┼────────────────────────┼───────────────────────────┼────────────────────┤
-│ **01**| Getting Started        │ `getting-started.md`      │ ✅ Complete (2026) │
-│ **02**| Docker Engine          │ `docker-engine.md`        │ ✅ Complete (2026) │
-│ **03**| Container Operations   │ `working-with-containers..`| ✅ Complete (2026) │
-│ **04**| Images & Multi-Stage   │ `working-with-images.md`  │ ✅ Complete (2026) │
-│ **05**| App Containerization   │ `containerizing_an_app.md`│ ✅ Complete (2026) │
-│ **06**| Multi-Container Apps   │ `multi-container-apps.md` │ ✅ Complete (2026) │
-│ **07**| Storage & Volumes      │ `docker-volumes.md`       │ ✅ Complete (2026) │
-│ **08**| Docker Networking      │ `docker-networking.md`    │ ✅ Complete (2026) │
-│ **09**| Docker Security        │ `docker-security.md`      │ ✅ Complete (2026) │
-│ **10**| Docker Swarm Mode      │ `docker-swarm.md`         │ ✅ Complete (2026) │
-│ **11**| Docker & WebAssembly   │ `docker-and-wasm.md`      │ ✅ Complete (2026) │
-│ **12**| Distributed Kafka      │ `apache-kafka-introduct..`│ ✅ Complete (2026) │
-│ **13**| SRE Command Sheet      │ `docker-cheatsheet.md`    │ ✅ Complete (2026) │
-│ **14**| Curriculum Index       │ `docker-docs.md`          │ ✅ Complete (2026) │
-└──────┴────────────────────────┴───────────────────────────┴────────────────────┘
+    subgraph T5["🔵 TIER 5: Supply Chain, Testing & Capstone (Modules 19 – 26)"]
+        direction LR
+        M19["19: eBPF Profiling\n& cAdvisor"]
+        M20["20: DockerSlim\n& Distroless"]
+        M21["21: Vault & BuildKit\nSecret Mounts"]
+        M22["22: SLSA Supply Chain\n& Cosign Signatures"]
+        M23["23: Kaniko Unprivileged\nCI/CD Pipelines"]
+        M24["24: Harbor OCI\nRegistry Hub"]
+        M25["25: Testcontainers\nIntegration Labs"]
+        M26["26: Production Capstone\nMicroservices Mesh"]
+        M19 --> M20 --> M21 --> M22 --> M23 --> M24 --> M25 --> M26
+    end
+
+    PRE --> T1 --> T2 --> T3 --> T4 --> T5
 ```
 
 ---
 
-## 3. Virtualization Evolution: Hypervisors, Containers & WebAssembly
+## 2. Complete 32-Module Curriculum Matrix
 
-```
-┌────────────────────────────────────────────────────────────────────────────────┐
-│                   COMPUTING VIRTUALIZATION EVOLUTION                           │
-├───────────────────────┬──────────────────────────┬─────────────────────────────┤
-│ Technology Tier       │ Abstraction Level        │ Resource Isolation Unit     │
-├───────────────────────┼──────────────────────────┼─────────────────────────────┤
-│ **Virtual Machines**  │ Hardware / VMX Level     │ Full Guest Operating System │
-│ (Type 1/2 Hypervisor) │ (Slow, heavy 10GB+ image)│ (Independent Kernel & RAM)  │
-├───────────────────────┼──────────────────────────┼─────────────────────────────┤
-│ **Linux Containers**  │ Operating System Kernel  │ Isolated User-Space Process │
-│ (Docker / containerd) │ (Fast, lightweight 20MB) │ (Shared Kernel via cgroups) │
-├───────────────────────┼──────────────────────────┼─────────────────────────────┤
-│ **WebAssembly**       │ Process Virtual Machine  │ Sandboxed Bytecode Module   │
-│ (Wasm / WASI)         │ (Instant 1ms, 2MB size)  │ (Zero Guest OS dependency!) │
-└───────────────────────┴──────────────────────────┴─────────────────────────────┘
-```
-
----
-
-## 4. The Open Container Initiative (OCI) & CNCF Ecosystem
-
-```
-┌────────────────────────────────────────────────────────────────────────────────┐
-│                    OPEN CONTAINER INITIATIVE STANDARDS                         │
-├────────────────────────────────────────────────────────────────────────────────┤
-│ 1. `image-spec`: Defines OCI image format, manifest JSON, and layer tarballs.  │
-│ 2. `runtime-spec`: Defines container configuration (`config.json`) and runc.   │
-│ 3. `distribution-spec`: Defines HTTP API for pushing and pulling OCI artifacts.│
-└────────────────────────────────────────────────────────────────────────────────┘
-```
-
----
-
-## 5. Certification & Exam Essentials (Cheat Sheet)
-
-* ⚠️ **Target Certifications Supported by this Curriculum**:
-  - **Docker Certified Associate (DCA)**: Comprehensive coverage of Swarm orchestration, networking, security, storage, and image lifecycle.
-  - **Certified Kubernetes Administrator (CKA)** / **CKAD**: Container runtime fundamentals (`containerd`, `runc`), cgroups, and multi-container patterns.
-  - **Certified Kubernetes Security Specialist (CKS)**: Seccomp, AppArmor, non-root users, capability dropping, and vulnerability scanning.
-* 🔒 **Daemon Configuration Invariant**: Custom daemon settings must be declared in `/etc/docker/daemon.json` and validated with `dockerd --validate`.
-* ⚙️ **The 5-Node Raft Rule**: Maintain odd numbers of Swarm managers (3 or 5) to ensure deterministic quorum calculations without split-brain.
-
----
-
-## 6. Comparative Analysis Matrix: Container Learning Tracks
-
-| Curriculum Track | Target Audience | Primary Focus | Practical Outcome |
+| Module | Core Domain & Engineering Focus | Target Level | Reference Document Link |
 | :--- | :--- | :--- | :--- |
-| **Developer Track** | Software Engineers | Multi-Stage Dockerfiles, Compose | Instant local development setup |
-| **DevOps Track** | CI/CD Engineers | BuildKit caching, Multi-Arch | Ultra-fast automated build CI/CD |
-| **SRE / Ops Track** | Infrastructure SREs | Cgroups v2, Swarm, Storage IOPS | 99.999% High-Availability Uptime |
-| **Security Track** | AppSec / InfoSec | Seccomp, Cosign, Non-Root, SBOM | CIS Docker Benchmark Compliance |
+| **neg04. Runtime Install** | Docker Engine, containerd, Colima, WSL2, `hello-world` execution flow | Absolute Beginner | [`neg04_container_runtime_installation_and_hello_world.md`](neg04_container_runtime_installation_and_hello_world.md) |
+| **neg03. CLI Primitives** | CLI grammar, `run` vs `start` vs `exec`, `logs`, `stats`, `inspect` JSON format | Absolute Beginner | [`neg03_container_cli_primitives_run_exec_logs_ps.md`](neg03_container_cli_primitives_run_exec_logs_ps.md) |
+| **neg02. Dockerfile Basics** | `FROM`, `RUN`, `COPY`, `WORKDIR`, layer caching, `CMD` vs `ENTRYPOINT` matrix | Beginner Foundations | [`neg02_dockerfile_foundations_from_run_cmd_entrypoint.md`](neg02_dockerfile_foundations_from_run_cmd_entrypoint.md) |
+| **neg01. Storage Mounts** | Ephemeral layers, Named Volumes, Bind Mounts, `tmpfs`, `--mount` syntax | Beginner Foundations | [`neg01_container_storage_bind_mounts_and_named_volumes.md`](neg01_container_storage_bind_mounts_and_named_volumes.md) |
+| **neg00. Networking Ports** | `bridge`, `host`, port forwarding `-p`, iptables DNAT, embedded DNS `127.0.0.11` | Beginner Foundations | [`neg00_container_networking_ports_bridge_and_host.md`](neg00_container_networking_ports_bridge_and_host.md) |
+| **00. Foundations & Arch** | High-level container architecture, virtualization vs containerization, OCI | Foundational Systems | [`00_container_foundations_and_docker_architecture.md`](00_container_foundations_and_docker_architecture.md) |
+| **01. Engine & Linux Primitives** | Namespaces (8 types), cgroups v2, OverlayFS (lower/upper/merged), `dockerd`/`runc` | Systems Architecture | [`01_docker_engine_architecture_and_linux_kernel_primitives.md`](01_docker_engine_architecture_and_linux_kernel_primitives.md) |
+| **02. Process Model & Tini** | PID 1 responsibilities, zombie process reaping, SIGTERM signal propagation, `tini` | Systems Architecture | [`02_container_lifecycle_process_model_and_tini_init.md`](02_container_lifecycle_process_model_and_tini_init.md) |
+| **03. Multi-Stage & BuildKit** | Multi-stage build patterns, BuildKit cache mounts, frontend syntax, `.dockerignore` | Build Optimization | [`03_dockerfile_multi_stage_builds_and_buildkit.md`](03_dockerfile_multi_stage_builds_and_buildkit.md) |
+| **04. Polyglot Containers** | Node.js, Python, Go, Java, Rust containerization recipes and best practices | Application Systems | [`04_containerizing_enterprise_polyglot_applications.md`](04_containerizing_enterprise_polyglot_applications.md) |
+| **05. Docker Compose** | Compose v2 specification, multi-tier microservices, healthchecks, `depends_on` | Orchestration Lead | [`05_docker_compose_specification_and_multi_tier_stacks.md`](05_docker_compose_specification_and_multi_tier_stacks.md) |
+| **06. Storage Architecture** | OverlayFS copy-on-write internals, volume drivers, NFS/CIFS network storage | Storage Specialist | [`06_storage_architecture_volumes_bind_mounts_and_overlayfs.md`](06_storage_architecture_volumes_bind_mounts_and_overlayfs.md) |
+| **07. Advanced Networking** | Virtual ethernet (`veth`) pairs, overlay VXLAN, macvlan, Linux packet traversal | Network Architect | [`07_networking_deep_dive_bridge_overlay_macvlan_and_iptables.md`](07_networking_deep_dive_bridge_overlay_macvlan_and_iptables.md) |
+| **08. Security & Hardening** | Dropping capabilities (`CAP_SYS_ADMIN`), Seccomp profiles, AppArmor, non-root UID | Security Engineer | [`08_container_security_hardening_rootless_seccomp_and_capabilities.md`](08_container_security_hardening_rootless_seccomp_and_capabilities.md) |
+| **09. Swarm & Routing Mesh** | Docker Swarm Mode, Raft consensus, Ingress routing mesh, service virtual IPs | Cluster Architect | [`09_docker_swarm_clustering_and_ingress_routing_mesh.md`](09_docker_swarm_clustering_and_ingress_routing_mesh.md) |
+| **10. WebAssembly WASI** | OCI WebAssembly integration, WasmEdge, Wasmtime, sub-millisecond serverless | JIT & WASM Lead | [`10_webassembly_wasi_runtimes_wasmtime_and_wasmedge.md`](10_webassembly_wasi_runtimes_wasmtime_and_wasmedge.md) |
+| **11. Distributed Kafka** | Stateful clustering, ZooKeeper/KRaft quorum, volume persistence, multi-broker mesh | Data Infrastructure | [`11_distributed_kafka_and_stateful_container_workloads.md`](11_distributed_kafka_and_stateful_container_workloads.md) |
+| **12. SRE Runbook** | Production debugging, forensic inspection, emergency crash-recovery runbooks | SRE & Operations | [`12_production_cli_cheatsheet_and_troubleshooting_runbook.md`](12_production_cli_cheatsheet_and_troubleshooting_runbook.md) |
+| **13. OCI Standards** | OCI Runtime, Image, and Distribution Specifications, content-addressable storage | Systems Governance | [`13_container_specification_and_documentation_standards.md`](13_container_specification_and_documentation_standards.md) |
+| **14. GPU Acceleration** | NVIDIA Container Toolkit (`nvidia-ctk`), CDI device schema, CUDA AI workloads | AI Infrastructure | [`14_gpu_acceleration_nvidia_container_toolkit_and_cuda.md`](14_gpu_acceleration_nvidia_container_toolkit_and_cuda.md) |
+| **15. Multi-Arch Buildx** | OCI Manifest Lists, QEMU `binfmt_misc` emulation, ARM64 Graviton optimization | Build Engineer | [`15_cross_platform_builds_buildx_qemu_and_multiarch.md`](15_cross_platform_builds_buildx_qemu_and_multiarch.md) |
+| **16. Kubernetes CRI** | CRI gRPC interface, CRI-O vs `containerd`, Pod sandbox pause container lifecycle | Cloud Native Lead | [`16_cri_o_and_kubernetes_cri_runtimes.md`](16_cri_o_and_kubernetes_cri_runtimes.md) |
+| **17. Daemonless Podman** | Rootless containers, `conmon` supervisor, Buildah image builder, Skopeo sync | Hardened Systems | [`17_podman_skopeo_and_buildah_daemonless_ecosystem.md`](17_podman_skopeo_and_buildah_daemonless_ecosystem.md) |
+| **18. Sandboxed MicroVMs** | gVisor (`runsc`) user-space kernel, Kata Containers hardware-isolated MicroVMs | Security Architect | [`18_sandboxed_containers_gvisor_and_kata_containers.md`](18_sandboxed_containers_gvisor_and_kata_containers.md) |
+| **19. eBPF Profiling** | Linux perf, eBPF probes, CFS CPU throttling detection, cAdvisor Prometheus metrics | Observability Lead | [`19_container_profiling_perf_ebpf_and_cadvisor.md`](19_container_profiling_perf_ebpf_and_cadvisor.md) |
+| **20. Image Minification** | DockerSlim dynamic tracing, Google Distroless, scratch base, CVE elimination | Quality Engineer | [`20_image_optimization_and_docker_slim.md`](20_image_optimization_and_docker_slim.md) |
+| **21. Secrets Management** | BuildKit secret mounts, HashiCorp Vault agent sidecars, tmpfs RAM credentials | Security Engineer | [`21_secrets_management_buildkit_secrets_and_vault.md`](21_secrets_management_buildkit_secrets_and_vault.md) |
+| **22. SLSA Supply Chain** | Software Bill of Materials (SBOM / Syft), Sigstore Cosign cryptographic signatures | Supply Chain Lead | [`22_supply_chain_security_slsa_provenance_and_cosign.md`](22_supply_chain_security_slsa_provenance_and_cosign.md) |
+| **23. CI/CD Pipelines** | Kaniko unprivileged in-cluster builds, DinD vs DooD security analysis, caching | Platform Engineer | [`23_cicd_pipeline_integration_docker_in_docker_and_kaniko.md`](23_cicd_pipeline_integration_docker_in_docker_and_kaniko.md) |
+| **24. Harbor Registries** | CNCF Harbor architecture, geo-replication, proxy cache mirrors, RBAC policies | Infrastructure Lead | [`24_container_registry_architecture_harbor_and_distribution.md`](24_container_registry_architecture_harbor_and_distribution.md) |
+| **25. Testcontainers QA** | Ephemeral integration test suites, automated database teardown, Ryuk reaper | Quality Assurance | [`25_container_testing_testcontainers_and_quality_assurance.md`](25_container_testing_testcontainers_and_quality_assurance.md) |
+| **26. Master Capstone** | Hardened polyglot microservices mesh, NGINX gateway, Node.js API, Postgres, Redis | Principal Architect | [`26_enterprise_production_capstone_microservices_mesh.md`](26_enterprise_production_capstone_microservices_mesh.md) |
 
 ---
 
-## 7. Performance & Resource Optimization
+## 3. Ecosystem Competency & Certification Roadmap
 
-```
+```text
 ┌────────────────────────────────────────────────────────────────────────────────┐
-│                   UNIVERSAL CONTAINER OPTIMIZATION MANDATES                    │
-├────────────────────────────────────────────────────────────────────────────────┤
-│ 1. Always enforce memory, CPU, and PID limits on every container.             │
-│ 2. Use Distroless or Scratch multi-stage base images in production.           │
-│ 3. Attach dedicated Named Volumes for database and message broker storage.    │
-│ 4. Segment sensitive backend networks with user-defined bridges (`--internal`).│
-│ 5. Schedule nightly automated garbage collection (`docker system prune`).      │
-└────────────────────────────────────────────────────────────────────────────────┘
+│             CONTAINER & CLOUD NATIVE CERTIFICATION MAPPING MATRIX              │
+├───────────────────┬───────────────────┬────────────────────────────────────────┤
+│ Certification     │ Governing Body    │ Targeted Encyclopedia Modules          │
+├───────────────────┼───────────────────┼────────────────────────────────────────┤
+│ **DCA**           │ Docker / Mirantis │ Modules neg04-neg00, 00-09, 12, 15     │
+├───────────────────┼───────────────────┼────────────────────────────────────────┤
+│ **CKA**           │ Linux Foundation  │ Modules 01, 06, 07, 16, 17, 19, 23     │
+├───────────────────┼───────────────────┼────────────────────────────────────────┤
+│ **CKS (Security)**│ Linux Foundation  │ Modules 08, 17, 18, 20, 21, 22         │
+├───────────────────┼───────────────────┼────────────────────────────────────────┤
+│ **LFCS (Linux)**  │ Linux Foundation  │ Modules 01, 02, 06, 07, 08, 19         │
+└───────────────────┴───────────────────┴────────────────────────────────────────┘
 ```
 
 ---
 
-## 8. In-Depth Engineering Perspectives
+## 4. Universal Engineering Documentation Standards (`DOC-STD-UNIVERSAL-2026`)
 
-### Security Perspective
-* **Defense-in-Depth Confinement**: Combining non-root execution (`USER 10001:10001`), dropping all Linux capabilities (`--cap-drop ALL`), enabling Seccomp BPF filtering, and enforcing immutable root filesystems (`--read-only`) ensures that even if an application suffers a Remote Code Execution (RCE) exploit, the attacker cannot persist malware or compromise the host kernel.
+Every document in this 32-module encyclopedia adheres strictly to the universal enterprise documentation standard:
 
-### High Availability Perspective
-* **Self-Healing Distributed Systems**: Combining Docker Swarm Raft consensus, Ingress Routing Meshes, and automated rolling update failure rollbacks guarantees uninterrupted business operations during host server hardware failures.
-
-### Resilience & Fault Tolerance Perspective
-* **Clean Process Lifecycle Supervision**: Designing applications to handle `SIGTERM` signals for graceful shutdown, pairing with Tini zombie process reaping (`--init`), and defining deterministic container health checks eliminates zombie PID leaks and connection reset storms.
-
-### Cost & Efficiency Perspective
-* **Rigorous FinOps Governance**: Standardizing on minimal multi-stage base images, eliminating OverlayFS copy-on-write IOPS write taxes through direct Named Volumes, and right-sizing container memory quotas cuts enterprise cloud bills by over 50%.
+1. **Executive Summaries**: High-level business purpose, mechanics, and value for executives and non-technical stakeholders.
+2. **Deep Architectural Diagrams**: Mermaid flowcharts, sequence diagrams, mindmaps, and ASCII virtual memory topologies.
+3. **Reproducible Production Labs**: Complete, executable configurations and scripts.
+4. **Pure Escaped CLI Snippets**: Formatted with trailing `\` line escapes and zero in-code comments.
+5. **The 5+5 Reference Rule**: Exactly 5 official documentation links + 5 authoritative engineering deep dives (APA 7th edition).
+6. **Universal FinOps & Hardware Cost Governance**: Financial analyses detailing exact cloud VM and storage cost savings.
 
 ---
 
-## 9. Step-by-Step Hands-On Production Walkthrough
+## 5. Enterprise FinOps & Cloud Compute Governance Framework
 
-### Step 1: Execute Complete Container Health & Security Check
-
-```bash
-# 1. Audit Docker Daemon Configuration and Cgroup Hierarchy
-docker info --format '
-Engine Version  : {{.ServerVersion}}
-Storage Driver  : {{.Driver}}
-Cgroup Version  : {{.CgroupVersion}}
-Live Restore    : {{.LiveRestoreEnabled}}
-Security Opts   : {{json .SecurityOptions}}
-'
-```
-
----
-
-### Step 2: Verify Master Curriculum Assets
-
-```bash
-# Inspect all 14 curriculum modules in the repository
-ls -la /Users/frgonzal/Documents/vit/docker-containers/docs/
-```
-
----
-
-## 10. Pure CLI / Command Interface
-
-### 1. Inspect Global Container System Storage Footprint
-```bash
-docker system df \
-    --verbose
-```
-
-### 2. Stream Live Resource Telemetry across All Containers
-```bash
-docker stats \
-    --no-stream \
-    --format "table {{.Name}}\t{{.CPUPerc}}\t{{.MemUsage}}\t{{.NetIO}}\t{{.BlockIO}}"
-```
-
-### 3. Gracefully Stop All Containers
-```bash
-docker stop \
-    --time 15 \
-    $(docker ps -q)
-```
-
----
-
-## 11. Advanced Architecture & Edge-Case Failure Modes
-
-```
-┌────────────────────────────────────────────────────────────────────────────────┐
-│                    MASTER FAILURE RECOVERY MATRIX                              │
-├──────────────────────┬────────────────────────┬────────────────────────────────┤
-│ Failure Scenario     │ Underlying Root Cause  │ Recommended Solution Module    │
-├──────────────────────┼────────────────────────┼────────────────────────────────┤
-│ **Out Of Memory**    │ Container exceeds RAM; │ Module 02 (`docker-engine.md`) │
-│ **(Exit Code 137)**  │ kernel OOM killer fires│ Module 03 (`working-with-..`)  │
-├──────────────────────┼────────────────────────┼────────────────────────────────┤
-│ **Service DNS Lookup │ Containers on legacy   │ Module 08 (`docker-network..`) │
-│ **Failure Error**    │ default `bridge` net.  │ Module 06 (`multi-container..`)│
-├──────────────────────┼────────────────────────┼────────────────────────────────┤
-│ **Database Write I/O │ Running database on    │ Module 07 (`docker-volumes.md`)│
-│ **Freeze Latency**   │ root OverlayFS layer.  │ Module 02 (`docker-engine.md`) │
-├──────────────────────┼────────────────────────┼────────────────────────────────┤
-│ **Swarm Manager Raft │ Loss of majority quorum│ Module 10 (`docker-swarm.md`)  │
-│ **Cluster Freeze**   │ in manager nodes.      │                                │
-└──────────────────────┴────────────────────────┴────────────────────────────────┘
-```
-
----
-
-## 12. Detailed Sub-Components & Subsystems
-
-### 1. containerd Execution Core
-* **Key Concepts**: Industrial-strength core container runtime managing snapshotters, image distribution, and execution lifecycle.
-* **CLI / Tool Snippet**:
-```bash
-docker version
-```
-
-### 2. Linux Kernel Cgroups v2 Controller
-* **Key Concepts**: Unified hierarchical resource controller enforcing CPU, memory, I/O, and PID limits on container process groups.
-* **CLI / Tool Snippet**:
-```bash
-cat /proc/cgroups
-```
-
-### 3. OverlayFS Storage Driver
-* **Key Concepts**: Union filesystem merging immutable lowerdir image layers with a thin writable upperdir container layer.
-* **CLI / Tool Snippet**:
-```bash
-docker info --format '{{.Driver}}'
-```
-
-### 4. BuildKit Compiler
-* **Key Concepts**: High-performance build subsystem executing concurrent multi-stage graphs, secrets mounts, and cache persistence.
-* **CLI / Tool Snippet**:
-```bash
-docker buildx version
-```
-
----
-
-## 13. References (The 5+5 Rule)
-
-### Official Documentation & Enterprise Standards
-1. [Docker Official Documentation: Complete Technical Portal](https://docs.docker.com/)
-2. [Open Container Initiative (OCI): Image, Runtime & Distribution Specs](https://opencontainers.org/)
-3. [Cloud Native Computing Foundation (CNCF): Landscape and Projects](https://www.cncf.io/)
-4. [Center for Internet Security (CIS): Docker Benchmark Standard](https://www.cisecurity.org/benchmark/docker)
-5. [NIST Special Publication 800-190: Application Container Security Guide](https://csrc.nist.gov/publications/detail/sp/800-190/final)
-
-### Authoritative Engineering Blogs & Architecture Deep Dives
-6. [Martin Fowler: Microservices and Container Infrastructure Patterns](https://martinfowler.com/)
-7. [Brendan Gregg: Linux Performance and Container Resource Optimization](https://www.brendangregg.com/)
-8. [Liz Rice: Container Security: Fundamental Technology of Containers](https://www.lizrice.com/)
-9. [Julia Evans: Understanding Linux Namespaces, Cgroups, and Containers](https://jvns.ca/)
-10. [FinOps Foundation: Cloud Container Cost Optimization Framework](https://www.finops.org/)
-
----
-
-## 14. Universal FinOps & Resource Cost Governance
-
-```
-┌────────────────────────────────────────────────────────────────────────────────┐
-│                       MASTER FINOPS SAVINGS MATRIX                             │
-├──────────────────────────┬──────────────────────────┬──────────────────────────┤
-│ Optimization Strategy    │ Technical Mechanism      │ Measurable FinOps ROI    │
-├──────────────────────────┼──────────────────────────┼──────────────────────────┤
-│ **Universal Standards**  │ Full adoption of 2026    │ Cuts overall cloud spend │
-│                          │ container blueprint      │ by 40%–50% enterprise-wide│
-├──────────────────────────┼──────────────────────────┼──────────────────────────┤
-│ **Multi-Stage Builds**   │ Strips 80%+ image bloat  │ Saves \$35,000+/year in  │
-│                          │ from cloud registries    │ registry egress/storage  │
-├──────────────────────────┼──────────────────────────┼──────────────────────────┤
-│ **Direct Named Volumes** │ Direct NVMe block I/O    │ Saves \$10,000+/year per │
-│                          │ (Bypasses OverlayFS CoW) │ database cluster node    │
-├──────────────────────────┼──────────────────────────┼──────────────────────────┤
-│ **Docker Swarm Mode**    │ Zero-cost native cluster │ Saves \$30,000+/year vs  │
-│                          │ orchestration control    │ managed K8s overhead     │
-└──────────────────────────┴──────────────────────────┴──────────────────────────┘
-```
-
-### 1. Enterprise Standardization Cloud FinOps Transformation
-In an enterprise managing 300 microservices across 800 virtual machine hosts:
-- Prior to standardized governance, unconstrained container memory leaks and bloated images drove annual cloud infrastructure spending to **\$2.8 Million**.
-- Adopting this curriculum's **`DOC-STD-UNIVERSAL-2026`** standard—enforcing memory quotas, multi-stage Distroless builds, named volumes for high-I/O databases, and automated system pruning—reduces total compute and storage requirements by **45%**.
-- **FinOps ROI**: Delivers **\$1,260,000 in direct annual cloud infrastructure cost savings**.
-
-### 2. Engineering Team Onboarding Acceleration Value
-- Traditional unstandardized documentation requires 4 to 6 weeks for incoming engineers to achieve production deployment autonomy ($~\$16,000\text{ onboarding salary cost per engineer}$).
-- Providing this unified, offline-capable, production-grade 14-module curriculum enables new hires to become fully autonomous in **under 3 business days**.
-- Across 40 engineering hires annually, the organization reclaims **\$520,000 in developer onboarding productivity value**.
+* **Slashes Cloud Compute Bills by 65%**: Packaging microservices into lightweight containers running on shared Linux kernels multiplies compute density by 4x–8x over traditional virtual machines.
+* **Reduces Storage Egress by 95%**: Minifying images with Distroless and DockerSlim (from 1GB to 20MB) drops cross-region container image pull bandwidth fees to near zero.
+* **Prevents Multi-Million Dollar Breaches**: Cryptographic signing (Cosign) and BuildKit secret mounts eliminate hardcoded credentials and software supply chain attacks.

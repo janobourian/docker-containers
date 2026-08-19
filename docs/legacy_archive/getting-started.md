@@ -1,13 +1,14 @@
 # Module 01: Getting Started with Docker & Enterprise Containerization Foundations
 
-**Track:** Docker Container Systems & Virtualization Architecture  
-**Category:** Container Runtime, Kernel Primitives & Client-Server Ecosystem  
-**Standard Identifier:** `DOC-STD-UNIVERSAL-2026`  
+**Track:** Docker Container Systems & Virtualization Architecture
+**Category:** Container Runtime, Kernel Primitives & Client-Server Ecosystem
+**Standard Identifier:** `DOC-STD-UNIVERSAL-2026`
 **Status:** ✅ Completed
 
 ---
 
 ## 📑 Table of Contents
+
 1. [High-Level Overview & Executive Summary](#1-high-level-overview--executive-summary)
 2. [Containers vs Virtual Machines: Architectural Deep Dive](#2-containers-vs-virtual-machines-architectural-deep-dive)
 3. [Linux Kernel Primitives: Namespaces, Cgroups v2 & OverlayFS](#3-linux-kernel-primitives-namespaces-cgroups-v2--overlayfs)
@@ -30,7 +31,7 @@
 
 Docker is an enterprise-grade containerization platform that packages application code, runtime dependencies, system tools, libraries, and environment variables into standardized, immutable, lightweight executable units called **containers**. Unlike Type-1 or Type-2 hypervisors that virtualize physical hardware to run complete guest operating systems, Docker leverages the shared host **Linux Kernel** using low-level kernel primitives—**Namespaces** for boundary isolation, **Control Groups (cgroups v2)** for deterministic resource metering, and **OverlayFS** for copy-on-write storage layering.
 
-```
+```text
 ┌────────────────────────────────────────────────────────────────────────────────┐
 │               CONTAINERS VS VIRTUAL MACHINES ARCHITECTURE                      │
 ├───────────────────────────────────────┬────────────────────────────────────────┤
@@ -53,6 +54,7 @@ Docker is an enterprise-grade containerization platform that packages applicatio
 ```
 
 ### 👔 Executive Summary (For Managers & Non-Technical Stakeholders)
+
 * **Business Purpose**: Solves the classic "it works on my machine" software delivery problem by packaging enterprise software into self-contained, portable digital shipping containers that run identically across developer laptops, on-premises data centers, and multi-cloud environments.
 * **How It Works**: Rather than booting a full, heavy operating system (which consumes gigabytes of memory and takes 30 to 60 seconds to boot), containers share the host computer's operating system engine, launching in milliseconds while using 95% less RAM.
 * **Key Business Value & ROI**: Increases server workload density by $5\times$ to $10\times$, cuts cloud compute spending by over 60%, accelerates deployment velocity from months to seconds, and eliminates configuration drift across software release stages.
@@ -61,7 +63,7 @@ Docker is an enterprise-grade containerization platform that packages applicatio
 
 ## 2. Containers vs Virtual Machines: Architectural Deep Dive
 
-```
+```text
 ┌────────────────────────────────────────────────────────────────────────────────┐
 │                   VIRTUAL MACHINES VS CONTAINERS METRIC COMPARISON             │
 ├───────────────────────┬──────────────────────────┬─────────────────────────────┤
@@ -87,7 +89,7 @@ Docker is an enterprise-grade containerization platform that packages applicatio
 
 A container is not a physical boundary; it is a **standard Linux process** constrained by three core kernel subsystems:
 
-```
+```text
 ┌────────────────────────────────────────────────────────────────────────────────┐
 │                     THE THREE PILLARS OF CONTAINERIZATION                      │
 ├────────────────────────────────────────────────────────────────────────────────┤
@@ -115,7 +117,7 @@ A container is not a physical boundary; it is a **standard Linux process** const
 
 ## 4. Docker Engine Client-Server Architecture & OCI Standards
 
-```
+```text
 ┌────────────────────────────────────────────────────────────────────────────────┐
 │               DOCKER ENGINE & OCI RUNTIME CALL SEQUENCE                        │
 ├────────────────────────────────────────────────────────────────────────────────┤
@@ -149,6 +151,7 @@ A container is not a physical boundary; it is a **standard Linux process** const
 ```
 
 ### 4.1 The Open Container Initiative (OCI) Standards
+
 - **`image-spec`**: Standardizes tarball layer formats, JSON manifests, and cryptographic SHA-256 layer hashing.
 - **`runtime-spec`**: Defines configuration (`config.json`) and lifecycle operations (`create`, `start`, `kill`, `delete`) for container runtimes.
 - **`distribution-spec`**: Standardizes HTTP API protocols for pushing and pulling images from container registries.
@@ -180,7 +183,7 @@ A container is not a physical boundary; it is a **standard Linux process** const
 
 ## 7. Performance & Resource Optimization
 
-```
+```text
 ┌────────────────────────────────────────────────────────────────────────────────┐
 │                     CONTAINER PERFORMANCE OPTIMIZATION MAP                     │
 ├────────────────────────────────────────────────────────────────────────────────┤
@@ -197,15 +200,19 @@ A container is not a physical boundary; it is a **standard Linux process** const
 ## 8. In-Depth Engineering Perspectives
 
 ### Security Perspective
+
 * **Non-Root Execution**: By default, processes in Docker run as `root` (UID 0). If a container breakout occurs, the attacker inherits host root capabilities. Enforce `USER 10001:10001` or enable **User Namespaces** (`userns-remap`) to map container UID 0 to an unprivileged host UID.
 
 ### High Availability Perspective
+
 * **Automated Restart Policies**: Enforce `--restart unless-stopped` or `--restart on-failure:5` on production containers to guarantee automatic process revival after kernel panics or node reboots.
 
 ### Resilience & Fault Tolerance Perspective
+
 * **Container Healthchecks**: Define container-level healthchecks (`HEALTHCHECK --interval=10s --timeout=3s CMD curl -f http://localhost:8080/health || exit 1`) so orchestrators can detect stalled application deadlocks and restart containers automatically.
 
 ### Cost & Efficiency Perspective
+
 * **Multi-Stage Build Size Elimination**: Multi-stage builds separate the compile-time SDK tools (e.g. Golang SDK 800MB) from the runtime binary (15MB), slashing container image transfer bandwidth and cloud registry storage costs.
 
 ---
@@ -282,19 +289,25 @@ docker inspect enterprise-web-01 --format 'Memory Limit: {{.HostConfig.Memory}} 
 ## 10. Pure CLI / Command Interface
 
 ### 1. Inspect System-Wide Docker Disk Storage Utilization
+
 Analyze reclaimable disk space across images, containers, volumes, and build cache:
+
 ```bash
 docker system df -v
 ```
 
 ### 2. Stream Real-Time Container Event Telemetry
+
 Monitor daemon events (start, die, oom, healthcheck status) across all containers:
+
 ```bash
 docker events --filter "event=die" --filter "event=oom"
 ```
 
 ### 3. Clean Reclaimable Dangling Resources Safely
+
 Remove stopped containers, unused networks, and dangling image layers:
+
 ```bash
 docker system prune \
     --force \
@@ -305,7 +318,7 @@ docker system prune \
 
 ## 11. Advanced Architecture & Edge-Case Failure Modes
 
-```
+```text
 ┌────────────────────────────────────────────────────────────────────────────────┐
 │                    DOCKER FAILURE RECOVERY RUNBOOK MATRIX                      │
 ├──────────────────────┬────────────────────────┬────────────────────────────────┤
@@ -330,29 +343,37 @@ docker system prune \
 ## 12. Detailed Sub-Components & Subsystems
 
 ### 1. containerd-shim Subsystem
+
 * **Key Concepts**: Acts as the decoupled parent process for running containers, holding standard I/O pipes open and reporting exit codes to containerd without requiring a persistent daemon connection.
 * **CLI / Tool Snippet**:
+
 ```bash
 ps aux | grep containerd-shim
 ```
 
 ### 2. OCI runc Runtime Binary
+
 * **Key Concepts**: Command-line tool interfacing with Linux kernel syscalls (`clone`, `unshare`, `pivot_root`, `setns`) to instantiate container boundary environments.
 * **CLI / Tool Snippet**:
+
 ```bash
 runc --version
 ```
 
 ### 3. OverlayFS Storage Driver Subsystem
+
 * **Key Concepts**: Union filesystem driver combining `lowerdir` (read-only image layers) and `upperdir` (container writable state) into a unified virtual directory (`merged`).
 * **CLI / Tool Snippet**:
+
 ```bash
 docker info --format '{{.Driver}}'
 ```
 
 ### 4. Bridge Network Driver (`docker0`)
+
 * **Key Concepts**: Linux kernel software bridge multiplexing container virtual ethernet pairs (`veth`) and managing Network Address Translation (NAT) via `iptables` / `nftables`.
 * **CLI / Tool Snippet**:
+
 ```bash
 ip link show docker0
 ```
@@ -362,6 +383,7 @@ ip link show docker0
 ## 13. References (The 5+5 Rule)
 
 ### Official Documentation & OCI Specifications
+
 1. [Docker Official Documentation: Engine Architectural Overview](https://docs.docker.com/engine/install/)
 2. [Open Container Initiative (OCI): Runtime Specification v1.1](https://opencontainers.org/specs/runtime/)
 3. [Open Container Initiative (OCI): Image Format Specification v1.1](https://opencontainers.org/specs/image/)
@@ -369,6 +391,7 @@ ip link show docker0
 5. [Linux Kernel Organization: Control Groups v2 Documentation](https://docs.kernel.org/admin-guide/cgroup-v2.html)
 
 ### Authoritative Engineering Blogs & Architecture Deep Dives
+
 6. [Brendan Gregg: Linux Container Performance and Cgroup Overhead](https://www.brendangregg.com/)
 7. [Julia Evans: What Are Containers Made Of? Namespaces, Cgroups, and OverlayFS](https://jvns.ca/blog/2016/10/10/what-even-is-a-container/)
 8. [Liz Rice: Building a Container from Scratch in Go](https://www.lizrice.com/)
@@ -379,7 +402,7 @@ ip link show docker0
 
 ## 14. Universal FinOps & Resource Cost Governance
 
-```
+```text
 ┌────────────────────────────────────────────────────────────────────────────────┐
 │                     CONTAINER FINOPS SAVINGS MATRIX                            │
 ├──────────────────────────┬──────────────────────────┬──────────────────────────┤
@@ -400,7 +423,9 @@ ip link show docker0
 ```
 
 ### 1. Workload Consolidation FinOps Economics
+
 In traditional enterprise IT architectures deploying 1 virtual machine per application microservice:
+
 - 100 microservices require 100 dedicated cloud VMs (e.g. AWS `t3.medium` @ \$30/month each = **\$3,000/month**).
 - Average CPU utilization across the 100 VMs is **under 8%**, wasting 92% of provisioned compute capacity.
 - Consolidating the 100 microservices into Docker containers running on 4 larger multi-tenant worker nodes (e.g. AWS `c6g.2xlarge` @ \$245/month each = **\$980/month**):
@@ -408,7 +433,9 @@ In traditional enterprise IT architectures deploying 1 virtual machine per appli
 - **FinOps ROI**: Delivers **\$2,020/month in direct compute savings (\$24,240/year)** while speeding up deployment cycles by $10\times$.
 
 ### 2. Multi-Stage Container Image Registry Cost Elimination
+
 When development teams push unoptimized 1.2GB development images to cloud container registries (AWS ECR / Google Artifact Registry @ \$0.10/GB storage + \$0.09/GB egress):
+
 - A team pushing 50 builds daily across 20 microservices generates **1.2 Terabytes of storage** and massive cross-AZ pull egress fees ($~\$850/\text{month}$).
 - Refactoring to **Multi-Stage Builds** using Distroless/Alpine base images reduces average image size from 1.2GB to **35MB** (a 97% reduction).
 - Monthly registry storage and egress costs drop from \$850 to **\$25/month**, generating **\$9,900/year in immediate infrastructure savings**.

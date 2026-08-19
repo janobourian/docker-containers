@@ -1,13 +1,14 @@
 # Module 06: Multi-Container Applications with Docker Compose
 
-**Track:** Docker Container Systems & Virtualization Architecture  
-**Category:** Multi-Service Orchestration, Compose Specification & Declarative Stacks  
-**Standard Identifier:** `DOC-STD-UNIVERSAL-2026`  
+**Track:** Docker Container Systems & Virtualization Architecture
+**Category:** Multi-Service Orchestration, Compose Specification & Declarative Stacks
+**Standard Identifier:** `DOC-STD-UNIVERSAL-2026`
 **Status:** ✅ Completed
 
 ---
 
 ## 📑 Table of Contents
+
 1. [High-Level Overview & Executive Summary](#1-high-level-overview--executive-summary)
 2. [The Compose Specification & Multi-Tier Topology](#2-the-compose-specification--multi-tier-topology)
 3. [Service Dependencies & Health-Gated Initialization (`depends_on`)](#3-service-dependencies--health-gated-initialization-depends_on)
@@ -33,7 +34,7 @@ Modern enterprise architectures rarely operate as a single monolithic process; t
 
 Compose automatically manages the complete operational lifecycle: creating isolated user-defined bridge networks, provisioning named persistent storage volumes, enforcing health-check gated service dependency startup order (`depends_on: condition: service_healthy`), injecting environment secrets, and scaling service replicas (`--scale api=3`).
 
-```
+```text
 ┌────────────────────────────────────────────────────────────────────────────────┐
 │               ENTERPRISE MULTI-CONTAINER STACK TOPOLOGY                        │
 ├────────────────────────────────────────────────────────────────────────────────┤
@@ -68,6 +69,7 @@ Compose automatically manages the complete operational lifecycle: creating isola
 ```
 
 ### 👔 Executive Summary (For Managers & Non-Technical Stakeholders)
+
 * **Business Purpose**: Replaces complex, error-prone 20-step manual software installation procedures with a single automated command (`docker compose up`) that launches an entire enterprise system on any developer laptop or staging server.
 * **How It Works**: Uses a human-readable blueprint file (`compose.yaml`) to coordinate all database, web server, and application containers, connecting them across secure private internal networks and mounting permanent disk storage.
 * **Key Business Value & ROI**: Slashes new engineer onboarding time from 3 days to under 5 minutes, eliminates staging environment drift, and provides isolated, automated preview environments for every pull request.
@@ -77,6 +79,7 @@ Compose automatically manages the complete operational lifecycle: creating isola
 ## 2. The Compose Specification & Multi-Tier Topology
 
 ### 2.1 File Naming & Specification Evolution
+
 - **Historical**: `fig.yml` ──► `docker-compose.yml` (Python tool).
 - **Modern OCI Compose Standard**: **`compose.yaml`** (or `compose.yml`), executed natively via the Go-based Docker CLI plugin: **`docker compose`** (without the hyphen).
 
@@ -87,6 +90,7 @@ Compose automatically manages the complete operational lifecycle: creating isola
 A classic production failure occurs when an API container starts, attempts to connect to PostgreSQL, and immediately crashes because PostgreSQL is still running startup recovery scripts.
 
 ### 3.1 The Healthcheck Gated Dependency Model
+
 Using `depends_on` with `condition: service_healthy` guarantees that dependent services **wait until the upstream database passes its health probe**:
 
 ```yaml
@@ -122,6 +126,7 @@ services:
 ## 4. Environment Architecture, Secrets & Profiles
 
 ### 4.1 Secret Management vs Environment Variables
+
 Passing sensitive passwords in `environment:` leaks credentials into `docker inspect` JSON outputs. **Docker Compose Secrets** mount credentials into RAM-backed `/run/secrets/` files inside the container:
 
 ```yaml
@@ -131,6 +136,7 @@ secrets:
 ```
 
 ### 4.2 Selective Component Execution with Compose Profiles
+
 Compose Profiles allow defining debug tools, local database admin UIs (pgAdmin), and integration test suites that run **only when explicitly requested**:
 
 ```yaml
@@ -141,6 +147,7 @@ services:
     ports:
       - "5050:80"
 ```
+
 To launch with profile: `docker compose --profile admin up -d`.
 
 ---
@@ -196,7 +203,7 @@ services:
 
 ## 8. Performance & Resource Optimization
 
-```
+```text
 ┌────────────────────────────────────────────────────────────────────────────────┐
 │                      COMPOSE OPTIMIZATION PLAYBOOK                             │
 ├────────────────────────────────────────────────────────────────────────────────┤
@@ -344,19 +351,25 @@ docker compose -f compose.production.yaml top
 ## 10. Pure CLI / Command Interface
 
 ### 1. Validate and Lint Compose Specification Syntax
+
 Verify variable interpolation and syntax correctness:
+
 ```bash
 docker compose -f compose.production.yaml config
 ```
 
 ### 2. Execute Command Inside a Running Compose Service
+
 Run database client inside the isolated private database container:
+
 ```bash
 docker compose -f compose.production.yaml exec database psql -U appuser -d fintech_db -c "\dt"
 ```
 
 ### 3. Gracefully Stop and Destroy Stack (Preserving Storage Volumes)
+
 Tear down containers and networks without deleting data:
+
 ```bash
 docker compose -f compose.production.yaml down
 ```
@@ -365,7 +378,7 @@ docker compose -f compose.production.yaml down
 
 ## 11. Advanced Architecture & Edge-Case Failure Modes
 
-```
+```text
 ┌────────────────────────────────────────────────────────────────────────────────┐
 │                    COMPOSE FAILURE RECOVERY MATRIX                             │
 ├──────────────────────┬────────────────────────┬────────────────────────────────┤
@@ -390,29 +403,37 @@ docker compose -f compose.production.yaml down
 ## 12. Detailed Sub-Components & Subsystems
 
 ### 1. Compose Go SDK Engine
+
 * **Key Concepts**: Compiles `compose.yaml` AST into Docker Engine REST API payloads, orchestrating dependency graphs and network provisioning.
 * **CLI / Tool Snippet**:
+
 ```bash
 docker compose version
 ```
 
 ### 2. Internal Embedded DNS Server (`127.0.0.11`)
+
 * **Key Concepts**: Engine-level DNS responder running inside container network namespaces, translating service names to ephemeral IP addresses.
 * **CLI / Tool Snippet**:
+
 ```bash
 docker compose exec api nslookup database 2>/dev/null || true
 ```
 
 ### 3. Compose Secret Provider
+
 * **Key Concepts**: In-memory tmpfs secret manager mounting `/run/secrets/<secret_name>` into target container namespaces without disk persistence.
 * **CLI / Tool Snippet**:
+
 ```bash
 docker compose config --secrets
 ```
 
 ### 4. Service Scaler & Load Balancer
+
 * **Key Concepts**: Provisions multiple identical container instances (`<project>-<service>-<N>`), updating DNS alias entries with multi-IP round-robin records.
 * **CLI / Tool Snippet**:
+
 ```bash
 docker compose ps --filter "service=api"
 ```
@@ -422,6 +443,7 @@ docker compose ps --filter "service=api"
 ## 13. References (The 5+5 Rule)
 
 ### Official Documentation & OCI Specifications
+
 1. [The Compose Specification Official Specification](https://compose-spec.io/)
 2. [Docker Official Documentation: Docker Compose File Reference](https://docs.docker.com/reference/compose-file/)
 3. [Docker Official Documentation: Service Dependencies and Healthchecks](https://docs.docker.com/compose/compose-file/05-services/#depends_on)
@@ -429,6 +451,7 @@ docker compose ps --filter "service=api"
 5. [Docker Official Documentation: Compose Secrets Management](https://docs.docker.com/compose/use-secrets/)
 
 ### Authoritative Engineering Blogs & Architecture Deep Dives
+
 6. [Martin Fowler: Microservices Application Testing with Docker Compose](https://martinfowler.com/)
 7. [Brendan Gregg: Multi-Container Networking and Epoll Performance](https://www.brendangregg.com/)
 8. [Liz Rice: Understanding Docker Network Bridges and Container DNS](https://www.lizrice.com/)
@@ -439,7 +462,7 @@ docker compose ps --filter "service=api"
 
 ## 14. Universal FinOps & Resource Cost Governance
 
-```
+```text
 ┌────────────────────────────────────────────────────────────────────────────────┐
 │                       COMPOSE FINOPS SAVINGS MATRIX                            │
 ├──────────────────────────┬──────────────────────────┬──────────────────────────┤
@@ -460,13 +483,17 @@ docker compose ps --filter "service=api"
 ```
 
 ### 1. Cloud Developer Sandbox Elimination Economics
+
 In an engineering organization with 100 software engineers:
+
 - Providing each developer with a dedicated AWS cloud testing environment (RDS Postgres, ElastiCache Redis, ECS container instances) costs **\$180 per engineer per month (\$18,000/month)**.
 - Standardizing local development and testing on **Docker Compose** allows developers to run the exact same multi-tier architecture locally on their workstations with zero cloud dependencies.
 - **FinOps ROI**: **\$216,000/year in direct AWS cloud sandbox infrastructure cost savings**.
 
 ### 2. Ephemeral PR Preview Environments
+
 In continuous integration pipelines testing feature branches:
+
 - Leaving dedicated staging environments running 24/7 costs \$1,500/month.
 - Automating Docker Compose stack spinning on pull request creation and executing `docker compose down -v` upon pull request merge ensures compute resources run only during test execution (averaging 30 minutes per branch).
 - Staging infrastructure costs drop from \$1,500 to **\$120/month** (a 92% reduction).

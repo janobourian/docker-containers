@@ -1,38 +1,51 @@
 # Module 12: Enterprise Apache Kafka with Docker & KRaft Architecture
 
-**Track:** Docker Container Systems & Virtualization Architecture  
-**Category:** Distributed Systems, Event Streaming, KRaft Metadata & Multi-Container Stacks  
-**Standard Identifier:** `DOC-STD-UNIVERSAL-2026`  
+**Track:** Docker Container Systems & Virtualization Architecture
+**Category:** Distributed Systems, Event Streaming, KRaft Metadata & Multi-Container Stacks
+**Standard Identifier:** `DOC-STD-UNIVERSAL-2026`
 **Status:** ✅ Completed
 
 ---
 
 ## 📑 Table of Contents
+
 1. [High-Level Overview & Executive Summary](#1-high-level-overview--executive-summary)
+
 2. [Kafka Architecture & The KRaft Consensus Protocol](#2-kafka-architecture--the-kraft-consensus-protocol)
+
 3. [The Advertised Listeners Architecture (Internal vs External Routing)](#3-the-advertised-listeners-architecture-internal-vs-external-routing)
+
 4. [Topics, Partitions, Consumer Groups & Offsets](#4-topics-partitions-consumer-groups--offsets)
+
 5. [Certification & Exam Essentials (Cheat Sheet)](#5-certification--exam-essentials-cheat-sheet)
+
 6. [Comparative Analysis Matrix: Message Brokers & Event Logs](#6-comparative-analysis-matrix-message-brokers--event-logs)
+
 7. [Performance & Resource Optimization](#7-performance--resource-optimization)
+
 8. [In-Depth Engineering Perspectives](#8-in-depth-engineering-perspectives)
-9. [Well-Architected Framework Alignment](#9-well-architected-framework-alignment)
-10. [Step-by-Step Hands-On Production Walkthrough](#10-step-by-step-hands-on-production-walkthrough)
-11. [Pure CLI / Command Interface](#11-pure-cli--command-interface)
-12. [Advanced Architecture & Edge-Case Failure Modes](#12-advanced-architecture--edge-case-failure-modes)
-13. [Detailed Sub-Components & Subsystems](#13-detailed-sub-components--subsystems)
-14. [References (The 5+5 Rule)](#14-references-the-55-rule)
-15. [Universal FinOps & Resource Cost Governance](#15-universal-finops--resource-cost-governance)
+
+9. [Step-by-Step Hands-On Production Walkthrough](#9-step-by-step-hands-on-production-walkthrough)
+
+10. [Pure CLI / Command Interface](#10-pure-cli--command-interface)
+
+11. [Advanced Architecture & Edge-Case Failure Modes](#11-advanced-architecture--edge-case-failure-modes)
+
+12. [Detailed Sub-Components & Subsystems](#12-detailed-sub-components--subsystems)
+
+13. [References (The 5+5 Rule)](#13-references-the-55-rule)
+
+14. [Universal FinOps & Resource Cost Governance](#14-universal-finops--resource-cost-governance)
 
 ---
 
 ## 1. High-Level Overview & Executive Summary
 
-**Apache Kafka** is an enterprise distributed event streaming platform capable of handling trillions of events per day with ultra-low latency, strict partition ordering, and high fault tolerance. Running Apache Kafka in containerized environments enables rapid development and reproducible integration testing for microservice event-driven architectures. 
+**Apache Kafka** is an enterprise distributed event streaming platform capable of handling trillions of events per day with ultra-low latency, strict partition ordering, and high fault tolerance. Running Apache Kafka in containerized environments enables rapid development and reproducible integration testing for microservice event-driven architectures.
 
 Modern production Kafka deployments utilize **KRaft (Kafka Raft Metadata Mode)**, which completely eliminates the legacy external Apache ZooKeeper dependency by running metadata consensus directly inside Kafka controller nodes using an internal event-sourced `@metadata` topic.
 
-```
+```text
 ┌────────────────────────────────────────────────────────────────────────────────┐
 │               MODERN KRAFT (ZOOKEEPER-FREE) KAFKA ARCHITECTURE                 │
 ├────────────────────────────────────────────────────────────────────────────────┤
@@ -54,6 +67,7 @@ Modern production Kafka deployments utilize **KRaft (Kafka Raft Metadata Mode)**
 ```
 
 ### 👔 Executive Summary (For Managers & Non-Technical Stakeholders)
+
 * **Business Purpose**: Acts as a central high-speed digital nervous system for the enterprise, allowing banking services, e-commerce checkouts, and fraud detection AI systems to react to business events in real time.
 * **How It Works**: Functions as an indestructible, partitioned append-only event ledger. Applications publish messages (e.g. order placed, payment settled) to topics, where downstream microservices process them in parallel.
 * **Key Business Value & ROI**: Decouples complex monolithic systems into resilient microservices, guarantees zero message loss during peak Black Friday transaction volumes, and eliminates legacy ZooKeeper server maintenance costs.
@@ -62,7 +76,7 @@ Modern production Kafka deployments utilize **KRaft (Kafka Raft Metadata Mode)**
 
 ## 2. Kafka Architecture & The KRaft Consensus Protocol
 
-```
+```text
 ┌────────────────────────────────────────────────────────────────────────────────┐
 │                   KRAFT VS LEGACY ZOOKEEPER ARCHITECTURE                       │
 ├──────────────────────────┬──────────────────────────┬──────────────────────────┤
@@ -85,11 +99,12 @@ Modern production Kafka deployments utilize **KRaft (Kafka Raft Metadata Mode)**
 The #1 issue developers face when running Kafka in Docker is configuring **`KAFKA_ADVERTISED_LISTENERS`**.
 
 When a client connects to Kafka:
+
 1. The client connects to the initial `bootstrap-server` endpoint.
 2. Kafka returns metadata containing the **Advertised Listener address** for the topic partition leader.
 3. The client disconnects from the bootstrap server and opens a new socket to the returned Advertised Listener address!
 
-```
+```text
 ┌────────────────────────────────────────────────────────────────────────────────┐
 │               KAFKA ADVERTISED LISTENERS DUAL-ROUTING MATRIX                   │
 ├────────────────────────────────────────────────────────────────────────────────┤
@@ -102,7 +117,7 @@ When a client connects to Kafka:
 
 ## 4. Topics, Partitions, Consumer Groups & Offsets
 
-```
+```text
 ┌────────────────────────────────────────────────────────────────────────────────┐
 │                     TOPIC PARTITION & CONSUMER GROUP MODEL                     │
 ├────────────────────────────────────────────────────────────────────────────────┤
@@ -131,17 +146,17 @@ When a client connects to Kafka:
 
 | Feature | Apache Kafka | RabbitMQ | Redis Streams | AWS SQS |
 | :--- | :--- | :--- | :--- | :--- |
-| **Model** | **Distributed Commit Log**| Traditional Queue / Exchange| In-Memory Log | Cloud Managed Queue |
+| **Model** | **Distributed Commit Log** | Traditional Queue / Exchange | In-Memory Log | Cloud Managed Queue |
 | **Throughput** | **1M+ msgs/second** | 50K msgs/second | 500K msgs/second | Scalable Cloud Queue |
-| **Message Replay** | **Native (Rewind offset)**| No (Destructive read) | Native (By ID) | No (Destructive) |
+| **Message Replay** | **Native (Rewind offset)** | No (Destructive read) | Native (By ID) | No (Destructive) |
 | **Ordering** | **Strict per partition** | FIFO queues | Strict per stream | FIFO queues |
-| **Best For** | High-volume event streams | Complex AMQP routing | Real-time caching + streams| Simple serverless tasks |
+| **Best For** | High-volume event streams | Complex AMQP routing | Real-time caching + streams | Simple serverless tasks |
 
 ---
 
 ## 7. Performance & Resource Optimization
 
-```
+```text
 ┌────────────────────────────────────────────────────────────────────────────────┐
 │                         KAFKA TUNING PLAYBOOK                                  │
 ├────────────────────────────────────────────────────────────────────────────────┤
@@ -158,15 +173,19 @@ When a client connects to Kafka:
 ## 8. In-Depth Engineering Perspectives
 
 ### Security Perspective
+
 * **mTLS and SASL/SCRAM Authentication**: In production multi-tenant environments, secure Kafka listener ports with Mutual TLS for wire encryption and SASL/SCRAM-SHA-512 for client authentication and ACL topic authorization.
 
 ### High Availability Perspective
+
 * **In-Sync Replicas (ISR) and `acks=all`**: To guarantee zero data loss during broker crashes, configure producers with `acks=all` and topics with `min.insync.replicas=2`. The broker will acknowledge commits only after the event is replicated across multiple quorum nodes.
 
 ### Resilience & Fault Tolerance Perspective
+
 * **Idempotent Producers**: Setting `enable.idempotence=true` assigns a unique Producer ID (PID) and sequence number to every message, eliminating duplicate records caused by network retries.
 
 ### Cost & Efficiency Perspective
+
 * **ZooKeeper Cluster Elimination**: Migrating to KRaft mode eliminates the requirement to provision 3 dedicated ZooKeeper server nodes, saving thousands of dollars annually in cloud virtual machine provisioning.
 
 ---
@@ -176,6 +195,7 @@ When a client connects to Kafka:
 ### Step 1: Create Complete KRaft Kafka Stack `compose.yaml`
 
 ```yaml
+
 # /Users/frgonzal/Documents/vit/docker-containers/compose.kafka.yaml
 name: enterprise-kafka-stack
 
@@ -193,13 +213,13 @@ services:
       KAFKA_PROCESS_ROLES: broker,controller
       KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
       KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
-      
+
       # Dual Listeners: Internal (Docker Net) and External (Host OS)
       KAFKA_LISTENERS: PLAINTEXT_INTERNAL://0.0.0.0:9092,PLAINTEXT_EXTERNAL://0.0.0.0:29092,CONTROLLER://0.0.0.0:9093
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT_INTERNAL://kafka:9092,PLAINTEXT_EXTERNAL://localhost:29092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT_INTERNAL:PLAINTEXT,PLAINTEXT_EXTERNAL:PLAINTEXT,CONTROLLER:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT_INTERNAL
-      
+
       # Persistence & Clustering
       KAFKA_LOG_DIRS: /var/lib/kafka/data
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
@@ -248,6 +268,7 @@ networks:
 ### Step 2: Launch Kafka Cluster and Verify Health
 
 ```bash
+
 # 1. Launch Kafka and Web Management UI
 docker compose -f compose.kafka.yaml up -d
 
@@ -260,6 +281,7 @@ docker compose -f compose.kafka.yaml ps
 ### Step 3: Create Topic, Produce and Consume Real-Time Events
 
 ```bash
+
 # 1. Create a Partitioned Business Topic
 docker exec -i enterprise-kafka-broker /opt/kafka/bin/kafka-topics.sh \
     --create \
@@ -296,7 +318,9 @@ docker exec -i enterprise-kafka-broker /opt/kafka/bin/kafka-console-consumer.sh 
 ## 10. Pure CLI / Command Interface
 
 ### 1. Inspect Active Consumer Groups and Offsets
+
 Check consumer lag across all topic partitions:
+
 ```bash
 docker exec -i enterprise-kafka-broker /opt/kafka/bin/kafka-consumer-groups.sh \
     --bootstrap-server localhost:9092 \
@@ -305,7 +329,9 @@ docker exec -i enterprise-kafka-broker /opt/kafka/bin/kafka-consumer-groups.sh \
 ```
 
 ### 2. List All Active Kafka Topics in Cluster
+
 Query cluster metadata catalog:
+
 ```bash
 docker exec -i enterprise-kafka-broker /opt/kafka/bin/kafka-topics.sh \
     --list \
@@ -313,7 +339,9 @@ docker exec -i enterprise-kafka-broker /opt/kafka/bin/kafka-topics.sh \
 ```
 
 ### 3. Gracefully Stop Kafka Cluster
+
 Shut down containers while preserving message commit logs:
+
 ```bash
 docker compose -f compose.kafka.yaml down
 ```
@@ -322,7 +350,7 @@ docker compose -f compose.kafka.yaml down
 
 ## 11. Advanced Architecture & Edge-Case Failure Modes
 
-```
+```text
 ┌────────────────────────────────────────────────────────────────────────────────┐
 │                     KAFKA FAILURE RECOVERY MATRIX                              │
 ├──────────────────────┬────────────────────────┬────────────────────────────────┤
@@ -347,29 +375,37 @@ docker compose -f compose.kafka.yaml down
 ## 12. Detailed Sub-Components & Subsystems
 
 ### 1. KRaft Metadata Log Controller
+
 * **Key Concepts**: Replicated state machine managing topic creation, partition rebalancing, and broker registration without external ZooKeeper.
 * **CLI / Tool Snippet**:
+
 ```bash
 docker exec -i enterprise-kafka-broker /opt/kafka/bin/kafka-metadata-shell.sh --help 2>/dev/null || true
 ```
 
 ### 2. Zero-Copy OS Network Dispatcher (`sendfile`)
+
 * **Key Concepts**: Linux kernel `sendfile()` syscall transferring bytes directly from the page cache to the network socket without copying data into user-space RAM.
 * **CLI / Tool Snippet**:
+
 ```bash
 docker stats enterprise-kafka-broker --no-stream
 ```
 
 ### 3. Topic Partition Segment Manager
+
 * **Key Concepts**: Writes immutable `.log` segment files and binary `.index` offset position maps in `/var/lib/kafka/data/`.
 * **CLI / Tool Snippet**:
+
 ```bash
 docker exec -i enterprise-kafka-broker ls -la /var/lib/kafka/data
 ```
 
 ### 4. Consumer Group Coordinator
+
 * **Key Concepts**: Manages partition assignments and coordinates consumer group heartbeats and rebalances.
 * **CLI / Tool Snippet**:
+
 ```bash
 docker exec -i enterprise-kafka-broker /opt/kafka/bin/kafka-consumer-groups.sh --bootstrap-server localhost:9092 --list
 ```
@@ -379,6 +415,7 @@ docker exec -i enterprise-kafka-broker /opt/kafka/bin/kafka-consumer-groups.sh -
 ## 13. References (The 5+5 Rule)
 
 ### Official Documentation & Technical Specifications
+
 1. [Apache Kafka Official Documentation: Core Architecture](https://kafka.apache.org/documentation/)
 2. [Apache Kafka KIP-500: Replace ZooKeeper with KRaft Metadata Mode](https://cwiki.apache.org/confluence/display/KAFKA/KIP-500%3A+Replace+ZooKeeper+with+Self-Managed+Metadata+Quorum)
 3. [Apache Kafka Official Docker Image Documentation](https://hub.docker.com/r/apache/kafka)
@@ -386,17 +423,18 @@ docker exec -i enterprise-kafka-broker /opt/kafka/bin/kafka-consumer-groups.sh -
 5. [Linux Kernel Organization: Zero-Copy Network I/O with sendfile(2)](https://man7.org/linux/man-pages/man2/sendfile.2.html)
 
 ### Authoritative Engineering Blogs & Architecture Deep Dives
-6. [Martin Kleppmann: Designing Data-Intensive Applications (Kafka & Event Logs)](https://dataintensive.net/)
-7. [Brendan Gregg: Linux I/O and Zero-Copy Performance Profiling in Kafka](https://www.brendangregg.com/)
-8. [Jay Kreps: The Log: What Every Software Engineer Should Know About Real-Time Data](https://engineering.linkedin.com/distributed-systems/log-what-every-software-engineer-should-know-about-real-time-data-integrations)
-9. [Martin Fowler: Event Sourcing and Event-Driven Architecture Patterns](https://martinfowler.com/eaaDev/EventSourcing.html)
-10. [High-Performance Linux Systems: Tuning OS Page Cache and TCP Buffers for Kafka](https://www.kernel.org/)
+
+1. [Martin Kleppmann: Designing Data-Intensive Applications (Kafka & Event Logs)](https://dataintensive.net/)
+2. [Brendan Gregg: Linux I/O and Zero-Copy Performance Profiling in Kafka](https://www.brendangregg.com/)
+3. [Jay Kreps: The Log: What Every Software Engineer Should Know About Real-Time Data](https://engineering.linkedin.com/distributed-systems/log-what-every-software-engineer-should-know-about-real-time-data-integrations)
+4. [Martin Fowler: Event Sourcing and Event-Driven Architecture Patterns](https://martinfowler.com/eaaDev/EventSourcing.html)
+5. [High-Performance Linux Systems: Tuning OS Page Cache and TCP Buffers for Kafka](https://www.kernel.org/)
 
 ---
 
 ## 14. Universal FinOps & Resource Cost Governance
 
-```
+```text
 ┌────────────────────────────────────────────────────────────────────────────────┐
 │                        KAFKA FINOPS SAVINGS MATRIX                             │
 ├──────────────────────────┬──────────────────────────┬──────────────────────────┤
@@ -417,12 +455,16 @@ docker exec -i enterprise-kafka-broker /opt/kafka/bin/kafka-consumer-groups.sh -
 ```
 
 ### 1. KRaft Migration Infrastructure Economics
+
 In a standard enterprise event streaming deployment running 3 Kafka brokers:
-- **Legacy ZooKeeper Mode**: Requires maintaining **3 additional ZooKeeper nodes** (`c6g.xlarge` @ \$120/month each = **\$360/month**) plus operational patching labor.
-- **Modern KRaft Mode**: Combines broker and controller roles inside the existing Kafka containers with zero external nodes.
-- **FinOps ROI**: Delivers **\$4,320/year in direct cloud compute savings** while accelerating metadata failover times from 30 seconds to **under 500 milliseconds**.
+
+* **Legacy ZooKeeper Mode**: Requires maintaining **3 additional ZooKeeper nodes** (`c6g.xlarge` @ \$120/month each = **\$360/month**) plus operational patching labor.
+* **Modern KRaft Mode**: Combines broker and controller roles inside the existing Kafka containers with zero external nodes.
+* **FinOps ROI**: Delivers **\$4,320/year in direct cloud compute savings** while accelerating metadata failover times from 30 seconds to **under 500 milliseconds**.
 
 ### 2. Zero-Copy Network Egress Optimization
+
 Kafka leverages the Linux kernel `sendfile()` system call to stream partition data directly from the OS page cache to network interface cards (NICs) without copying data into JVM user space.
-- Eliminates JVM Garbage Collection (GC) pauses and allows a single 4-core container instance to saturate a **10 Gigabit network link**.
-- Reduces required cluster broker node counts by **50%**, saving **\$18,000/year** across production event streaming infrastructure.
+
+* Eliminates JVM Garbage Collection (GC) pauses and allows a single 4-core container instance to saturate a **10 Gigabit network link**.
+* Reduces required cluster broker node counts by **50%**, saving **\$18,000/year** across production event streaming infrastructure.

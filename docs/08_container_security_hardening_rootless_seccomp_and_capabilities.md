@@ -1,29 +1,41 @@
 # Module 09: Docker Security, Hardening, Rootless Mode & Compliance
 
-**Track:** Docker Container Systems & Virtualization Architecture  
-**Category:** Container Security, Rootless Execution, Seccomp, AppArmor & CIS Benchmarks  
-**Standard Identifier:** `DOC-STD-UNIVERSAL-2026`  
+**Track:** Docker Container Systems & Virtualization Architecture
+**Category:** Container Security, Rootless Execution, Seccomp, AppArmor & CIS Benchmarks
+**Standard Identifier:** `DOC-STD-UNIVERSAL-2026`
 **Status:** ✅ Completed
 
 ---
 
 ## 📑 Table of Contents
+
 1. [High-Level Overview & Executive Summary](#1-high-level-overview--executive-summary)
+
 2. [The Defense-in-Depth Container Security Model](#2-the-defense-in-depth-container-security-model)
+
 3. [Linux Capabilities, Seccomp BPF & Mandatory Access Control (AppArmor/SELinux)](#3-linux-capabilities-seccomp-bpf--mandatory-access-control-apparmorselinux)
+
 4. [Rootless Docker Daemon Architecture & User Namespaces](#4-rootless-docker-daemon-architecture--user-namespaces)
+
 5. [Supply Chain Security: SBOMs, Image Signing (Cosign) & CVE Scanning](#5-supply-chain-security-sboms-image-signing-cosign--cve-scanning)
+
 6. [Certification & Exam Essentials (Cheat Sheet)](#6-certification--exam-essentials-cheat-sheet)
+
 7. [Comparative Analysis Matrix: Container Security Enforcement Models](#7-comparative-analysis-matrix-container-security-enforcement-models)
+
 8. [Performance & Resource Optimization](#8-performance--resource-optimization)
-9. [In-Depth Engineering Perspectives](#9-in-depth-engineering-perspectives)
-10. [Well-Architected Framework Alignment](#10-well-architected-framework-alignment)
-11. [Step-by-Step Hands-On Production Walkthrough](#11-step-by-step-hands-on-production-walkthrough)
-12. [Pure CLI / Command Interface](#12-pure-cli--command-interface)
-13. [Advanced Architecture & Edge-Case Failure Modes](#13-advanced-architecture--edge-case-failure-modes)
-14. [Detailed Sub-Components & Subsystems](#14-detailed-sub-components--subsystems)
-15. [References (The 5+5 Rule)](#15-references-the-55-rule)
-16. [Universal FinOps & Resource Cost Governance](#16-universal-finops--resource-cost-governance)
+
+9. [Step-by-Step Hands-On Production Walkthrough](#9-step-by-step-hands-on-production-walkthrough)
+
+10. [Pure CLI / Command Interface](#10-pure-cli--command-interface)
+
+11. [Advanced Architecture & Edge-Case Failure Modes](#11-advanced-architecture--edge-case-failure-modes)
+
+12. [Detailed Sub-Components & Subsystems](#12-detailed-sub-components--subsystems)
+
+13. [References (The 5+5 Rule)](#13-references-the-55-rule)
+
+14. [Universal FinOps & Resource Cost Governance](#14-universal-finops--resource-cost-governance)
 
 ---
 
@@ -33,7 +45,7 @@ Enterprise container security requires establishing a multi-layered **Defense-in
 
 Securing the container runtime demands: dropping all non-essential Linux Capabilities (`--cap-drop ALL`), restricting dangerous kernel syscalls via **Seccomp BPF profiles**, enforcing Mandatory Access Control (**AppArmor / SELinux**), locking the root filesystem to read-only (`--read-only`), eliminating privilege escalation (`--security-opt no-new-privileges:true`), and deploying **Rootless Docker**.
 
-```
+```text
 ┌────────────────────────────────────────────────────────────────────────────────┐
 │               DEFENSE-IN-DEPTH CONTAINER SECURITY ARCHITECTURE                 │
 ├────────────────────────────────────────────────────────────────────────────────┤
@@ -60,6 +72,7 @@ Securing the container runtime demands: dropping all non-essential Linux Capabil
 ```
 
 ### 👔 Executive Summary (For Managers & Non-Technical Stakeholders)
+
 * **Business Purpose**: Prevents cybercriminals from hacking cloud servers, stealing confidential customer databases, or deploying ransomware through vulnerable containerized applications.
 * **How It Works**: Applies zero-trust security fences around every container. It strips administrative superpowers from software processes, locks files so malware cannot modify system code, and scans images for known vulnerabilities before deployment.
 * **Key Business Value & ROI**: Satisfies strict enterprise regulatory compliance mandates (SOC 2, ISO 27001, PCI-DSS, HIPAA), prevents multimillion-dollar security breach liability, and protects enterprise brand trust.
@@ -68,7 +81,7 @@ Securing the container runtime demands: dropping all non-essential Linux Capabil
 
 ## 2. The Defense-in-Depth Container Security Model
 
-```
+```text
 ┌────────────────────────────────────────────────────────────────────────────────┐
 │                     CONTAINER SECURITY THREAT DEFENSE MATRIX                   │
 ├───────────────────┬──────────────────────────────────┬─────────────────────────┤
@@ -96,6 +109,7 @@ Securing the container runtime demands: dropping all non-essential Linux Capabil
 ## 3. Linux Capabilities, Seccomp BPF & Mandatory Access Control (AppArmor/SELinux)
 
 ### 3.1 Linux Capabilities Granular Hardening
+
 In Linux, the traditional `root` user possesses 38 distinct capabilities. Containers run with a default set of 14 capabilities (e.g. `CAP_CHOWN`, `CAP_FOWNER`, `CAP_NET_RAW`).
 
 **Production Principle of Least Privilege**: Drop all capabilities and add back strictly what the application requires:
@@ -108,11 +122,13 @@ docker run \
 ```
 
 ### 3.2 Seccomp (Secure Computing Mode) BPF Filtering
+
 Seccomp uses Berkeley Packet Filter (BPF) programs to intercept and filter system calls before the Linux kernel processes them. Docker's default Seccomp profile blocks over **40 dangerous system calls**, including:
-- `reboot` / `kexec_load`: Prevents container from rebooting the physical host.
-- `ptrace`: Prevents process memory inspection and code injection into other processes.
-- `sys_chroot` / `pivot_root`: Blocks escape from filesystem confinement.
-- `keyctl` / `add_key`: Blocks access to the kernel's cryptographic keyring.
+
+* `reboot` / `kexec_load`: Prevents container from rebooting the physical host.
+* `ptrace`: Prevents process memory inspection and code injection into other processes.
+* `sys_chroot` / `pivot_root`: Blocks escape from filesystem confinement.
+* `keyctl` / `add_key`: Blocks access to the kernel's cryptographic keyring.
 
 ---
 
@@ -121,16 +137,18 @@ Seccomp uses Berkeley Packet Filter (BPF) programs to intercept and filter syste
 In standard Docker installations, the `dockerd` daemon runs as the host `root` user, listening on `/var/run/docker.sock`. Anyone with access to the Docker socket can obtain full host root privileges.
 
 ### 4.1 Rootless Docker Mechanics
+
 In **Rootless Docker**, both `dockerd` and the containers run inside an unprivileged **User Namespace**:
-- The daemon runs under an unprivileged host user (e.g. UID 1000).
-- Inside the container, processes appear to be UID 0 (root), but on the host OS, they map to unprivileged sub-UIDs (e.g. UID 100000–165535).
-- If an attacker completely escapes the container, they hold **zero root privileges on the host system**!
+
+* The daemon runs under an unprivileged host user (e.g. UID 1000).
+* Inside the container, processes appear to be UID 0 (root), but on the host OS, they map to unprivileged sub-UIDs (e.g. UID 100000–165535).
+* If an attacker completely escapes the container, they hold **zero root privileges on the host system**!
 
 ---
 
 ## 5. Supply Chain Security: SBOMs, Image Signing (Cosign) & CVE Scanning
 
-```
+```text
 ┌────────────────────────────────────────────────────────────────────────────────┐
 │               ENTERPRISE CONTAINER SUPPLY CHAIN PIPELINE                       │
 ├────────────────────────────────────────────────────────────────────────────────┤
@@ -173,9 +191,9 @@ In **Rootless Docker**, both `dockerd` and the containers run inside an unprivil
 | Security Control | Protection Mechanism | Enforcement Layer | Performance Overhead |
 | :--- | :--- | :--- | :--- |
 | **Non-Root Execution** | Process UID separation | Linux Kernel (POSIX) | **Zero (0%)** |
-| **Linux Capabilities Drop**| Strips 38 kernel privileges | Linux Kernel Capability bitmask| **Zero (0%)** |
-| **Seccomp Syscall Filtering**| BPF kernel syscall filter | Linux Kernel Seccomp subsystem | < 0.1% CPU |
-| **AppArmor / SELinux** | Mandatory Access Control (MAC)| Linux Security Module (LSM) | < 0.5% CPU |
+| **Linux Capabilities Drop** | Strips 38 kernel privileges | Linux Kernel Capability bitmask | **Zero (0%)** |
+| **Seccomp Syscall Filtering** | BPF kernel syscall filter | Linux Kernel Seccomp subsystem | < 0.1% CPU |
+| **AppArmor / SELinux** | Mandatory Access Control (MAC) | Linux Security Module (LSM) | < 0.5% CPU |
 | **User Namespaces** | Remaps UID 0 to UID 100000 | Linux User Namespace driver | **Zero (0%)** |
 | **Rootless Docker** | Daemon runs as standard user | User Namespace + slirp4netns | Minimal network |
 
@@ -183,7 +201,7 @@ In **Rootless Docker**, both `dockerd` and the containers run inside an unprivil
 
 ## 8. Performance & Resource Optimization
 
-```
+```text
 ┌────────────────────────────────────────────────────────────────────────────────┐
 │                        SECURITY TUNING PLAYBOOK                                │
 ├────────────────────────────────────────────────────────────────────────────────┤
@@ -260,6 +278,7 @@ docker run \
 ### Step 3: Audit and Verify Runtime Security Constraints
 
 ```bash
+
 # 1. Verify that Root Filesystem is Immutable (Read-Only)
 docker exec zero-trust-web touch /test_file && echo "FAIL: Root is writeable!" || echo "SUCCESS: Root filesystem is read-only!"
 
@@ -275,7 +294,9 @@ docker inspect zero-trust-web --format 'SecurityOpt: {{json .HostConfig.Security
 ## 10. Pure CLI / Command Interface
 
 ### 1. Execute Vulnerability CVE Scan with Docker Scout
+
 Inspect critical security advisories on target images:
+
 ```bash
 docker scout cves \
     --only-severity critical,high \
@@ -283,14 +304,18 @@ docker scout cves \
 ```
 
 ### 2. Audit Container System Calls and Seccomp Profile
+
 Verify attached Seccomp filter status:
+
 ```bash
 docker inspect zero-trust-web \
     --format 'Seccomp Profile: {{.HostConfig.SecurityOpt}}'
 ```
 
 ### 3. Run CIS Docker Security Benchmark Audit
+
 Execute automated security benchmark scanner against host:
+
 ```bash
 docker run \
     --rm \
@@ -308,7 +333,7 @@ docker run \
 
 ## 11. Advanced Architecture & Edge-Case Failure Modes
 
-```
+```text
 ┌────────────────────────────────────────────────────────────────────────────────┐
 │                    SECURITY FAILURE RECOVERY MATRIX                            │
 ├──────────────────────┬────────────────────────┬────────────────────────────────┤
@@ -333,29 +358,37 @@ docker run \
 ## 12. Detailed Sub-Components & Subsystems
 
 ### 1. Seccomp BPF JIT Compiler
+
 * **Key Concepts**: Compiles Seccomp JSON rules into Berkeley Packet Filter bytecode executed in the kernel entry path on every system call.
 * **CLI / Tool Snippet**:
+
 ```bash
 docker info --format '{{.SecurityOptions}}'
 ```
 
 ### 2. AppArmor LSM Enforcer
+
 * **Key Concepts**: Linux Security Module enforcing path-based mandatory access control profiles (`docker-default`) on file read/write operations.
 * **CLI / Tool Snippet**:
+
 ```bash
 aa-status 2>/dev/null || true
 ```
 
 ### 3. Cosign OCI Signature Verifier
+
 * **Key Concepts**: Cryptographic signature validation engine verifying ECDSA / Ed25519 signatures stored as OCI artifacts in container registries.
 * **CLI / Tool Snippet**:
+
 ```bash
 cosign version 2>/dev/null || true
 ```
 
 ### 4. User Namespace Remapper Subsystem
+
 * **Key Concepts**: Coordinates `/etc/subuid` and `/etc/subgid` allocations, configuring kernel UID/GID offset translation tables for container scopes.
 * **CLI / Tool Snippet**:
+
 ```bash
 cat /etc/subuid 2>/dev/null || true
 ```
@@ -365,6 +398,7 @@ cat /etc/subuid 2>/dev/null || true
 ## 13. References (The 5+5 Rule)
 
 ### Official Documentation & Security Standards
+
 1. [Docker Official Documentation: Engine Security Guidelines](https://docs.docker.com/engine/security/)
 2. [Center for Internet Security (CIS): Docker Benchmark v1.6.0](https://www.cisecurity.org/benchmark/docker)
 3. [NIST SP 800-190: Application Container Security Guide](https://csrc.nist.gov/publications/detail/sp/800-190/final)
@@ -372,17 +406,18 @@ cat /etc/subuid 2>/dev/null || true
 5. [Sigstore Cosign: Container Signing, Verification and Storage](https://docs.sigstore.dev/cosign/overview/)
 
 ### Authoritative Engineering Blogs & Architecture Deep Dives
-6. [Liz Rice: Container Security: Fundamental Technology of Containers (O'Reilly)](https://www.lizrice.com/)
-7. [Julia Evans: How Seccomp Filters System Calls in Linux Containers](https://jvns.ca/)
-8. [Brendan Gregg: Linux Security Auditing and BPF Kernel Monitoring](https://www.brendangregg.com/)
-9. [Martin Fowler: Continuous Security and Software Supply Chain Integrity](https://martinfowler.com/)
-10. [High-Performance Linux Systems: Hardening Linux Namespaces and User IDs](https://www.kernel.org/)
+
+1. [Liz Rice: Container Security: Fundamental Technology of Containers (O'Reilly)](https://www.lizrice.com/)
+2. [Julia Evans: How Seccomp Filters System Calls in Linux Containers](https://jvns.ca/)
+3. [Brendan Gregg: Linux Security Auditing and BPF Kernel Monitoring](https://www.brendangregg.com/)
+4. [Martin Fowler: Continuous Security and Software Supply Chain Integrity](https://martinfowler.com/)
+5. [High-Performance Linux Systems: Hardening Linux Namespaces and User IDs](https://www.kernel.org/)
 
 ---
 
 ## 14. Universal FinOps & Resource Cost Governance
 
-```
+```text
 ┌────────────────────────────────────────────────────────────────────────────────┐
 │                      SECURITY FINOPS SAVINGS MATRIX                            │
 ├──────────────────────────┬──────────────────────────┬──────────────────────────┤
@@ -403,12 +438,16 @@ cat /etc/subuid 2>/dev/null || true
 ```
 
 ### 1. Automated Supply Chain Security vs Incident Response Economics
+
 In enterprise engineering organizations:
-- Remediating a production zero-day container compromise (e.g. crypto-miner or data exfiltration via container escape) costs an average of **\$150,000 in emergency forensics, engineering overtime, and lost revenue**.
-- Enforcing non-root execution (`USER 10001:10001`), `--cap-drop ALL`, and automated CI/CD CVE gating (`docker scout`) completely neutralizes 99% of automated container exploit payloads.
-- **FinOps ROI**: Delivers **hundreds of thousands of dollars in risk mitigation value** with zero additional software licensing costs.
+
+* Remediating a production zero-day container compromise (e.g. crypto-miner or data exfiltration via container escape) costs an average of **\$150,000 in emergency forensics, engineering overtime, and lost revenue**.
+* Enforcing non-root execution (`USER 10001:10001`), `--cap-drop ALL`, and automated CI/CD CVE gating (`docker scout`) completely neutralizes 99% of automated container exploit payloads.
+* **FinOps ROI**: Delivers **hundreds of thousands of dollars in risk mitigation value** with zero additional software licensing costs.
 
 ### 2. Distroless Image Patching Labor Reduction
+
 When operating 200 production containers built on standard Ubuntu base images:
-- Security scanners report ~80 CVE vulnerabilities per image monthly across unused packages (curl, tar, perl, apt), requiring security teams to review and patch 16,000 monthly CVE alerts ($~20\text{ engineering hours/month}$).
-- Migrating to **Distroless** base images reduces reported CVEs to **near zero**, saving **\$36,000/year in wasted engineering triage labor**.
+
+* Security scanners report ~80 CVE vulnerabilities per image monthly across unused packages (curl, tar, perl, apt), requiring security teams to review and patch 16,000 monthly CVE alerts ($~20\text{ engineering hours/month}$).
+* Migrating to **Distroless** base images reduces reported CVEs to **near zero**, saving **\$36,000/year in wasted engineering triage labor**.

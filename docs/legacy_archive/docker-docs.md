@@ -1,13 +1,14 @@
 # Module 14: Docker Enterprise Architecture Master Curriculum & Reference Index
 
-**Track:** Docker Container Systems & Virtualization Architecture  
-**Category:** Curriculum Master Map, Production Architecture Standards & Learning Roadmap  
-**Standard Identifier:** `DOC-STD-UNIVERSAL-2026`  
+**Track:** Docker Container Systems & Virtualization Architecture
+**Category:** Curriculum Master Map, Production Architecture Standards & Learning Roadmap
+**Standard Identifier:** `DOC-STD-UNIVERSAL-2026`
 **Status:** ✅ Completed
 
 ---
 
 ## 📑 Table of Contents
+
 1. [High-Level Overview & Executive Summary](#1-high-level-overview--executive-summary)
 2. [The Complete Docker Engineering Curriculum Roadmap](#2-the-complete-docker-engineering-curriculum-roadmap)
 3. [Enterprise Production Standard (`DOC-STD-UNIVERSAL-2026`)](#3-enterprise-production-standard-doc-std-universal-2026)
@@ -30,7 +31,7 @@
 
 The **Docker Enterprise Architecture Master Curriculum** is an offline-capable, production-grade engineering reference designed to train software architects, site reliability engineers (SREs), and cloud platform teams on the entire containerization lifecycle. Spanning low-level Linux kernel primitives (`clone()`, namespaces, cgroups v2), multi-stage BuildKit image compilation, high-performance storage architectures, zero-trust network micro-segmentation, declarative multi-container Compose orchestration, native Swarm high availability, WebAssembly (WASI) runtimes, and distributed Apache Kafka event streaming, this curriculum establishes the gold standard for enterprise container platform engineering.
 
-```
+```text
 ┌────────────────────────────────────────────────────────────────────────────────┐
 │               DOCKER ENTERPRISE CURRICULUM ARCHITECTURE MAP                    │
 ├────────────────────────────────────────────────────────────────────────────────┤
@@ -61,6 +62,7 @@ The **Docker Enterprise Architecture Master Curriculum** is an offline-capable, 
 ```
 
 ### 👔 Executive Summary (For Managers & Non-Technical Stakeholders)
+
 * **Business Purpose**: Serves as the single source of truth and architectural benchmark for all containerized applications, cloud migration initiatives, and developer productivity standards across the enterprise.
 * **How It Works**: Structures technical learning into 14 comprehensive, progressive modules that provide both executive business summaries and rigorous hands-on Linux system engineering walkthroughs.
 * **Key Business Value & ROI**: Cuts developer onboarding times from weeks to hours, enforces zero-trust security baselines across hundreds of microservices, and saves millions of dollars annually in cloud compute and storage costs.
@@ -69,7 +71,7 @@ The **Docker Enterprise Architecture Master Curriculum** is an offline-capable, 
 
 ## 2. The Complete Docker Engineering Curriculum Roadmap
 
-```
+```text
 ┌────────────────────────────────────────────────────────────────────────────────┐
 │                   DOCKER ENGINEERING CURRICULUM CATALOGUE                      │
 ├──────┬────────────────────────┬───────────────────┬────────────────────────────┤
@@ -97,6 +99,7 @@ The **Docker Enterprise Architecture Master Curriculum** is an offline-capable, 
 ## 3. Enterprise Production Standard (`DOC-STD-UNIVERSAL-2026`)
 
 Every document in this track adheres strictly to the **Universal Engineering Documentation Blueprint**:
+
 1. **No Synthetic Slop**: 100% authentic, verified technical content sourced directly from official OCI, Docker, CNCF, and Linux kernel specifications.
 2. **Escaped CLI Formatting**: Multiline commands formatted with trailing backslashes (`\`) and 4-space indent with zero in-code shell comments.
 3. **5+5 Authoritative Citations**: Every module concludes with 5 official standards and 5 peer-reviewed engineering deep dives.
@@ -106,7 +109,7 @@ Every document in this track adheres strictly to the **Universal Engineering Doc
 
 ## 4. Mastery Matrix: Core Competencies & Skills Roadmap
 
-```
+```text
 ┌────────────────────────────────────────────────────────────────────────────────┐
 │               DOCKER ENGINEERING SKILL PROGRESSION MATRIX                      │
 ├───────────────────┬──────────────────────────────────┬─────────────────────────┤
@@ -155,7 +158,7 @@ Every document in this track adheres strictly to the **Universal Engineering Doc
 
 ## 7. Performance & Resource Optimization
 
-```
+```text
 ┌────────────────────────────────────────────────────────────────────────────────┐
 │                   ENTERPRISE CONTAINER PERFORMANCE MANDATES                    │
 ├────────────────────────────────────────────────────────────────────────────────┤
@@ -172,15 +175,19 @@ Every document in this track adheres strictly to the **Universal Engineering Doc
 ## 8. In-Depth Engineering Perspectives
 
 ### Security Perspective
+
 * **Zero-Trust Container Governance**: Enforcing non-root user execution, stripping 38 root Linux capabilities (`--cap-drop ALL`), enabling Seccomp BPF filters, and mounting immutable filesystems (`--read-only`) neutralizes container breakout attack vectors before they reach the host kernel.
 
 ### High Availability Perspective
+
 * **Multi-Node Consensus and Ingress Meshes**: Leveraging Raft consensus across 3 to 5 manager nodes ensures continuous cluster operations during hardware outages, while Layer 4 IPVS routing meshes seamlessly direct traffic around failed worker nodes.
 
 ### Resilience & Fault Tolerance Perspective
+
 * **Self-Healing Process Supervisors**: Pairing container healthchecks (`HEALTHCHECK`) with declarative restart policies (`unless-stopped` / `always`) and Tini zombie process reaping (`--init`) prevents system lockups and guarantees automatic self-healing.
 
 ### Cost & Efficiency Perspective
+
 * **Continuous FinOps Optimization**: Right-sizing container memory reservations, eliminating OverlayFS copy-on-write write penalties via direct Named Volumes, and shrinking container image transfer bandwidth via multi-stage builds cuts cloud infrastructure bills by 40% to 70%.
 
 ---
@@ -229,12 +236,14 @@ docker rm -f curriculum-smoke-test
 ## 10. Pure CLI / Command Interface
 
 ### 1. View Global Container Disk Utilization
+
 ```bash
 docker system df \
     --verbose
 ```
 
 ### 2. Stream Live Resource Telemetry across All Containers
+
 ```bash
 docker stats \
     --no-stream \
@@ -242,6 +251,7 @@ docker stats \
 ```
 
 ### 3. Display Running Containers with Custom Formatting
+
 ```bash
 docker ps \
     --all \
@@ -252,7 +262,7 @@ docker ps \
 
 ## 11. Advanced Architecture & Edge-Case Failure Modes
 
-```
+```text
 ┌────────────────────────────────────────────────────────────────────────────────┐
 │                  CURRICULUM TROUBLESHOOTING RUNBOOK MATRIX                     │
 ├──────────────────────┬────────────────────────┬────────────────────────────────┤
@@ -277,29 +287,37 @@ docker ps \
 ## 12. Detailed Sub-Components & Subsystems
 
 ### 1. containerd Runtime Core
+
 * **Key Concepts**: Industry-standard core container runtime managing image transfer, execution namespaces, and snapshot storage.
 * **CLI / Tool Snippet**:
+
 ```bash
 containerd --version 2>/dev/null || docker version
 ```
 
 ### 2. OCI Specification Governance Body
+
 * **Key Concepts**: Open Container Initiative defining vendor-neutral runtime (`runtime-spec`) and image (`image-spec`) standards.
 * **CLI / Tool Snippet**:
+
 ```bash
 runc --version 2>/dev/null || true
 ```
 
 ### 3. Linux Control Groups (cgroups v2) Unified Subsystem
+
 * **Key Concepts**: Kernel resource controller enforcing strict CPU quotas, memory ceilings, IOPS limits, and PID maximums.
 * **CLI / Tool Snippet**:
+
 ```bash
 mount | grep cgroup
 ```
 
 ### 4. BuildKit High-Performance Build Engine
+
 * **Key Concepts**: Next-generation builder executing concurrent multi-stage graphs, secrets caching, and multi-platform compilation.
 * **CLI / Tool Snippet**:
+
 ```bash
 docker buildx du
 ```
@@ -309,6 +327,7 @@ docker buildx du
 ## 13. References (The 5+5 Rule)
 
 ### Official Documentation & Enterprise Standards
+
 1. [Docker Official Documentation Master Portal](https://docs.docker.com/)
 2. [Open Container Initiative (OCI) Official Standards Specifications](https://opencontainers.org/)
 3. [Cloud Native Computing Foundation (CNCF) Landscape](https://landscape.cncf.io/)
@@ -316,6 +335,7 @@ docker buildx du
 5. [NIST SP 800-190 Application Container Security Guide](https://csrc.nist.gov/publications/detail/sp/800-190/final)
 
 ### Authoritative Engineering Blogs & Architecture Deep Dives
+
 6. [Martin Fowler: Microservice Prerequisites and Container Architecture](https://martinfowler.com/)
 7. [Brendan Gregg: Linux Performance and Container Resource Profiling](https://www.brendangregg.com/)
 8. [Liz Rice: Container Security and Linux System Internals (O'Reilly)](https://www.lizrice.com/)
@@ -326,7 +346,7 @@ docker buildx du
 
 ## 14. Universal FinOps & Resource Cost Governance
 
-```
+```text
 ┌────────────────────────────────────────────────────────────────────────────────┐
 │                       CURRICULUM FINOPS SAVINGS MATRIX                         │
 ├──────────────────────────┬──────────────────────────┬──────────────────────────┤
@@ -347,12 +367,15 @@ docker buildx du
 ```
 
 ### 1. Enterprise-Wide Standard Governance FinOps ROI
+
 In a Fortune 500 company operating 400 microservices across 1,200 virtual servers:
+
 - Unstandardized, bloated container deployments consume an average of 4GB RAM per container with unpruned image layers and unmonitored storage volumes ($~\$4.2\text{M annually in cloud spend}$).
 - Implementing the **`DOC-STD-UNIVERSAL-2026`** architectural standard—enforcing multi-stage Distroless builds, cgroup quotas, named database volumes, and automated garbage collection—reduces average compute/memory requirements by **45%**.
 - **FinOps ROI**: Delivers **\$1,890,000 in direct annual cloud infrastructure savings**.
 
 ### 2. Engineering Productivity & Training Acceleration
+
 - Traditional fragmented documentation requires 4 to 6 weeks for new engineers to master company container deployment pipelines ($~\$18,000\text{ in onboarding salary waste per engineer}$).
 - Providing this unified, offline-capable, production-grade 14-module curriculum enables new hires to become fully productive in **under 3 business days**.
 - Across 50 new engineering hires annually, the enterprise reclaims **\$750,000 in developer onboarding productivity value**.

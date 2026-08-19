@@ -1,13 +1,14 @@
 # Module 05: Containerizing Applications & Production Operational Readiness
 
-**Track:** Docker Container Systems & Virtualization Architecture  
-**Category:** Application Packaging, Twelve-Factor Containers & Production Hardening  
-**Standard Identifier:** `DOC-STD-UNIVERSAL-2026`  
+**Track:** Docker Container Systems & Virtualization Architecture
+**Category:** Application Packaging, Twelve-Factor Containers & Production Hardening
+**Standard Identifier:** `DOC-STD-UNIVERSAL-2026`
 **Status:** ✅ Completed
 
 ---
 
 ## 📑 Table of Contents
+
 1. [High-Level Overview & Executive Summary](#1-high-level-overview--executive-summary)
 2. [The Twelve-Factor Containerization Blueprint](#2-the-twelve-factor-containerization-blueprint)
 3. [Multi-Target Build Pipelines: Development, Testing & Production](#3-multi-target-build-pipelines-development-testing--production)
@@ -30,7 +31,7 @@
 
 Containerizing an enterprise application transforms raw source code and runtime configurations into an immutable, secure, production-ready OCI image. Adhering to the **Twelve-Factor App** methodology, production containerization requires: strict separation of configuration from code via environment variables, logging all diagnostic streams directly to `stdout`/`stderr`, trapping `SIGTERM` signals for graceful connection draining, executing as a dedicated unprivileged user (`USER 10001:10001`), and configuring deterministic container healthcheck probes.
 
-```
+```text
 ┌────────────────────────────────────────────────────────────────────────────────┐
 │               ENTERPRISE CONTAINERIZATION ARCHITECTURE PIPELINE                │
 ├────────────────────────────────────────────────────────────────────────────────┤
@@ -51,6 +52,7 @@ Containerizing an enterprise application transforms raw source code and runtime 
 ```
 
 ### 👔 Executive Summary (For Managers & Non-Technical Stakeholders)
+
 * **Business Purpose**: Converts raw software applications into standardized, self-contained cloud modules that deploy automatically across any cloud or data center without manual installation steps.
 * **How It Works**: Packages software code, security certificates, and health monitoring probes into a single hardened container. The software boots in milliseconds, configures itself from cloud environment settings, and reports its health to orchestration platforms.
 * **Key Business Value & ROI**: Eliminates human deployment errors, cuts developer onboarding time from weeks to minutes, and guarantees zero-downtime rolling updates in production.
@@ -59,7 +61,7 @@ Containerizing an enterprise application transforms raw source code and runtime 
 
 ## 2. The Twelve-Factor Containerization Blueprint
 
-```
+```text
 ┌────────────────────────────────────────────────────────────────────────────────┐
 │                   THE TWELVE-FACTOR CONTAINER CHECKLIST                        │
 ├───────────────────┬──────────────────────────────────┬─────────────────────────┤
@@ -116,6 +118,7 @@ CMD ["dist/main.js"]
 ```
 
 To build a specific target:
+
 ```bash
 docker build --target dev -t myapp:dev .
 docker build --target prod -t myapp:prod .
@@ -125,7 +128,7 @@ docker build --target prod -t myapp:prod .
 
 ## 4. Container Security Hardening: Non-Root, Read-Only & Capabilities
 
-```
+```text
 ┌────────────────────────────────────────────────────────────────────────────────┐
 │                     CONTAINER RUNTIME HARDENING FLAGS                          │
 ├────────────────────────────────────────────────────────────────────────────────┤
@@ -164,7 +167,7 @@ docker build --target prod -t myapp:prod .
 
 ## 7. Performance & Resource Optimization
 
-```
+```text
 ┌────────────────────────────────────────────────────────────────────────────────┐
 │                   APPLICATION CONTAINERIZATION TUNING MAP                      │
 ├────────────────────────────────────────────────────────────────────────────────┤
@@ -181,15 +184,19 @@ docker build --target prod -t myapp:prod .
 ## 8. In-Depth Engineering Perspectives
 
 ### Security Perspective
+
 * **Software Bill of Materials (SBOM)**: Modern supply chain security requires generating an SBOM during build. Use `docker buildx build --sbom=true --provenance=true ...` to embed cryptographic provenance and package manifests directly into the OCI image index.
 
 ### High Availability Perspective
+
 * **Deterministic Graceful Connection Draining**: When updating backend microservices, register OS signal hooks in application frameworks (Express, FastAPI, Gin) that cease accepting new connections while completing active transactions within 15 seconds.
 
 ### Resilience & Fault Tolerance Perspective
+
 * **Containerized Database Healthchecks**: When packaging database migration sidecars, write healthcheck scripts that verify actual database TCP responsiveness (`pg_isready -h localhost -p 5432`) rather than merely checking if the process PID exists.
 
 ### Cost & Efficiency Perspective
+
 * **Base Layer Deduplication**: Standardizing all company microservices on a single shared base image (e.g. `internal-registry.corp/base-node20:latest`) ensures that when 50 microservices run on a node, the host stores the 120MB base layer **exactly once in RAM and disk**, saving 6GB of host storage.
 
 ---
@@ -308,7 +315,9 @@ docker inspect --format '{{.State.Health.Status}}' telemetry-api-01
 ## 10. Pure CLI / Command Interface
 
 ### 1. Build and Tag Multi-Stage Image Target
+
 Compile specifically the production target:
+
 ```bash
 docker build \
     --target runtime \
@@ -317,7 +326,9 @@ docker build \
 ```
 
 ### 2. Inspect Environment Variables and Port Mappings
+
 Verify runtime environment variables inside running container:
+
 ```bash
 docker inspect \
     --format 'Env: {{json .Config.Env}} | Ports: {{json .NetworkSettings.Ports}}' \
@@ -325,7 +336,9 @@ docker inspect \
 ```
 
 ### 3. Generate Image SBOM and Vulnerability Report
+
 Generate Software Bill of Materials using Docker Scout:
+
 ```bash
 docker scout sbom enterprise/telemetry-api:1.0.0
 ```
@@ -334,7 +347,7 @@ docker scout sbom enterprise/telemetry-api:1.0.0
 
 ## 11. Advanced Architecture & Edge-Case Failure Modes
 
-```
+```text
 ┌────────────────────────────────────────────────────────────────────────────────┐
 │                  CONTAINERIZATION FAILURE RECOVERY MATRIX                      │
 ├──────────────────────┬────────────────────────┬────────────────────────────────┤
@@ -359,29 +372,37 @@ docker scout sbom enterprise/telemetry-api:1.0.0
 ## 12. Detailed Sub-Components & Subsystems
 
 ### 1. Dockerfile AST Lexer & Parser
+
 * **Key Concepts**: Compiles Dockerfile instructions into BuildKit Low-Level Builder (LLB) directed acyclic graph operations.
 * **CLI / Tool Snippet**:
+
 ```bash
 docker build --help
 ```
 
 ### 2. Linux Capabilities Bitmask Subsystem
+
 * **Key Concepts**: Divides traditional root superuser privileges into 38 distinct POSIX capabilities (`CAP_NET_BIND_SERVICE`, `CAP_SYS_ADMIN`, `CAP_CHOWN`).
 * **CLI / Tool Snippet**:
+
 ```bash
 capsh --print
 ```
 
 ### 3. Container Healthcheck Poller
+
 * **Key Concepts**: Engine background timer executing probe commands in container namespaces, tracking consecutive failure thresholds.
 * **CLI / Tool Snippet**:
+
 ```bash
 docker inspect --format '{{range .State.Health.Log}}{{.Output}}{{end}}' telemetry-api-01
 ```
 
 ### 4. Build Context Tarball Streamer
+
 * **Key Concepts**: Packages directory tree honoring `.dockerignore` rules, streaming tar stream over UNIX socket to BuildKit daemon.
 * **CLI / Tool Snippet**:
+
 ```bash
 tar -tf /dev/stdin < <(docker build --help) 2>/dev/null || true
 ```
@@ -391,6 +412,7 @@ tar -tf /dev/stdin < <(docker build --help) 2>/dev/null || true
 ## 13. References (The 5+5 Rule)
 
 ### Official Documentation & Enterprise Standards
+
 1. [The Twelve-Factor App Methodology (Adam Wiggins)](https://12factor.net/)
 2. [Docker Official Documentation: Best Practices for Writing Dockerfiles](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/)
 3. [Open Container Initiative (OCI): Image Configuration Specification](https://opencontainers.org/specs/image/)
@@ -398,6 +420,7 @@ tar -tf /dev/stdin < <(docker build --help) 2>/dev/null || true
 5. [Center for Internet Security (CIS): Docker Benchmark v1.6.0](https://www.cisecurity.org/benchmark/docker)
 
 ### Authoritative Engineering Blogs & Architecture Deep Dives
+
 6. [Martin Fowler: Twelve-Factor Application Packaging with Containers](https://martinfowler.com/)
 7. [Liz Rice: Principles of Container Hardening & Capability Dropping](https://www.lizrice.com/)
 8. [Julia Evans: Understanding Linux Capabilities and Non-Root Containers](https://jvns.ca/)
@@ -408,7 +431,7 @@ tar -tf /dev/stdin < <(docker build --help) 2>/dev/null || true
 
 ## 14. Universal FinOps & Resource Cost Governance
 
-```
+```text
 ┌────────────────────────────────────────────────────────────────────────────────┐
 │                 CONTAINERIZATION FINOPS SAVINGS MATRIX                         │
 ├──────────────────────────┬──────────────────────────┬──────────────────────────┤
@@ -429,14 +452,18 @@ tar -tf /dev/stdin < <(docker build --help) 2>/dev/null || true
 ```
 
 ### 1. Developer Build Velocity & CI Minute Savings
+
 In an engineering team of 50 developers executing 200 builds daily:
+
 - Poorly structured Dockerfiles without layer caching take 8 minutes per build ($200 \times 8 = 1,600\text{ build minutes daily}$).
 - Reordering Dockerfile instructions to copy dependency files (`package.json` / `requirements.txt`) prior to code drops rebuild times to **35 seconds**.
 - Total daily build time drops from 1,600 minutes to **116 minutes** (a 92% reduction).
 - **FinOps ROI**: Saves **\$3,500/year in CI runner fees** and reclaims **1,200 hours of developer waiting time annually**.
 
 ### 2. Auto-Scaling Compute Headroom Optimization
+
 When cloud auto-scalers (Kubernetes HPA / AWS ECS) scale up backend containers during traffic spikes:
+
 - A heavy 1.5GB container requires 45 seconds to pull, unpack, and initialize on a new node, forcing operations to maintain 30% idle buffer capacity to handle surges ($~\$1,200/\text{month}$).
 - A lightweight 25MB container pulls and starts in **1.4 seconds**, enabling just-in-time scaling.
 - Idle buffer compute headroom drops from 30% to **5%**, saving **\$12,000/year in idle cloud compute spend**.

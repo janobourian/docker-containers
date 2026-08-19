@@ -1,13 +1,14 @@
 # Module 13: Docker Enterprise Command Line Cheat Sheet & SRE Operations
 
-**Track:** Docker Container Systems & Virtualization Architecture  
-**Category:** Operational Quick Reference, CLI Runbooks, SRE Diagnostics & Troubleshooting  
-**Standard Identifier:** `DOC-STD-UNIVERSAL-2026`  
+**Track:** Docker Container Systems & Virtualization Architecture
+**Category:** Operational Quick Reference, CLI Runbooks, SRE Diagnostics & Troubleshooting
+**Standard Identifier:** `DOC-STD-UNIVERSAL-2026`
 **Status:** ✅ Completed
 
 ---
 
 ## 📑 Table of Contents
+
 1. [High-Level Overview & Executive Summary](#1-high-level-overview--executive-summary)
 2. [Master CLI Commands: Container Lifecycle & Process Execution](#2-master-cli-commands-container-lifecycle--process-execution)
 3. [Master CLI Commands: Images, BuildKit & Multi-Arch](#3-master-cli-commands-images-buildkit--multi-arch)
@@ -30,7 +31,7 @@
 
 This comprehensive reference manual provides an authoritative, enterprise-grade operational cheat sheet for Site Reliability Engineers (SREs), DevOps architects, and systems engineers. All commands follow standard multiline backslash (`\`) escaping, 4-space parameter indentation, explicit resource limits, and zero in-code shell comments.
 
-```
+```text
 ┌────────────────────────────────────────────────────────────────────────────────┐
 │               ENTERPRISE DOCKER COMMAND TAXONOMY HIERARCHY                     │
 ├────────────────────────────────────────────────────────────────────────────────┤
@@ -46,6 +47,7 @@ This comprehensive reference manual provides an authoritative, enterprise-grade 
 ```
 
 ### 👔 Executive Summary (For Managers & Non-Technical Stakeholders)
+
 * **Business Purpose**: Serves as the master operational playbook for IT operations, SREs, and platform teams, providing standardized, copy-paste-ready commands for production maintenance and incident triage.
 * **How It Works**: Organizes all Docker Engine, Compose, and Swarm commands into structured categories with precise flags for memory limits, security hardening, and performance monitoring.
 * **Key Business Value & ROI**: Minimizes Mean Time to Repair (MTTR) during critical system outages, prevents human errors during maintenance windows, and enforces consistent security standards across the entire engineering organization.
@@ -55,6 +57,7 @@ This comprehensive reference manual provides an authoritative, enterprise-grade 
 ## 2. Master CLI Commands: Container Lifecycle & Process Execution
 
 ### 1. Launch Hardened Background Container
+
 ```bash
 docker run \
     --detach \
@@ -73,6 +76,7 @@ docker run \
 ```
 
 ### 2. Dynamically Update Live Container Limits
+
 ```bash
 docker update \
     --cpus 2.0 \
@@ -82,6 +86,7 @@ docker update \
 ```
 
 ### 3. Gracefully Stop Container with Custom Timeout
+
 ```bash
 docker stop \
     --time 20 \
@@ -89,6 +94,7 @@ docker stop \
 ```
 
 ### 4. Interactive Command Execution as Specific User
+
 ```bash
 docker exec \
     --interactive \
@@ -103,6 +109,7 @@ docker exec \
 ## 3. Master CLI Commands: Images, BuildKit & Multi-Arch
 
 ### 1. Multi-Architecture Build and Push with BuildKit
+
 ```bash
 docker buildx build \
     --platform linux/amd64,linux/arm64 \
@@ -113,12 +120,14 @@ docker buildx build \
 ```
 
 ### 2. Inspect Remote OCI Manifest List
+
 ```bash
 docker manifest inspect \
     myregistry.corp/api-gateway:1.0.0
 ```
 
 ### 3. Scan Image for Security Vulnerabilities
+
 ```bash
 docker scout cves \
     --only-severity critical,high \
@@ -130,6 +139,7 @@ docker scout cves \
 ## 4. Master CLI Commands: Storage, Volumes & Bind Mounts
 
 ### 1. Create Labeled Named Persistent Volume
+
 ```bash
 docker volume create \
     --label environment=production \
@@ -138,6 +148,7 @@ docker volume create \
 ```
 
 ### 2. Ephemeral Volume Backup via Sidecar Container
+
 ```bash
 docker run \
     --rm \
@@ -148,6 +159,7 @@ docker run \
 ```
 
 ### 3. Prune All Dangling and Unused Volumes
+
 ```bash
 docker volume prune \
     --force
@@ -158,6 +170,7 @@ docker volume prune \
 ## 5. Master CLI Commands: Networking, DNS & Ports
 
 ### 1. Create Isolated Internal Bridge Network
+
 ```bash
 docker network create \
     --driver bridge \
@@ -168,6 +181,7 @@ docker network create \
 ```
 
 ### 2. Dynamically Connect Running Container to Network
+
 ```bash
 docker network connect \
     isolated-backend-net \
@@ -175,6 +189,7 @@ docker network connect \
 ```
 
 ### 3. Inspect Network Subnet and Connected Container IPs
+
 ```bash
 docker network inspect \
     isolated-backend-net \
@@ -186,6 +201,7 @@ docker network inspect \
 ## 6. Master CLI Commands: Docker Compose Multi-Tier Stacks
 
 ### 1. Validate Compose File Configuration
+
 ```bash
 docker compose \
     --file compose.production.yaml \
@@ -193,6 +209,7 @@ docker compose \
 ```
 
 ### 2. Launch Stack with Profile and Replicas
+
 ```bash
 docker compose \
     --file compose.production.yaml \
@@ -203,6 +220,7 @@ docker compose \
 ```
 
 ### 3. Real-Time Telemetry Stream Across Stack
+
 ```bash
 docker compose \
     --file compose.production.yaml \
@@ -217,6 +235,7 @@ docker compose \
 ## 7. Master CLI Commands: Swarm Mode & Multi-Host Clustering
 
 ### 1. Initialize Swarm Cluster with Autolock
+
 ```bash
 docker swarm init \
     --advertise-addr 192.168.1.10 \
@@ -224,6 +243,7 @@ docker swarm init \
 ```
 
 ### 2. Deploy Scaled Replicated Service with Rolling Update
+
 ```bash
 docker service create \
     --name production-api \
@@ -237,6 +257,7 @@ docker service create \
 ```
 
 ### 3. Drain Node for Safe Maintenance
+
 ```bash
 docker node update \
     --availability drain \
@@ -248,6 +269,7 @@ docker node update \
 ## 8. Master CLI Commands: SRE Diagnostics, Telemetry & Profiling
 
 ### 1. Stream Real-Time CPU, RAM & Block I/O Metrics
+
 ```bash
 docker stats \
     --no-stream \
@@ -255,12 +277,14 @@ docker stats \
 ```
 
 ### 2. Inspect Process Tree inside Container Namespace
+
 ```bash
 docker top \
     enterprise-web
 ```
 
 ### 3. System-Wide Disk Utilization Breakdown
+
 ```bash
 docker system df \
     --verbose
@@ -310,7 +334,7 @@ docker logs \
 
 ## 11. Advanced Architecture & Edge-Case Failure Modes
 
-```
+```text
 ┌────────────────────────────────────────────────────────────────────────────────┐
 │                    SRE CLI FAILURE RECOVERY MATRIX                             │
 ├──────────────────────┬────────────────────────┬────────────────────────────────┤
@@ -335,29 +359,37 @@ docker logs \
 ## 12. Detailed Sub-Components & Subsystems
 
 ### 1. Docker CLI Client Engine
+
 * **Key Concepts**: Go-based command parser translating CLI syntax into HTTP/1.1 REST API requests sent to `/var/run/docker.sock`.
 * **CLI / Tool Snippet**:
+
 ```bash
 docker version
 ```
 
 ### 2. Docker Events Stream Dispatcher
+
 * **Key Concepts**: Real-time event streaming bus reporting kernel-level container status changes (create, start, oom, die, destroy).
 * **CLI / Tool Snippet**:
+
 ```bash
 docker events --since '1h'
 ```
 
 ### 3. Docker Log Streamer
+
 * **Key Concepts**: Multiplexes stdout/stderr FIFO streams from containerd-shim into JSON-file or syslog log drivers.
 * **CLI / Tool Snippet**:
+
 ```bash
 docker logs --help
 ```
 
 ### 4. Docker System Garbage Collector
+
 * **Key Concepts**: Content-addressable storage auditor traversing dependency trees to safely delete orphaned layers, volumes, and networks.
 * **CLI / Tool Snippet**:
+
 ```bash
 docker system prune --help
 ```
@@ -367,6 +399,7 @@ docker system prune --help
 ## 13. References (The 5+5 Rule)
 
 ### Official Documentation & Technical Specifications
+
 1. [Docker Official Documentation: Command Line Reference](https://docs.docker.com/reference/cli/docker/)
 2. [Docker Official Documentation: Docker Compose CLI Reference](https://docs.docker.com/reference/cli/docker/compose/)
 3. [Docker Official Documentation: Docker Swarm CLI Reference](https://docs.docker.com/reference/cli/docker/swarm/)
@@ -374,6 +407,7 @@ docker system prune --help
 5. [Open Container Initiative (OCI): Runtime Command Line Standard](https://opencontainers.org/specs/runtime/)
 
 ### Authoritative Engineering Blogs & Architecture Deep Dives
+
 6. [Brendan Gregg: Linux SRE Diagnostic Commands & Performance Tools](https://www.brendangregg.com/)
 7. [Julia Evans: Essential Docker Commands and Linux Fundamentals](https://jvns.ca/)
 8. [Martin Fowler: Operational Tooling for Microservice Architectures](https://martinfowler.com/)
@@ -384,7 +418,7 @@ docker system prune --help
 
 ## 14. Universal FinOps & Resource Cost Governance
 
-```
+```text
 ┌────────────────────────────────────────────────────────────────────────────────┐
 │                        CLI FINOPS SAVINGS MATRIX                               │
 ├──────────────────────────┬──────────────────────────┬──────────────────────────┤
@@ -405,13 +439,17 @@ docker system prune --help
 ```
 
 ### 1. SRE Incident Triage Acceleration FinOps ROI
+
 In mission-critical enterprise e-commerce platforms generating \$20,000 per minute in transaction revenue:
+
 - An un-diagnosed container memory leak freezing the API gateway causes a 30-minute outage (\$600,000 in lost revenue).
 - Utilizing standardized CLI diagnostic commands (`docker stats --no-stream`, `docker top`, `docker update --memory 2048m`) allows SRE engineers to isolate the offending container and dynamically expand memory in **under 2 minutes**.
 - **FinOps ROI**: Recovers **\$560,000 in protected transaction revenue per incident**.
 
 ### 2. Storage Leak Elimination via Automated System Pruning
+
 Build servers running continuous integration pipelines accumulate dangling image layers and stopped build containers daily.
+
 - Without scheduled CLI pruning, build worker disk usage grows by 20GB daily, requiring monthly storage expansion purchases ($~\$350/\text{month}$).
 - A scheduled daily `docker system prune -f --filter "until=24h"` maintains steady-state disk usage at under 15GB.
 - **FinOps ROI**: Saves **\$4,200/year in cloud EBS storage expansion fees**.

@@ -26,6 +26,7 @@ applications and how to get started.
 
 See the [Install Spin](https://spinframework.dev/install) page of the [Spin documentation](https://spinframework.dev) for a detailed
 guide on installing and configuring Spin, but in short run the following commands:
+
 ```bash
 curl -fsSL https://spinframework.dev/downloads/install.sh | bash
 sudo mv ./spin /usr/local/bin/spin
@@ -39,6 +40,7 @@ and then follow the
 language guides, and the [guide on writing Spin applications](https://spinframework.dev/writing-apps/).
 
 ## Usage
+
 Below is an example of using the `spin` CLI to create a new Spin application.  To run the example you will need to install the `wasm32-wasip1` target for Rust.
 
 ```bash
@@ -46,10 +48,12 @@ $ rustup target add wasm32-wasip1
 ```
 
 First, run the `spin new` command to create a Spin application from a template.
+
 ```bash
 # Create a new Spin application named 'hello-rust' based on the Rust http template, accepting all defaults
 $ spin new --accept-defaults -t http-rust hello-rust
 ```
+
 Running the `spin new` command created a `hello-rust` directory with all the necessary files for your application. Change to the `hello-rust` directory and build the application with `spin build`, then run it locally with `spin up`:
 
 ```bash
@@ -119,4 +123,3 @@ You can find the contributing guide [here](https://spinframework.dev/contributin
 Follow us on Twitter: [@spinframework](https://twitter.com/spinframework)
 
 You can join the Spin community in the [Spin CNCF Slack channel](https://cloud-native.slack.com/archives/C089NJ9G1V0) where you can ask questions, get help, and show off the cool things you are doing with Spin!
-

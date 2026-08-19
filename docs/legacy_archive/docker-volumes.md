@@ -1,13 +1,14 @@
 # Module 07: Docker Storage Architecture — Named Volumes, Bind Mounts & tmpfs
 
-**Track:** Docker Container Systems & Virtualization Architecture  
-**Category:** Persistent Storage, Volume Drivers, Backup Automation & Filesystem Mounts  
-**Standard Identifier:** `DOC-STD-UNIVERSAL-2026`  
+**Track:** Docker Container Systems & Virtualization Architecture
+**Category:** Persistent Storage, Volume Drivers, Backup Automation & Filesystem Mounts
+**Standard Identifier:** `DOC-STD-UNIVERSAL-2026`
 **Status:** ✅ Completed
 
 ---
 
 ## 📑 Table of Contents
+
 1. [High-Level Overview & Executive Summary](#1-high-level-overview--executive-summary)
 2. [Storage Types: Named Volumes, Bind Mounts & tmpfs](#2-storage-types-named-volumes-bind-mounts--tmpfs)
 3. [The `-v` vs `--mount` Flag Syntax & Semantics](#3-the--v-vs---mount-flag-syntax--semantics)
@@ -30,7 +31,7 @@
 
 By default, all data written inside a Docker container is stored in the ephemeral writable container layer managed by a union filesystem driver (**OverlayFS**). When the container is destroyed (`docker rm`), this data is permanently lost, and write throughput suffers from copy-on-write (CoW) latency. For stateful enterprise applications—relational databases (PostgreSQL, MySQL), document stores (MongoDB), search engines (Elasticsearch), and shared media repositories—Docker provides three distinct persistent storage architectures: **Named Volumes**, **Bind Mounts**, and **tmpfs Mounts**.
 
-```
+```text
 ┌────────────────────────────────────────────────────────────────────────────────┐
 │               DOCKER STORAGE PARADIGMS ARCHITECTURE                            │
 ├────────────────────────────────────────────────────────────────────────────────┤
@@ -50,6 +51,7 @@ By default, all data written inside a Docker container is stored in the ephemera
 ```
 
 ### 👔 Executive Summary (For Managers & Non-Technical Stakeholders)
+
 * **Business Purpose**: Protects critical corporate data—such as financial ledgers, customer records, and transaction logs—by ensuring that data survives container crashes, upgrades, and host server restarts.
 * **How It Works**: Decouples the application software from its permanent data storage. When a database container needs a security upgrade, the old container is deleted, and the new container is attached to the existing storage volume in 1 second with zero data loss.
 * **Key Business Value & ROI**: Guarantees zero data loss during routine software deployments, delivers native NVMe disk performance for database workloads, and enables automated point-in-time backup and disaster recovery operations.
@@ -58,7 +60,7 @@ By default, all data written inside a Docker container is stored in the ephemera
 
 ## 2. Storage Types: Named Volumes, Bind Mounts & tmpfs
 
-```
+```text
 ┌────────────────────────────────────────────────────────────────────────────────┐
 │                     CONTAINER STORAGE MECHANICS MATRIX                         │
 ├───────────────────┬───────────────────┬────────────────────────────────────────┤
@@ -76,6 +78,7 @@ By default, all data written inside a Docker container is stored in the ephemera
 ```
 
 ### 2.1 Storage Drivers vs Volumes (The Copy-on-Write Tax)
+
 - **OverlayFS (Container Layer)**: When a container updates an existing file, OverlayFS copies the file from the read-only image layer (`lowerdir`) to the writable layer (`upperdir`). For a 10GB database table, a single 1-row update copies the entire 10GB file, causing severe I/O freezes!
 - **Volumes**: Volumes bypass OverlayFS completely, mounting directly from the host filesystem at native hardware NVMe speeds ($O(1)$ direct I/O).
 
@@ -85,7 +88,7 @@ By default, all data written inside a Docker container is stored in the ephemera
 
 Docker provides two command-line flags for configuring mounts:
 
-```
+```text
 ┌────────────────────────────────────────────────────────────────────────────────┐
 │                     `-v` VS `--MOUNT` COMPARISON MATRIX                        │
 ├──────────────────────────┬──────────────────────────┬──────────────────────────┤
@@ -103,6 +106,7 @@ Docker provides two command-line flags for configuring mounts:
 ```
 
 ### Example Comparison:
+
 ```bash
 # Legacy -v syntax (Read-Only Named Volume):
 docker run -d -v mydata:/app/data:ro nginx
@@ -119,7 +123,7 @@ docker run -d \
 
 Because Docker volumes reside in daemon-managed directories, backups are performed using **ephemeral sidecar containers**:
 
-```
+```text
 ┌────────────────────────────────────────────────────────────────────────────────┐
 │               EPHEMERAL CONTAINER VOLUME BACKUP PATTERN                        │
 ├────────────────────────────────────────────────────────────────────────────────┤
@@ -160,7 +164,7 @@ Because Docker volumes reside in daemon-managed directories, backups are perform
 
 ## 7. Performance & Resource Optimization
 
-```
+```text
 ┌────────────────────────────────────────────────────────────────────────────────┐
 │                         STORAGE TUNING PLAYBOOK                                │
 ├────────────────────────────────────────────────────────────────────────────────┤
@@ -177,15 +181,19 @@ Because Docker volumes reside in daemon-managed directories, backups are perform
 ## 8. In-Depth Engineering Perspectives
 
 ### Security Perspective
+
 * **Host Root Access Prevention via Bind Mounts**: Mounting the host root filesystem (`-v /:/host`) inside a privileged container gives the container complete root access to modify `/etc/shadow`, install malicious kernel modules, and compromise the host. Restrict bind mounts via Docker authorization plugins (OPA / Falco).
 
 ### High Availability Perspective
+
 * **Cloud Storage Volume Drivers (CSI)**: In cloud multi-node environments, use volume plugins (e.g. REX-Ray, AWS EBS CSI driver) to attach block storage volumes across availability zones dynamically as containers move between nodes.
 
 ### Resilience & Fault Tolerance Perspective
+
 * **Atomic Hot Database Backups**: Never execute physical file copies on an active database volume while writes are occurring. Use application backup utilities (e.g. `pg_dump` or `pg_basebackup`) piped into S3 sidecars.
 
 ### Cost & Efficiency Perspective
+
 * **Anonymous Volume Disk Reclaim**: Orphaned anonymous volumes left by deleted test containers can silently consume hundreds of gigabytes of billable cloud disk storage. Schedule weekly `docker volume prune -f` maintenance scripts.
 
 ---
@@ -270,20 +278,26 @@ docker run \
 ## 10. Pure CLI / Command Interface
 
 ### 1. Inspect Physical Host Path of a Named Volume
+
 Query exact host filesystem mount point:
+
 ```bash
 docker volume inspect enterprise-pgdata \
     --format 'Mountpoint: {{.Mountpoint}} | Driver: {{.Driver}} | Scope: {{.Scope}}'
 ```
 
 ### 2. Identify All Orphaned and Unattached Volumes
+
 List volumes not currently mounted by any running or stopped container:
+
 ```bash
 docker volume ls --filter "dangling=true"
 ```
 
 ### 3. Remove All Unused Volumes Safely
+
 Reclaim storage from unattached volumes:
+
 ```bash
 docker volume prune --force
 ```
@@ -292,7 +306,7 @@ docker volume prune --force
 
 ## 11. Advanced Architecture & Edge-Case Failure Modes
 
-```
+```text
 ┌────────────────────────────────────────────────────────────────────────────────┐
 │                    STORAGE FAILURE RECOVERY MATRIX                             │
 ├──────────────────────┬────────────────────────┬────────────────────────────────┤
@@ -317,29 +331,37 @@ docker volume prune --force
 ## 12. Detailed Sub-Components & Subsystems
 
 ### 1. Docker Volume Driver Manager
+
 * **Key Concepts**: Pluggable driver subsystem (`local`, `nfs`, `ebs`, `glusterfs`) provisioning and mounting block and file storage volumes.
 * **CLI / Tool Snippet**:
+
 ```bash
 docker info --format '{{.Plugins.Volume}}'
 ```
 
 ### 2. Linux Kernel VFS Mount Subsystem
+
 * **Key Concepts**: Translates container mount namespace requests into kernel Virtual File System (VFS) bindings using `MS_BIND` and `MS_RDONLY` flags.
 * **CLI / Tool Snippet**:
+
 ```bash
 cat /proc/mounts | grep docker
 ```
 
 ### 3. tmpfs Virtual RAM Driver
+
 * **Key Concepts**: Allocates volatile Linux shared memory (`tmpfs`) backed by kernel page cache without generating disk I/O.
 * **CLI / Tool Snippet**:
+
 ```bash
 df -h | grep tmpfs
 ```
 
 ### 4. Volume Metadata State Store
+
 * **Key Concepts**: Local metadata KV store tracking volume labels, driver parameters, and mount references in `/var/lib/docker/volumes/metadata.db`.
 * **CLI / Tool Snippet**:
+
 ```bash
 docker volume ls
 ```
@@ -349,6 +371,7 @@ docker volume ls
 ## 13. References (The 5+5 Rule)
 
 ### Official Documentation & OCI Standards
+
 1. [Docker Official Documentation: Manage Data in Docker](https://docs.docker.com/storage/)
 2. [Docker Official Documentation: Use Volumes](https://docs.docker.com/storage/volumes/)
 3. [Docker Official Documentation: Use Bind Mounts](https://docs.docker.com/storage/bind-mounts/)
@@ -356,6 +379,7 @@ docker volume ls
 5. [Linux Kernel Organization: Virtual Filesystem (VFS) and Mount API](https://docs.kernel.org/filesystems/vfs.html)
 
 ### Authoritative Engineering Blogs & Architecture Deep Dives
+
 6. [Brendan Gregg: Linux Filesystem I/O and Storage Profiling in Containers](https://www.brendangregg.com/)
 7. [Julia Evans: How Storage Mounts and Namespaces Work in Linux](https://jvns.ca/)
 8. [Martin Fowler: State Management in Ephemeral Cloud Container Architectures](https://martinfowler.com/)
@@ -366,7 +390,7 @@ docker volume ls
 
 ## 14. Universal FinOps & Resource Cost Governance
 
-```
+```text
 ┌────────────────────────────────────────────────────────────────────────────────┐
 │                       STORAGE FINOPS SAVINGS MATRIX                            │
 ├──────────────────────────┬──────────────────────────┬──────────────────────────┤
@@ -387,14 +411,18 @@ docker volume ls
 ```
 
 ### 1. OverlayFS Write Amplification Elimination ROI
+
 Running high-velocity transactional databases (e.g. 5,000 writes/sec) on container root OverlayFS filesystems forces copy-up operations on modified disk pages:
+
 - Generates **$150\times$ write amplification**, exhausting AWS EBS GP3 baseline IOPS and requiring upgrading to Provisioned IOPS IO2 storage ($~\$900/\text{month per database node}$).
 - Mounting storage via a dedicated **Docker Named Volume** provides direct NVMe kernel block access at native bare-metal speeds.
 - EBS storage requirement drops back to standard GP3 ($~\$80/\text{month}$).
 - **FinOps ROI**: Delivers **\$9,840/year in direct storage infrastructure savings per database cluster**.
 
 ### 2. Orphaned Anonymous Volume Purging
+
 In CI/CD build clusters running 500 integration test containers daily that define `VOLUME ["/data"]`:
+
 - Each run generates an unattached 2GB anonymous volume that persists after container deletion.
 - Within 30 days, the cluster accumulates **30 Terabytes of orphaned storage**, driving up cloud storage bills by **\$2,400/month**.
 - Implementing an automated nightly `docker volume prune --force` job purges orphaned storage in 5 seconds.

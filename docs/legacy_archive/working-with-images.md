@@ -1,13 +1,14 @@
 # Module 04: Docker Images, Multi-Stage Builds, BuildKit & Multi-Arch Architecture
 
-**Track:** Docker Container Systems & Virtualization Architecture  
-**Category:** Container Image Architecture, Build Optimization, Multi-Stage Builds & OCI Manifests  
-**Standard Identifier:** `DOC-STD-UNIVERSAL-2026`  
+**Track:** Docker Container Systems & Virtualization Architecture
+**Category:** Container Image Architecture, Build Optimization, Multi-Stage Builds & OCI Manifests
+**Standard Identifier:** `DOC-STD-UNIVERSAL-2026`
 **Status:** ✅ Completed
 
 ---
 
 ## 📑 Table of Contents
+
 1. [High-Level Overview & Executive Summary](#1-high-level-overview--executive-summary)
 2. [Anatomy of a Docker Image: Manifests, Blobs & Layer Invariants](#2-anatomy-of-a-docker-image-manifests-blobs--layer-invariants)
 3. [Multi-Stage Builds & Size Minimization Patterns](#3-multi-stage-builds--size-minimization-patterns)
@@ -33,7 +34,7 @@ A **Docker Image** is an immutable, cryptographically verifiable, read-only pack
 
 Modern production container engineering mandates the use of **Multi-Stage Builds** and **BuildKit** (the next-generation build engine backed by LLB - Low-Level Builder). By separating the compilation SDK environment from the final runtime container, teams eliminate heavy compilers, package managers, and debug tools, shrinking image sizes from 1.5GB to under 20MB while dramatically reducing CVE security vulnerabilities.
 
-```
+```text
 ┌────────────────────────────────────────────────────────────────────────────────┐
 │               MULTI-STAGE BUILD & LAYER STRIPPING ARCHITECTURE                 │
 ├────────────────────────────────────────────────────────────────────────────────┤
@@ -56,6 +57,7 @@ Modern production container engineering mandates the use of **Multi-Stage Builds
 ```
 
 ### 👔 Executive Summary (For Managers & Non-Technical Stakeholders)
+
 * **Business Purpose**: Transforms raw application source code into secure, standardized, lightweight deployable software containers that boot instantly and can be stored in corporate cloud registries.
 * **How It Works**: Uses an automated multi-stage assembly recipe. The heavy construction tools (compilers, debuggers, source files) are used to build the software and then thrown away, leaving only the tiny finished product in the final container.
 * **Key Business Value & ROI**: Slashes container image download times by 90%, reduces cloud container storage and network egress costs by up to 85%, and eliminates 99% of cybersecurity vulnerabilities (CVEs) by removing unused operating system binaries.
@@ -64,7 +66,7 @@ Modern production container engineering mandates the use of **Multi-Stage Builds
 
 ## 2. Anatomy of a Docker Image: Manifests, Blobs & Layer Invariants
 
-```
+```text
 ┌────────────────────────────────────────────────────────────────────────────────┐
 │                     OCI CONTAINER IMAGE DATA STRUCTURE                         │
 ├────────────────────────────────────────────────────────────────────────────────┤
@@ -80,6 +82,7 @@ Modern production container engineering mandates the use of **Multi-Stage Builds
 ```
 
 ### 2.1 Content Hash vs Distribution Hash
+
 - **Content Hash (DiffID)**: The SHA-256 digest calculated over the **uncompressed** layer filesystem tarball. Used locally by the engine.
 - **Distribution Hash (Digest)**: The SHA-256 digest calculated over the **gzip-compressed** layer transferred over the network to registries.
 
@@ -88,6 +91,7 @@ Modern production container engineering mandates the use of **Multi-Stage Builds
 ## 3. Multi-Stage Builds & Size Minimization Patterns
 
 ### The Layer Caching Anti-Pattern vs Best Practice:
+
 Docker builds layers sequentially. Modifying any file copied into a layer invalidates all subsequent layer caches.
 
 ```dockerfile
@@ -113,7 +117,7 @@ CMD ["node", "server.js"]
 
 **BuildKit** replaces the legacy Docker daemon builder with a decoupled, high-performance execution engine:
 
-```
+```text
 ┌────────────────────────────────────────────────────────────────────────────────┐
 │                       BUILDKIT PIPELINE ADVANTAGES                             │
 ├────────────────────────────────────────────────────────────────────────────────┤
@@ -173,7 +177,7 @@ docker buildx build \
 
 ## 8. Performance & Resource Optimization
 
-```
+```text
 ┌────────────────────────────────────────────────────────────────────────────────┐
 │                       IMAGE OPTIMIZATION PLAYBOOK                              │
 ├────────────────────────────────────────────────────────────────────────────────┤
@@ -263,19 +267,25 @@ docker history enterprise/api-gateway:1.0.0
 ## 10. Pure CLI / Command Interface
 
 ### 1. Inspect Multi-Architecture Manifest List
+
 Inspect remote architecture manifest metadata:
+
 ```bash
 docker manifest inspect nginx:latest
 ```
 
 ### 2. Scan Image for Security Vulnerabilities (CVEs)
+
 Execute vulnerability scan on target container image:
+
 ```bash
 docker scout cves nginx:alpine
 ```
 
 ### 3. Remove All Unused and Dangling Images
+
 Reclaim storage from obsolete image versions:
+
 ```bash
 docker image prune \
     --all \
@@ -287,7 +297,7 @@ docker image prune \
 
 ## 11. Advanced Architecture & Edge-Case Failure Modes
 
-```
+```text
 ┌────────────────────────────────────────────────────────────────────────────────┐
 │                    IMAGE BUILD FAILURE RECOVERY MATRIX                         │
 ├──────────────────────┬────────────────────────┬────────────────────────────────┤
@@ -312,29 +322,37 @@ docker image prune \
 ## 12. Detailed Sub-Components & Subsystems
 
 ### 1. Low-Level Builder (LLB) Engine
+
 * **Key Concepts**: BuildKit intermediate directed acyclic graph (DAG) representation that executes independent build instructions concurrently.
 * **CLI / Tool Snippet**:
+
 ```bash
 docker buildx version
 ```
 
 ### 2. OCI Image Manifest Parser
+
 * **Key Concepts**: JSON deserializer validating layer hashes, media types (`application/vnd.oci.image.manifest.v1+json`), and schema versions.
 * **CLI / Tool Snippet**:
+
 ```bash
 docker inspect --format '{{json .RootFS.Layers}}' alpine:latest
 ```
 
 ### 3. BuildKit Cache Storage Manager
+
 * **Key Concepts**: Manages persistent layer cache backends (local, inline, registry, s3) in `/var/lib/docker/buildkit/`.
 * **CLI / Tool Snippet**:
+
 ```bash
 docker buildx du
 ```
 
 ### 4. QEMU Multi-Arch Binary Binfmt Handler
+
 * **Key Concepts**: Linux kernel `binfmt_misc` module intercepting foreign CPU instruction sets, executing ARM64 binaries on AMD64 hosts via user-space emulation.
 * **CLI / Tool Snippet**:
+
 ```bash
 cat /proc/sys/fs/binfmt_misc/status
 ```
@@ -344,6 +362,7 @@ cat /proc/sys/fs/binfmt_misc/status
 ## 13. References (The 5+5 Rule)
 
 ### Official Documentation & OCI Specifications
+
 1. [Docker Official Documentation: Multi-Stage Builds Guide](https://docs.docker.com/build/building/multi-stage/)
 2. [Docker Official Documentation: Dockerfile Best Practices](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/)
 3. [Open Container Initiative (OCI): Image Format Specification v1.1](https://opencontainers.org/specs/image/)
@@ -351,6 +370,7 @@ cat /proc/sys/fs/binfmt_misc/status
 5. [GoogleContainerTools: Distroless Images Specification](https://github.com/GoogleContainerTools/distroless)
 
 ### Authoritative Engineering Blogs & Architecture Deep Dives
+
 6. [Liz Rice: Anatomy of a Container Image and OCI Manifests](https://www.lizrice.com/)
 7. [Julia Evans: How Docker Builds Layers and Cache Invalidation](https://jvns.ca/)
 8. [Martin Fowler: Patterns for Container Image Delivery and Immutability](https://martinfowler.com/)
@@ -361,7 +381,7 @@ cat /proc/sys/fs/binfmt_misc/status
 
 ## 14. Universal FinOps & Resource Cost Governance
 
-```
+```text
 ┌────────────────────────────────────────────────────────────────────────────────┐
 │                       IMAGE FINOPS SAVINGS MATRIX                              │
 ├──────────────────────────┬──────────────────────────┬──────────────────────────┤
@@ -382,7 +402,9 @@ cat /proc/sys/fs/binfmt_misc/status
 ```
 
 ### 1. Multi-Stage Registry Storage & Cross-AZ Egress ROI
+
 In an enterprise deploying 150 microservices updated 5 times daily across 3 AWS Availability Zones:
+
 - **Unoptimized Images (1.2GB each)**:
   - 150 services $\times 5\text{ builds} \times 1.2\text{GB} = 900\text{ GB daily storage churn}$.
   - Pulling 900GB across cross-AZ networks generates **\$2,430/month in AWS Cross-AZ Data Transfer fees** plus \$270/month in ECR storage charges ($~\$32,400/\text{year}$).
@@ -392,7 +414,9 @@ In an enterprise deploying 150 microservices updated 5 times daily across 3 AWS 
   - **FinOps ROI**: **\$31,860/year in direct cloud infrastructure savings**.
 
 ### 2. BuildKit CI/CD Compute Minute Reduction
+
 In automated GitHub Actions / GitLab CI pipelines:
+
 - Running `npm ci` and compiling Go binaries without cache mounts takes 8 minutes per pipeline run.
 - With 1,000 monthly pipeline runs at \$0.008/minute, CI compute costs \$64/month per repository.
 - Enabling BuildKit `--mount=type=cache` allows dependencies to persist across runs, cutting build times from 8 minutes to **1.5 minutes**.
