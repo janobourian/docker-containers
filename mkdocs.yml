@@ -26,6 +26,7 @@ nav:
   - Docker Docs: docker-docs.md
   - Docker CheatSheet: docker-cheatsheet.md
   - Apache Kafka: apache-kafka-introduction.md
+  - k8s: k8s/index.md
 
 markdown_extensions:
   - admonition
